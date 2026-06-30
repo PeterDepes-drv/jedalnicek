@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rodinný Jedálniček & Nákupný Zoznam</title>
+    <!-- Google Fonts: Outfit for titles, Inter for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- App Container -->
+    <div class="app-container">
+        
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-main">
+                <div class="logo-area">
+                    <span class="logo-icon">🍳</span>
+                    <h1>Rodinný Jedálniček</h1>
+                </div>
+                
+                <!-- Role Switcher & Firebase Config -->
+                <div class="role-switcher">
+                    <div class="connection-status-indicator offline" id="connection-status" onclick="openFirebaseSettingsModal()" title="Nastavenie online pripojenia">
+                        <span class="status-dot"></span> <span class="status-text">Lokálne</span>
+                    </div>
+                    <label for="role-select">Rola:</label>
+                    <div class="select-wrapper">
+                        <select id="role-select" onchange="changeRole(this.value)">
+                            <option value="mama">👩 Mama (Varenie & Plán)</option>
+                            <option value="otec" selected>👨 Otec (Nákupy & Nastavenia)</option>
+                            <option value="ivo">👦 Ivo (Návrhy & Zásoby)</option>
+                            <option value="majo">👦 Majo (Návrhy & Zásoby)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Role Badge / Instructions -->
+            <div id="role-instructions" class="role-instructions">
+                <!-- Will be updated dynamically -->
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="app-content">
+            
+            <!-- SCREEN 1: DNES VARÍME -->
+            <section id="screen-today" class="app-screen active">
+                <div class="screen-header">
+                    <h2>🍳 Čo dnes varíme?</h2>
+                    <p class="current-date-display" id="current-date-display">Dnes je ...</p>
+                </div>
+                
+                <div class="today-container">
+                    <div class="today-meals-grid" id="today-meals-grid">
+                        <!-- Dynamically filled with Lunch/Dinner cards -->
+                    </div>
+                    
+                    <div class="today-ingredients-card card">
+                        <h3>📋 Suroviny na dnešný deň</h3>
+                        <p class="section-subtitle">Čo treba vytiahnuť z chladničky alebo špajze:</p>
+                        <ul class="today-ingredients-list" id="today-ingredients-list">
+                            <!-- Dynamically filled -->
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SCREEN 2: JEDÁLNY LÍSTOK -->
+            <section id="screen-plan" class="app-screen">
+                <div class="screen-header-actions">
+                    <div class="screen-title-area">
+                        <h2>📅 Týždenný plán</h2>
+                        <p>Zostavte jedálniček a ušetrite si čas s premýšľaním</p>
+                    </div>
+                    <div class="plan-actions">
+                        <div class="plan-days-toggle">
+                            <button id="btn-days-7" class="btn-toggle active" onclick="setPlanDuration(7)">7 dní</button>
+                            <button id="btn-days-14" class="btn-toggle" onclick="setPlanDuration(14)">14 dní</button>
+                        </div>
+                        <button class="btn btn-primary" onclick="generateNewPlanPrompt()">🎲 Generovať nový plán</button>
+                    </div>
+                </div>
+
+                <!-- Plan Timeline -->
+                <div class="plan-timeline" id="plan-timeline">
+                    <!-- Dynamically filled with days -->
+                </div>
+            </section>
+
+            <!-- SCREEN 3: NÁKUPNÝ ZOZNAM -->
+            <section id="screen-shopping" class="app-screen">
+                <div class="screen-header-actions">
+                    <div class="screen-title-area">
+                        <h2>🛒 Nákupný zoznam</h2>
+                        <p>Automaticky vytvorený z plánu a zásob</p>
+                    </div>
+                    <div class="shopping-actions">
+                        <button class="btn btn-secondary" onclick="copyShoppingListToClipboard()">
+                            <span class="icon">💬</span> Kopírovať do WhatsApp
+                        </button>
+                        <button class="btn btn-danger-outline" onclick="clearCheckedShoppingItems()">
+                            <span class="icon">🗑️</span> Vymazať kúpené
+                        </button>
+                    </div>
+                </div>
+
+                <div class="shopping-layout">
+                    <!-- Left Side: Add item & Categorized list -->
+                    <div class="shopping-main-card card">
+                        <!-- Add Manual Item Form -->
+                        <form id="add-shopping-item-form" class="add-item-form" onsubmit="addManualShoppingItem(event)">
+                            <div class="form-row-inline">
+                                <input type="text" id="shop-item-name" placeholder="Názov suroviny (napr. Mlieko)" required>
+                                <input type="number" step="any" id="shop-item-qty" placeholder="Množstvo" style="max-width: 90px;">
+                                <select id="shop-item-unit" style="max-width: 80px;">
+                                    <option value="ks">ks</option>
+                                    <option value="g">g</option>
+                                    <option value="kg">kg</option>
+                                    <option value="ml">ml</option>
+                                    <option value="l">l</option>
+                                    <option value="bal">bal</option>
+                                    <option value="ks" selected>-</option>
+                                </select>
+                                <select id="shop-item-category">
+                                    <option value="zelenina">Zelenina a ovocie</option>
+                                    <option value="maso">Mäso a ryby</option>
+                                    <option value="mliecne">Mliečne výrobky</option>
+                                    <option value="pecivo">Pečivo</option>
+                                    <option value="trvanlive" selected>Trvanlivé potraviny</option>
+                                    <option value="mrazene">Mrazené potraviny</option>
+                                    <option value="drogeria">Drogéria a domácnosť</option>
+                                    <option value="ostatne">Ostatné</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary btn-icon-only">➕</button>
+                            </div>
+                        </form>
+
+                        <div class="shopping-categories-container" id="shopping-categories-container">
+                            <!-- Categorized lists will be generated here -->
+                        </div>
+                    </div>
+
+                    <!-- Right Side: Pantry notices -->
+                    <div class="shopping-pantry-notices" id="shopping-pantry-notices">
+                        <!-- Dynamically shows notes about what we already have at home -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- SCREEN 4: NAŠE JEDLÁ -->
+            <section id="screen-meals" class="app-screen">
+                <div class="screen-header-actions">
+                    <div class="screen-title-area">
+                        <h2>🍕 Naša databáza jedál</h2>
+                        <p>Zoznam receptov, ktoré u nás doma varíme</p>
+                    </div>
+                    <button class="btn btn-primary" id="btn-add-meal" onclick="openAddMealModal()">
+                        <span>➕</span> Pridať nové jedlo
+                    </button>
+                </div>
+
+                <!-- Search and Filter Bar -->
+                <div class="filter-bar card">
+                    <div class="filter-input-wrapper">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="meal-search" placeholder="Hľadať podľa názvu jedla..." oninput="filterMeals()">
+                    </div>
+                    <div class="filter-selects">
+                        <select id="meal-filter-category" onchange="filterMeals()">
+                            <option value="all">Všetky kategórie</option>
+                            <option value="polievka">🍜 Polievky</option>
+                            <option value="hlavne">🥩 Hlavné jedlá</option>
+                            <option value="rychle">⚡ Rýchle jedlá</option>
+                            <option value="bezmasite">🥦 Bezmäsité jedlá</option>
+                            <option value="dvojdnove">📅 Jedlá na 2 dni</option>
+                            <option value="lahke">🥗 Ľahké jedlá</option>
+                            <option value="vikendove">✨ Víkendové jedlá</option>
+                        </select>
+                        <select id="meal-filter-liked" onchange="filterMeals()">
+                            <option value="all">Kto má rád: Všetci</option>
+                            <option value="mama">👩 Mama</option>
+                            <option value="otec">👨 Otec</option>
+                            <option value="ivo">👦 Ivo</option>
+                            <option value="majo">👦 Majo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Meals Grid -->
+                <div class="meals-grid" id="meals-grid">
+                    <!-- Dynamically filled with meals -->
+                </div>
+            </section>
+
+            <!-- SCREEN 5: ZÁSOBY DOMA -->
+            <section id="screen-pantry" class="app-screen">
+                <div class="screen-header">
+                    <h2>📦 Zásoby doma</h2>
+                    <p>Jednoduchá kontrola základných potravín. Ak máme zelené, surovina sa automaticky nepridá do nákupného zoznamu.</p>
+                </div>
+
+                <!-- AI Fridge Scanner Card -->
+                <div class="fridge-scanner-card card" style="margin-bottom: 25px; padding: 20px; background-color: var(--primary-light); border-radius: var(--border-radius-sm); border: 2px dashed var(--primary); text-align: center;">
+                    <h3>📷 AI Skener Chladničky & Špajze</h3>
+                    <p class="section-subtitle" style="margin-bottom: 12px; color: var(--text-color); font-weight: 500;">
+                        Odfoťte otvorenú chladničku, špajzu alebo nákup na stole. AI rozpozná suroviny a vymyslí recepty!
+                    </p>
+                    <button type="button" class="btn btn-primary" onclick="triggerFridgeCamera()">
+                        📷 Odfotiť chladničku / stôl
+                    </button>
+                    <input type="file" accept="image/*" capture="environment" id="fridge-camera-input" style="display: none;" onchange="processFridgeCameraInput(event)">
+
+                    <!-- Loader -->
+                    <div id="fridge-loading" class="hidden" style="margin-top: 15px; font-weight: bold; color: var(--primary-hover);">
+                        🧠 AI hľadá suroviny a navrhuje recepty (môže to trvať 5-10 sekúnd)...
+                    </div>
+
+                    <!-- Results Section -->
+                    <div id="fridge-results" class="hidden" style="margin-top: 20px; text-align: left; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                        <h4 style="margin-bottom: 8px; color: var(--primary-hover);">🔍 Rozpoznané potraviny:</h4>
+                        <p id="fridge-detected-ingredients" style="font-weight: 600; margin-bottom: 20px; background-color: var(--bg-card); padding: 8px 12px; border-radius: var(--border-radius-sm); border: 1px solid var(--border-color);"></p>
+                        
+                        <h4 style="margin-bottom: 12px; color: var(--primary-hover);">💡 Recepty vytvorené z fotky:</h4>
+                        <div id="fridge-suggested-recipes" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-top: 10px;">
+                            <!-- Rendered AI recipes -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pantry-grid" id="pantry-grid">
+                    <!-- Dynamically filled with pantry items -->
+                </div>
+            </section>
+
+            <!-- SCREEN 6: NÁVRHY OD RODINY -->
+            <section id="screen-suggestions" class="app-screen">
+                <div class="screen-header">
+                    <h2>👦 Ivo & Majo - Návrhy a Zásoby</h2>
+                    <p>Spoločná správa jedálnička, návrhy na varenie a kontrola špajze.</p>
+                </div>
+
+                <div class="suggestions-layout">
+                    <!-- Left: Son's Checklist (only active in Ivo/Majo roles) -->
+                    <div class="suggestions-card card">
+                        <div class="card-badge" id="son-badge-label">👦 Úlohy pre chalanov</div>
+                        <h3 id="son-title-label">🎯 Pomoc s jedálničkom a zásobami</h3>
+                        
+                        <div class="mission-item" id="mission-1-status">
+                            <div class="mission-checkbox">1️⃣</div>
+                            <div class="mission-content">
+                                <strong id="son-suggest-title">Navrhni 3 jedlá na tento týždeň</strong>
+                                <div class="mission-inputs" id="son-meal-inputs-container">
+                                    <input type="text" id="son-suggest-1" placeholder="Prvý návrh jedla (napr. Segedín)">
+                                    <input type="text" id="son-suggest-2" placeholder="Druhý návrh jedla (napr. Palacinky)">
+                                    <input type="text" id="son-suggest-3" placeholder="Tretí návrh jedla (napr. Špagety)">
+                                    <button class="btn btn-secondary btn-sm" onclick="saveSonSuggestions()">Uložiť moje návrhy</button>
+                                </div>
+                                <div id="son-suggestions-display" class="suggestions-display hidden">
+                                    <!-- Rendered saved suggestions -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mission-item" id="mission-2-status">
+                            <div class="mission-checkbox">2️⃣</div>
+                            <div class="mission-content">
+                                <strong>Skontroluj zásoby v špajzi</strong>
+                                <p class="mission-subtext">Pozri sa do špajze a rýchlo naklikaj, čo máme a čo dochádza.</p>
+                                <button class="btn btn-secondary btn-sm" onclick="showTab('pantry')">🔍 Skontrolovať zásoby teraz</button>
+                                <div id="pantry-check-progress" class="progress-bar-container">
+                                    <div class="progress-bar-label">Skontrolované: <span id="pantry-checked-count">0</span> z 12</div>
+                                    <div class="progress-bar"><div class="progress-bar-fill" id="pantry-bar-fill" style="width: 0%"></div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mission-item" id="mission-3-status">
+                            <div class="mission-checkbox">3️⃣</div>
+                            <div class="mission-content">
+                                <strong>Ako ti chutilo posledné varené jedlo?</strong>
+                                <p class="mission-subtext">Ohodnoť jedlo, ktoré sme uvarili nedávno, tvoj hlas pomôže pri ďalšom plánovaní.</p>
+                                <div id="son-rating-container" class="son-rating-area">
+                                    <!-- Dynamic list of meals cooked recently to rate -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Active suggestions for parents -->
+                    <div class="suggestions-family-box card">
+                        <h3>💡 Aktuálne návrhy jedál od rodiny</h3>
+                        <p class="section-subtitle">Tieto jedlá by si rodina priala uvariť:</p>
+                        <ul class="suggestions-list" id="parent-suggestions-list">
+                            <!-- Filled dynamically -->
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation Bar (Responsive, transforms for mobile) -->
+        <nav class="app-nav">
+            <button class="nav-btn active" id="nav-today" onclick="showTab('today')">
+                <span class="nav-icon">🍳</span>
+                <span class="nav-label">Dnes varíme</span>
+            </button>
+            <button class="nav-btn" id="nav-plan" onclick="showTab('plan')">
+                <span class="nav-icon">📅</span>
+                <span class="nav-label">Jedálniček</span>
+            </button>
+            <button class="nav-btn" id="nav-shopping" onclick="showTab('shopping')">
+                <span class="nav-icon">🛒</span>
+                <span class="nav-label">Nákupy</span>
+                <span class="badge hidden" id="shopping-badge-count">0</span>
+            </button>
+            <button class="nav-btn" id="nav-meals" onclick="showTab('meals')">
+                <span class="nav-icon">🍕</span>
+                <span class="nav-label">Naše jedlá</span>
+            </button>
+            <button class="nav-btn" id="nav-pantry" onclick="showTab('pantry')">
+                <span class="nav-icon">📦</span>
+                <span class="nav-label">Zásoby</span>
+            </button>
+            <button class="nav-btn" id="nav-suggestions" onclick="showTab('suggestions')">
+                <span class="nav-icon">👦</span>
+                <span class="nav-label">Ivo & Majo</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- MODAL: RECIPE DETAIL -->
+    <div id="recipe-modal" class="modal">
+        <div class="modal-content card">
+            <span class="close" onclick="closeRecipeModal()">&times;</span>
+            <div id="modal-recipe-details">
+                <!-- Dynamically filled -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD/EDIT MEAL -->
+    <div id="meal-form-modal" class="modal">
+        <div class="modal-content card">
+            <span class="close" onclick="closeMealFormModal()">&times;</span>
+            <h3 id="meal-form-title">Pridať nové jedlo</h3>
+
+            <!-- AI Scanner Section -->
+            <div class="ai-scanner-section" style="margin-bottom: 20px; padding: 15px; background-color: var(--primary-light); border-radius: var(--border-radius-sm); border: 1.5px dashed var(--primary); text-align: center;">
+                <p style="font-size: 13px; font-weight: 600; color: var(--primary-hover); margin-bottom: 8px;">🧙‍♂️ Máte recept na papieri alebo fotku jedla? Vytvorte ho cez AI!</p>
+                <button type="button" class="btn btn-primary btn-sm" onclick="triggerAICamera()" style="background-color: var(--primary); box-shadow: none;">
+                    📷 Odfotiť / Nahrať fotku
+                </button>
+                <input type="file" accept="image/*" capture="environment" id="ai-camera-input" style="display: none;" onchange="processAICameraInput(event)">
+                
+                <!-- AI Loader -->
+                <div id="ai-loading" class="hidden" style="margin-top: 10px; font-size: 13px; color: var(--text-color); font-weight: bold;">
+                    🧠 AI analyzuje fotku (môže to trvať 5-10 sekúnd)...
+                </div>
+            </div>
+            
+            <form id="meal-editor-form" onsubmit="saveMealForm(event)">
+                <input type="hidden" id="edit-meal-id">
+                
+                <div class="form-group">
+                    <label for="edit-meal-name">Názov jedla*</label>
+                    <input type="text" id="edit-meal-name" required placeholder="napr. Segedínsky guláš">
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="edit-meal-category">Kategória*</label>
+                        <select id="edit-meal-category" required>
+                            <option value="polievka">🍜 Polievka</option>
+                            <option value="hlavne">🥩 Hlavné jedlo</option>
+                            <option value="rychle">⚡ Rýchle jedlo</option>
+                            <option value="bezmasite">🥦 Bezmäsité jedlo</option>
+                            <option value="dvojdnove">📅 Jedlo na 2 dni</option>
+                            <option value="lahke">🥗 Ľahké jedlo</option>
+                            <option value="vikendove">✨ Víkendové jedlo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-meal-servings">Počet porcií</label>
+                        <input type="number" id="edit-meal-servings" min="1" value="4">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="edit-meal-preptime">Čas prípravy (minúty)</label>
+                        <input type="number" id="edit-meal-preptime" min="1" value="45">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-meal-difficulty">Náročnosť</label>
+                        <select id="edit-meal-difficulty">
+                            <option value="lahke">Ľahká</option>
+                            <option value="stredne" selected>Stredná</option>
+                            <option value="narocne">Náročná</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-checkboxes">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="edit-meal-cook2days">
+                        <span class="checkmark"></span>
+                        Vhodné variť na 2 dni
+                    </label>
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="edit-meal-freeze">
+                        <span class="checkmark"></span>
+                        Dá sa zamraziť
+                    </label>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="edit-meal-popularity">Obľúbenosť</label>
+                        <select id="edit-meal-popularity">
+                            <option value="velmi-oblubene">Veľmi obľúbené</option>
+                            <option value="bezne" selected>Bežné</option>
+                            <option value="obcas">Len občas</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Kto ho má rád (označte všetkých):</label>
+                    <div class="who-likes-checkboxes">
+                        <label class="checkbox-pill">
+                            <input type="checkbox" id="like-mama" value="mama">
+                            <span>👩 Mama</span>
+                        </label>
+                        <label class="checkbox-pill">
+                            <input type="checkbox" id="like-otec" value="otec">
+                            <span>👨 Otec</span>
+                        </label>
+                        <label class="checkbox-pill">
+                            <input type="checkbox" id="like-ivo" value="ivo">
+                            <span>👦 Ivo</span>
+                        </label>
+                        <label class="checkbox-pill">
+                            <input type="checkbox" id="like-majo" value="majo">
+                            <span>👦 Majo</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Suroviny*</label>
+                    <p class="form-help">Zadajte suroviny v tvare: <em>Názov suroviny, Množstvo, Kategória</em> (napr: Zemiaky, 1kg, zelenina). Jedna surovina na riadok. Kategórie: zelenina, maso, mliecne, pecivo, trvanlive, mrazene, drogeria, ostatne.</p>
+                    <textarea id="edit-meal-ingredients" rows="6" required placeholder="Bravčové pliecko, 600g, maso&#10;Kyslá kapusta, 500g, trvanlive&#10;Kyslá smotana, 250ml, mliecne&#10;Cibuľa, 2ks, zelenina"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-meal-instructions">Krátky postup prípravy</label>
+                    <textarea id="edit-meal-instructions" rows="4" placeholder="Popíšte stručný recept..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-meal-note">Poznámka</label>
+                    <input type="text" id="edit-meal-note" placeholder="napr. podávať s knedľou">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeMealFormModal()">Zrušiť</button>
+                    <button type="submit" class="btn btn-primary">Uložiť jedlo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: SWAP MEAL SELECTOR -->
+    <div id="swap-meal-modal" class="modal">
+        <div class="modal-content card">
+            <span class="close" onclick="closeSwapMealModal()">&times;</span>
+            <h3>Vybrať iné jedlo</h3>
+            <p class="section-subtitle" id="swap-day-label">Zvoľte jedlo pre deň ...</p>
+            
+            <div class="filter-input-wrapper" style="margin-bottom: 15px;">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="swap-search" placeholder="Hľadať jedlo..." oninput="filterSwapList()">
+            </div>
+            
+            <div class="swap-meals-list" id="swap-meals-list">
+                <!-- Dynamic list of available meals to pick from -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ONLINE & AI SETTINGS -->
+    <div id="firebase-modal" class="modal">
+        <div class="modal-content card">
+            <span class="close" onclick="closeFirebaseSettingsModal()">&times;</span>
+            <h3>🌐 Nastavenie prepojenia & AI</h3>
+            <p class="section-subtitle">Prepojte celú rodinu cez Firebase a aktivujte AI fotoaparát cez Gemini</p>
+            
+            <div id="firebase-status-details" style="margin-bottom: 15px; padding: 12px; border-radius: var(--border-radius-sm); font-size: 13px; line-height: 1.5;">
+                <!-- Status details will be rendered dynamically -->
+            </div>
+
+            <form id="firebase-config-form" onsubmit="saveFirebaseConfig(event)">
+                <div class="form-group">
+                    <label for="fb-config-json">Firebase Konfigurácia (vložte JSON kód)</label>
+                    <p class="form-help">Vložte kód, ktorý získate vo Firebase konzole (obsahuje apiKey, databaseURL, atď.)</p>
+                    <textarea id="fb-config-json" rows="6" placeholder='{&#10;  "apiKey": "AIzaSy...",&#10;  "databaseURL": "https://...",&#10;  "projectId": "...",&#10;  "appId": "..."&#10;}'></textarea>
+                </div>
+
+                <div class="form-group" style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                    <label for="gemini-api-key">Google Gemini API Kľúč</label>
+                    <p class="form-help">Zadajte kľúč pre bezplatné Gemini API na skenovanie fotiek receptov a jedál. Získate ho zadarmo na <a href="https://aistudio.google.com/" target="_blank" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Google AI Studio</a>.</p>
+                    <input type="text" id="gemini-api-key" placeholder="AIzaSy...">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-danger-outline" onclick="clearFirebaseConfig()" style="margin-right: auto;">Odpojiť online režim</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeFirebaseSettingsModal()">Zrušiť</button>
+                    <button type="submit" class="btn btn-primary">Uložiť nastavenia</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDK (Compat version) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <!-- Script loading -->
+    <script src="app.js"></script>
+</body>
+</html>
