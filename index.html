@@ -232,6 +232,12 @@
                     </div>
                 </div>
 
+                <!-- Pantry Admin Actions -->
+                <div class="pantry-admin-actions card" id="pantry-admin-actions" style="margin-top: 15px; margin-bottom: 20px; display: flex; gap: 10px; align-items: center; background-color: var(--bg-card); padding: 12px; border-radius: var(--border-radius-sm); border: 1px solid var(--border-color);">
+                    <input type="text" id="new-pantry-item-name" placeholder="Názov základnej suroviny (napr. Cukor)" style="flex: 1; padding: 8px; font-size: 14px; border: 1px solid var(--border-color); border-radius: 4px;">
+                    <button class="btn btn-secondary btn-sm" onclick="addNewPantryItem()" style="padding: 8px 15px; white-space: nowrap;">➕ Pridať surovinu</button>
+                </div>
+
                 <div class="pantry-grid" id="pantry-grid">
                     <!-- Dynamically filled with pantry items -->
                 </div>

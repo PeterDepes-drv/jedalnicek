@@ -449,8 +449,8 @@ function changeRole(role) {
     saveFamilyStateToStorage();
     updateRoleUI();
 
-    // If role is Syn, automatically jump to Detsky kutik
-    if (role === "ivo", "majo") {
+    // If role is Syn, automatically jump to suggestions
+    if (role === "ivo" || role === "majo") {
         showTab("suggestions");
     } else {
         // Go to today's screen
@@ -1704,6 +1704,17 @@ function renderPantryScreen() {
     const grid = document.getElementById("pantry-grid");
     if (!grid) return;
 
+    // Toggle admin actions card visibility
+    const adminActions = document.getElementById("pantry-admin-actions");
+    const isAdmin = familyState.activeRole !== "ivo" && familyState.activeRole !== "majo";
+    if (adminActions) {
+        if (isAdmin) {
+            adminActions.classList.remove("hidden");
+        } else {
+            adminActions.classList.add("hidden");
+        }
+    }
+
     grid.innerHTML = "";
 
     pantry.forEach(item => {
@@ -1714,9 +1725,16 @@ function renderPantryScreen() {
         if (item.status === 'dochadza') badgeText = "Dochádza";
         if (item.status === 'treba-kupit') badgeText = "Treba kúpiť";
 
+        const deleteBtnMarkup = isAdmin 
+            ? `<button onclick="deletePantryItem('${item.name}')" title="Vymazať surovinu" style="background: none; border: none; color: var(--danger); cursor: pointer; font-size: 14px; padding: 0; margin-right: 8px; transition: var(--transition-fast);">🗑️</button>`
+            : '';
+
         div.innerHTML = `
             <div class="pantry-item-info">
-                <span class="pantry-item-name">${item.name}</span>
+                <div style="display: flex; align-items: center;">
+                    ${deleteBtnMarkup}
+                    <span class="pantry-item-name">${item.name}</span>
+                </div>
                 <span class="pantry-item-badge ${item.status}">${badgeText}</span>
             </div>
             <div class="pantry-status-toggle">
@@ -1727,6 +1745,40 @@ function renderPantryScreen() {
         `;
         grid.appendChild(div);
     });
+}
+
+function deletePantryItem(name) {
+    if (confirm('Naozaj chcete surovinu "' + name + '" vymazať zo zoznamu zásob?')) {
+        pantry = pantry.filter(p => p.name.toLowerCase() !== name.toLowerCase());
+        savePantryToStorage();
+        renderPantryScreen();
+        updateSynPantryProgress();
+    }
+}
+
+function addNewPantryItem() {
+    const input = document.getElementById("new-pantry-item-name");
+    if (!input) return;
+    const name = input.value.trim();
+    if (!name) return;
+
+    // Check if already exists
+    const exists = pantry.some(p => p.name.toLowerCase() === name.toLowerCase());
+    if (exists) {
+        alert('Surovina "' + name + '" sa už v zásobách nachádza.');
+        return;
+    }
+
+    pantry.push({
+        name: name,
+        status: "mame",
+        checkedAt: null
+    });
+
+    savePantryToStorage();
+    input.value = "";
+    renderPantryScreen();
+    updateSynPantryProgress();
 }
 
 function togglePantryItemStatus(name, newStatus) {
