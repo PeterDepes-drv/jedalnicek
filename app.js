@@ -1438,7 +1438,7 @@ function renderMealsScreen() {
         if (meal.category === 'vikendove') catLabel = "✨ Víkend";
 
         // Admin actions visible for parents
-        const isAdmin = familyState.activeRole !== "ivo" && familyState.activeRole !== "majo";
+        const isAdmin = true;
         const editActionsMarkup = isAdmin ? `
             <div class="meal-card-edit-btns">
                 <button class="btn-card-action" onclick="openEditMealModal('${meal.id}')" title="Upraviť">✏️</button>
@@ -1710,7 +1710,7 @@ function renderPantryScreen() {
 
     // Toggle admin actions card visibility
     const adminActions = document.getElementById("pantry-admin-actions");
-    const isAdmin = familyState.activeRole !== "ivo" && familyState.activeRole !== "majo";
+    const isAdmin = true;
     if (adminActions) {
         if (isAdmin) {
             adminActions.classList.remove("hidden");
