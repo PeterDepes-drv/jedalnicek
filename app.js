@@ -277,6 +277,7 @@ let activeTab = 'today';
 let firebaseConfig = null;
 let isFirebaseConnected = false;
 let geminiApiKey = null;
+let firebaseFamilyPassword = '';
 let tempFridgeSuggestions = [];
 let familyState = {
     activeRole: "otec",
@@ -328,6 +329,9 @@ function initData() {
     if (savedGeminiKey) {
         geminiApiKey = savedGeminiKey;
     }
+    
+    // 2.6 Family password load
+    firebaseFamilyPassword = localStorage.getItem("firebase_family_password") || '';
 
     // 3. Plan
     const savedPlan = localStorage.getItem("family_plan");
@@ -2043,6 +2047,12 @@ function rateAsSon(mealId, ratingVal) {
 // FIREBASE SYNCHRONIZATION LOGIC
 // ----------------------------------------------------
 
+
+function firebaseRef(path) {
+    const pwd = localStorage.getItem("firebase_family_password") || "default";
+    return firebase.database().ref("rodina/" + pwd + "/" + path);
+}
+
 function initFirebase() {
     const savedConfig = localStorage.getItem("firebase_config");
     if (savedConfig) {
@@ -2087,10 +2097,8 @@ function updateConnectionStatusUI(online) {
 function setupFirebaseListeners() {
     if (!isFirebaseConnected) return;
 
-    const db = firebase.database();
-
     // 1. Listen for Meals changes
-    db.ref('meals').on('value', (snapshot) => {
+    firebaseRef('meals').on('value', (snapshot) => {
         const val = snapshot.val();
         if (val) {
             meals = val;
@@ -2099,12 +2107,12 @@ function setupFirebaseListeners() {
             if (activeTab === 'today') renderTodayScreen();
         } else {
             // Populate database with default values if empty
-            db.ref('meals').set(meals);
+            firebaseRef('meals').set(meals);
         }
     });
 
     // 2. Listen for Pantry changes
-    db.ref('pantry').on('value', (snapshot) => {
+    firebaseRef('pantry').on('value', (snapshot) => {
         const val = snapshot.val();
         if (val) {
             pantry = val;
@@ -2113,12 +2121,12 @@ function setupFirebaseListeners() {
             if (activeTab === 'shopping') renderShoppingList();
             if (activeTab === 'suggestions') updateSynPantryProgress();
         } else {
-            db.ref('pantry').set(pantry);
+            firebaseRef('pantry').set(pantry);
         }
     });
 
     // 3. Listen for Plan changes
-    db.ref('plan').on('value', (snapshot) => {
+    firebaseRef('plan').on('value', (snapshot) => {
         const val = snapshot.val();
         if (val) {
             currentPlan = val;
@@ -2126,12 +2134,12 @@ function setupFirebaseListeners() {
             if (activeTab === 'plan') renderPlanScreen();
             if (activeTab === 'today') renderTodayScreen();
         } else {
-            db.ref('plan').set(currentPlan);
+            firebaseRef('plan').set(currentPlan);
         }
     });
 
     // 4. Listen for Shopping List changes
-    db.ref('shoppingList').on('value', (snapshot) => {
+    firebaseRef('shoppingList').on('value', (snapshot) => {
         const val = snapshot.val();
         if (val) {
             shoppingList = val;
@@ -2139,12 +2147,12 @@ function setupFirebaseListeners() {
             updateShoppingBadge();
             if (activeTab === 'shopping') renderShoppingList();
         } else {
-            db.ref('shoppingList').set(shoppingList);
+            firebaseRef('shoppingList').set(shoppingList);
         }
     });
 
     // 5. Listen for Family State changes (suggestions, etc.)
-    db.ref('familyState').on('value', (snapshot) => {
+    firebaseRef('familyState').on('value', (snapshot) => {
         const val = snapshot.val();
         if (val) {
             const localRole = familyState.activeRole;
@@ -2153,7 +2161,7 @@ function setupFirebaseListeners() {
             localStorage.setItem("family_state", JSON.stringify(familyState));
             if (activeTab === 'suggestions') renderSuggestionsScreen();
         } else {
-            db.ref('familyState').set(familyState);
+            firebaseRef('familyState').set(familyState);
         }
     });
 }
@@ -2187,6 +2195,13 @@ function openFirebaseSettingsModal() {
         geminiInput.value = savedGeminiKey || "";
     }
 
+    // Set Family password input
+    const savedFamilyPwd = localStorage.getItem("firebase_family_password");
+    const pwdInput = document.getElementById("fb-family-password");
+    if (pwdInput) {
+        pwdInput.value = savedFamilyPwd || "";
+    }
+
     modal.classList.add("active");
 }
 
@@ -2199,6 +2214,7 @@ function saveFirebaseConfig(event) {
     event.preventDefault();
     const jsonInput = document.getElementById("fb-config-json").value.trim();
     const geminiInput = document.getElementById("gemini-api-key").value.trim();
+    const pwdInput = document.getElementById("fb-family-password").value.trim();
 
     // Save Gemini key
     if (geminiInput) {
@@ -2207,6 +2223,15 @@ function saveFirebaseConfig(event) {
     } else {
         localStorage.removeItem("gemini_api_key");
         geminiApiKey = null;
+    }
+
+    // Save Family Password
+    if (pwdInput) {
+        localStorage.setItem("firebase_family_password", pwdInput);
+        firebaseFamilyPassword = pwdInput;
+    } else {
+        localStorage.removeItem("firebase_family_password");
+        firebaseFamilyPassword = '';
     }
 
     // Save Firebase config
@@ -2232,6 +2257,7 @@ function clearFirebaseConfig() {
     if (confirm("Chcete naozaj vymazať online a AI nastavenia? Aplikácia prejde do lokálneho režimu a AI funkcie sa vypnú.")) {
         localStorage.removeItem("firebase_config");
         localStorage.removeItem("gemini_api_key");
+        localStorage.removeItem("firebase_family_password");
         alert("Nastavenia boli vymazané. Stránka sa reštartuje.");
         window.location.reload();
     }
