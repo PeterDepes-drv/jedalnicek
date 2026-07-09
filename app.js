@@ -279,6 +279,7 @@ let isFirebaseConnected = false;
 let geminiApiKey = null;
 let firebaseFamilyPassword = '';
 let tempFridgeSuggestions = [];
+let parentsShoppingList = [];
 let familyState = {
     activeRole: "otec",
     suggestions: {
@@ -332,6 +333,16 @@ function initData() {
     
     // 2.6 Family password load
     firebaseFamilyPassword = localStorage.getItem("firebase_family_password") || '';
+
+    // 2.7 Parents shopping list load
+    const savedParents = localStorage.getItem("family_parents_shopping");
+    if (savedParents) {
+        try {
+            parentsShoppingList = JSON.parse(savedParents);
+        } catch(e) {
+            console.error("Failed to parse parents shopping list", e);
+        }
+    }
 
     // 3. Plan
     const savedPlan = localStorage.getItem("family_plan");
@@ -1188,7 +1199,13 @@ function renderShoppingList() {
         }
     });
 
+    // Append Parents' Shopping List if present
+    const uncheckedParentsItems = parentsShoppingList.filter(item => !item.checked);
     let totalItems = 0;
+    if (uncheckedParentsItems.length > 0) {
+        totalItems += uncheckedParentsItems.length;
+    }
+
     Object.keys(categories).forEach(catKey => {
         const items = categories[catKey];
         if (items.length === 0) return;
@@ -1371,6 +1388,15 @@ function copyShoppingListToClipboard() {
         });
         text += "\n";
     });
+
+    if (uncheckedParentsItems.length > 0) {
+        text += "👴 *NÁKUP PRE RODIČOV* 👴\n";
+        uncheckedParentsItems.forEach(item => {
+            const qtyText = item.quantity ? " (" + item.quantity + ")" : "";
+            text += "- [ ] " + item.name + qtyText + "\n";
+        });
+        text += "\n";
+    }
 
     if (totalItems === 0) {
         alert("Nákupný zoznam je prázdny. Nie je čo kopírovať.");
@@ -2151,6 +2177,18 @@ function setupFirebaseListeners() {
         }
     });
 
+    // 4.5 Listen for Parents Shopping List changes
+    firebaseRef('parentsShoppingList').on('value', (snapshot) => {
+        const val = snapshot.val();
+        if (val) {
+            parentsShoppingList = val;
+            localStorage.setItem("family_parents_shopping", JSON.stringify(parentsShoppingList));
+            if (activeTab === 'shopping') renderParentsShoppingList();
+        } else {
+            firebaseRef('parentsShoppingList').set(parentsShoppingList);
+        }
+    });
+
     // 5. Listen for Family State changes (suggestions, etc.)
     firebaseRef('familyState').on('value', (snapshot) => {
         const val = snapshot.val();
@@ -2577,4 +2615,190 @@ function saveAIDiscoveredRecipe(idx) {
     if (activeTab === "meals") renderMealsScreen();
 
     alert("Recept '" + newMeal.name + "' bol úspešne pridaný do Našich jedál!");
+}
+
+// ----------------------------------------------------
+// PARENTS SHOPPING LIST LOGIC
+// ----------------------------------------------------
+
+function saveParentsShoppingToStorage() {
+    localStorage.setItem("family_parents_shopping", JSON.stringify(parentsShoppingList));
+    if (isFirebaseConnected) {
+        firebaseRef('parentsShoppingList').set(parentsShoppingList);
+    }
+}
+
+function triggerParentsCamera() {
+    const key = localStorage.getItem("gemini_api_key");
+    if (!key) {
+        alert("Nemáte nastavený Gemini API Kľúč! Otvorte nastavenia (ikonu Lokálne/Online v hlavičke) a zadajte kľúč, ktorý získate zadarmo na Google AI Studio.");
+        openFirebaseSettingsModal();
+        return;
+    }
+    document.getElementById("parents-camera-input").click();
+}
+
+function processParentsCameraInput(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const loader = document.getElementById("parents-loading");
+    if (loader) loader.classList.remove("hidden");
+
+    const reader = new FileReader();
+    reader.onloadend = function() {
+        const base64Data = reader.result.split(',')[1];
+        const mimeType = file.type;
+        analyzeParentsListWithGemini(base64Data, mimeType);
+    };
+    reader.readAsDataURL(file);
+}
+
+function analyzeParentsListWithGemini(base64Data, mimeType) {
+    const key = localStorage.getItem("gemini_api_key");
+    if (!key) return;
+
+    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + key;
+    const bTick3 = "`" + "`" + "`";
+
+    const requestBody = {
+        contents: [
+            {
+                parts: [
+                    {
+                        text: "Si slovenský kulinársky asistent pre rodinu. Analyzuj túto fotografiu (ktorá zobrazuje rukou písaný alebo vytlačený papierový nákupný zoznam od rodičov). Prečítaj položky a vytvor z nich zoznam. Výstup vráť STRIKTNE ako jeden platný JSON objekt (žiadny iný text okolo, žiadne markdown značky ako " + bTick3 + "json). JSON musí presne zodpovedať tejto schéme:\n{\n  \"items\": [\n    { \"name\": \"Názov položky (napr. Polotučné mlieko)\", \"quantity\": \"množstvo s jednotkou (napr. 2ks alebo 1l alebo 500g, ak nie je zrejmé, ponechaj prázdne)\", \"category\": \"kategória (jedna z hodnôt: zelenina, maso, mliecne, pecivo, trvanlive, mrazene, drogeria, ostatne)\" }\n  ]\n}"
+                    },
+                    {
+                        inlineData: {
+                            mimeType: mimeType,
+                            data: base64Data
+                        }
+                    }
+                ]
+            }
+        ]
+    };
+
+    fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestBody)
+    })
+    .then(res => {
+        if (!res.ok) {
+            throw new Error("Chyba Gemini API.");
+        }
+        return res.json();
+    })
+    .then(data => {
+        const loader = document.getElementById("parents-loading");
+        if (loader) loader.classList.add("hidden");
+
+        if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
+            let textResponse = data.candidates[0].content.parts[0].text.trim();
+            
+            // Clean markdown blocks
+            const matchStart = new RegExp("^" + bTick3 + "json\\s*");
+            const matchEnd = new RegExp("\\s*" + bTick3 + "$");
+            const matchSimple = new RegExp("^" + bTick3 + "\\s*");
+            
+            if (matchStart.test(textResponse)) {
+                textResponse = textResponse.replace(matchStart, "").replace(matchEnd, "");
+            } else if (matchSimple.test(textResponse)) {
+                textResponse = textResponse.replace(matchSimple, "").replace(matchEnd, "");
+            }
+
+            const parsed = JSON.parse(textResponse);
+            if (parsed.items && parsed.items.length > 0) {
+                // Map items to default unchecked state
+                const formattedItems = parsed.items.map(item => ({
+                    name: item.name,
+                    quantity: item.quantity || "",
+                    category: item.category || "ostatne",
+                    checked: false
+                }));
+
+                parentsShoppingList = [...parentsShoppingList, ...formattedItems];
+                saveParentsShoppingToStorage();
+                renderParentsShoppingList();
+                alert("Nákupný zoznam od rodičov bol úspešne načítaný a pridaný! Spolu sa pridalo " + formattedItems.length + " položiek.");
+            } else {
+                alert("AI na fotke nenašla žiadne položky nákupného zoznamu.");
+            }
+        } else {
+            throw new Error("Neočakávaná odpoveď z API.");
+        }
+    })
+    .catch(err => {
+        const loader = document.getElementById("parents-loading");
+        if (loader) loader.classList.add("hidden");
+        console.error("AI Parents List Error:", err);
+        alert("Chyba analýzy zoznamu: " + err.message + "\nUistite sa, že fotka je čitateľná a dobre osvetlená.");
+    });
+}
+
+function renderParentsShoppingList() {
+    const container = document.getElementById("parents-shopping-list-items");
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    if (parentsShoppingList.length === 0) {
+        container.innerHTML = "<p style='color: var(--text-muted); font-size: 12px; text-align: center; padding: 20px 0; font-style: italic;'>Zoznam je prázdny. Odfoťte papierový zoznam vyššie.</p>";
+        return;
+    }
+
+    parentsShoppingList.forEach((item, idx) => {
+        const div = document.createElement("div");
+        div.style.display = "flex";
+        div.style.justifyContent = "space-between";
+        div.style.alignItems = "center";
+        div.style.padding = "6px 8px";
+        div.style.borderRadius = "var(--border-radius-xs)";
+        div.style.backgroundColor = "var(--bg-card)";
+        div.style.border = "1px solid var(--border-color)";
+        div.style.fontSize = "13px";
+        
+        if (item.checked) {
+            div.style.opacity = "0.6";
+        }
+
+        const qtyText = item.quantity ? " (" + item.quantity + ")" : "";
+
+        div.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 8px; cursor: pointer; flex: 1;" onclick="toggleParentsShoppingItem(${idx})">
+                <div style="width: 14px; height: 14px; border: 1px solid var(--border-color); border-radius: 3px; display: flex; align-items: center; justify-content: center; background-color: ${item.checked ? 'var(--primary)' : 'transparent'};">
+                    ${item.checked ? '<span style="color: white; font-size: 10px; font-weight: bold;">✓</span>' : ''}
+                </div>
+                <span style="text-decoration: ${item.checked ? 'line-through' : 'none'}; font-weight: 500;">${item.name}${qtyText}</span>
+            </div>
+            <button onclick="deleteParentsShoppingItem(${idx})" title="Vymazať" style="background: none; border: none; color: var(--danger); cursor: pointer; font-size: 12px; padding: 0;">🗑️</button>
+        `;
+        container.appendChild(div);
+    });
+}
+
+function toggleParentsShoppingItem(idx) {
+    if (parentsShoppingList[idx]) {
+        parentsShoppingList[idx].checked = !parentsShoppingList[idx].checked;
+        saveParentsShoppingToStorage();
+        renderParentsShoppingList();
+    }
+}
+
+function deleteParentsShoppingItem(idx) {
+    parentsShoppingList.splice(idx, 1);
+    saveParentsShoppingToStorage();
+    renderParentsShoppingList();
+}
+
+function clearParentsShoppingList() {
+    if (parentsShoppingList.length === 0) return;
+    if (confirm("Naozaj chcete vymazať celý nákupný zoznam pre rodičov?")) {
+        parentsShoppingList = [];
+        saveParentsShoppingToStorage();
+        renderParentsShoppingList();
+    }
 }

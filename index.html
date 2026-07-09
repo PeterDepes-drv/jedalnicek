@@ -145,9 +145,37 @@
                         </div>
                     </div>
 
-                    <!-- Right Side: Pantry notices -->
-                    <div class="shopping-pantry-notices" id="shopping-pantry-notices">
-                        <!-- Dynamically shows notes about what we already have at home -->
+                    <!-- Right Side: Parents' List & Pantry notices -->
+                    <div class="shopping-sidebar">
+                        <!-- Parents' Shopping List Card -->
+                        <div class="parents-shopping-card card" style="margin-bottom: 20px; padding: 20px; border: 1.5px dashed var(--accent); background-color: var(--accent-light);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <h3 style="margin: 0; color: #b7950b; font-size: 16px;">👴 Nákup pre rodičov</h3>
+                                <button class="btn btn-danger-outline btn-sm" onclick="clearParentsShoppingList()" style="padding: 4px 8px; font-size: 11px;">Vymazať</button>
+                            </div>
+                            
+                            <!-- AI Scanner for Parents' List -->
+                            <div style="text-align: center; margin-bottom: 15px; padding: 12px; background-color: var(--bg-card); border-radius: var(--border-radius-sm); border: 1px dashed var(--border-color);">
+                                <p style="font-size: 12px; font-weight: 600; margin-bottom: 8px;">📷 Máte papierový zoznam od rodičov?</p>
+                                <button type="button" class="btn btn-primary btn-sm" onclick="triggerParentsCamera()" style="background-color: var(--accent); color: white; border-color: var(--accent); box-shadow: none;">
+                                    📷 Odfotiť zoznam
+                                </button>
+                                <input type="file" accept="image/*" capture="environment" id="parents-camera-input" style="display: none;" onchange="processParentsCameraInput(event)">
+                                
+                                <!-- Loader -->
+                                <div id="parents-loading" class="hidden" style="margin-top: 8px; font-size: 12px; font-weight: bold; color: var(--text-color);">
+                                    🧠 AI číta rukou písaný zoznam...
+                                </div>
+                            </div>
+                            
+                            <div id="parents-shopping-list-items" style="display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto;">
+                                <!-- Dynamically filled with parents' items -->
+                            </div>
+                        </div>
+
+                        <div class="shopping-pantry-notices" id="shopping-pantry-notices">
+                            <!-- Dynamically shows notes about what we already have at home -->
+                        </div>
                     </div>
                 </div>
             </section>
