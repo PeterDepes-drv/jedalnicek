@@ -145,18 +145,27 @@
                         </div>
                     </div>
 
-                    <!-- Right Side: Parents' List & Pantry notices -->
+                    <!-- Right Side: Grandparents' List & Pantry notices -->
                     <div class="shopping-sidebar">
-                        <!-- Parents' Shopping List Card -->
+                        <!-- Grandparents' Shopping List Card -->
                         <div class="parents-shopping-card card" style="margin-bottom: 20px; padding: 20px; border: 1.5px dashed var(--accent); background-color: var(--accent-light);">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                                <h3 style="margin: 0; color: #b7950b; font-size: 16px;">👴 Nákup pre rodičov</h3>
+                                <h3 style="margin: 0; color: #b7950b; font-size: 16px;">👴 Nákup pre starých rodičov</h3>
                                 <button class="btn btn-danger-outline btn-sm" onclick="clearParentsShoppingList()" style="padding: 4px 8px; font-size: 11px;">Vymazať</button>
                             </div>
+
+                            <!-- Add Manual Grandparents Item Form -->
+                            <form id="add-grandparents-item-form" class="add-item-form" onsubmit="addManualGrandparentsItem(event)" style="margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+                                <div style="display: flex; gap: 6px;">
+                                    <input type="text" id="grandparents-item-name" placeholder="Položka (napr. Maslo)" required style="flex: 1; padding: 6px; font-size: 13px; border: 1px solid var(--border-color); border-radius: 4px; background-color: var(--bg-card);">
+                                    <input type="text" id="grandparents-item-qty" placeholder="Množstvo" style="max-width: 80px; padding: 6px; font-size: 13px; border: 1px solid var(--border-color); border-radius: 4px; background-color: var(--bg-card);">
+                                    <button type="submit" class="btn btn-primary btn-sm" style="padding: 6px 12px; background-color: var(--accent); border-color: var(--accent); font-size: 13px;">➕</button>
+                                </div>
+                            </form>
                             
-                            <!-- AI Scanner for Parents' List -->
+                            <!-- AI Scanner for Grandparents' List -->
                             <div style="text-align: center; margin-bottom: 15px; padding: 12px; background-color: var(--bg-card); border-radius: var(--border-radius-sm); border: 1px dashed var(--border-color);">
-                                <p style="font-size: 12px; font-weight: 600; margin-bottom: 8px;">📷 Máte papierový zoznam od rodičov?</p>
+                                <p style="font-size: 12px; font-weight: 600; margin-bottom: 8px;">📷 Máte papierový zoznam od starých rodičov?</p>
                                 <button type="button" class="btn btn-primary btn-sm" onclick="triggerParentsCamera()" style="background-color: var(--accent); color: white; border-color: var(--accent); box-shadow: none;">
                                     📷 Odfotiť zoznam
                                 </button>
@@ -164,7 +173,7 @@
                                 
                                 <!-- Loader -->
                                 <div id="parents-loading" class="hidden" style="margin-top: 8px; font-size: 12px; font-weight: bold; color: var(--text-color);">
-                                    🧠 AI číta rukou písaný zoznam...
+                                    🧠 AI číta rukou písaný zoznam od starých rodičov...
                                 </div>
                             </div>
                             

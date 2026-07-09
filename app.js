@@ -1390,7 +1390,7 @@ function copyShoppingListToClipboard() {
     });
 
     if (uncheckedParentsItems.length > 0) {
-        text += "👴 *NÁKUP PRE RODIČOV* 👴\n";
+        text += "👴 *NÁKUP PRE STARÝCH RODIČOV* 👴\n";
         uncheckedParentsItems.forEach(item => {
             const qtyText = item.quantity ? " (" + item.quantity + ")" : "";
             text += "- [ ] " + item.name + qtyText + "\n";
@@ -2666,7 +2666,7 @@ function analyzeParentsListWithGemini(base64Data, mimeType) {
             {
                 parts: [
                     {
-                        text: "Si slovenský kulinársky asistent pre rodinu. Analyzuj túto fotografiu (ktorá zobrazuje rukou písaný alebo vytlačený papierový nákupný zoznam od rodičov). Prečítaj položky a vytvor z nich zoznam. Výstup vráť STRIKTNE ako jeden platný JSON objekt (žiadny iný text okolo, žiadne markdown značky ako " + bTick3 + "json). JSON musí presne zodpovedať tejto schéme:\n{\n  \"items\": [\n    { \"name\": \"Názov položky (napr. Polotučné mlieko)\", \"quantity\": \"množstvo s jednotkou (napr. 2ks alebo 1l alebo 500g, ak nie je zrejmé, ponechaj prázdne)\", \"category\": \"kategória (jedna z hodnôt: zelenina, maso, mliecne, pecivo, trvanlive, mrazene, drogeria, ostatne)\" }\n  ]\n}"
+                        text: "Si slovenský kulinársky asistent pre rodinu. Analyzuj túto fotografiu (ktorá zobrazuje rukou písaný alebo vytlačený papierový nákupný zoznam od starých rodičov). Prečítaj položky a vytvor z nich zoznam. Výstup vráť STRIKTNE ako jeden platný JSON objekt (žiadny iný text okolo, žiadne markdown značky ako " + bTick3 + "json). JSON musí presne zodpovedať tejto schéme:\n{\n  \"items\": [\n    { \"name\": \"Názov položky (napr. Polotučné mlieko)\", \"quantity\": \"množstvo s jednotkou (napr. 2ks alebo 1l alebo 500g, ak nie je zrejmé, ponechaj prázdne)\", \"category\": \"kategória (jedna z hodnôt: zelenina, maso, mliecne, pecivo, trvanlive, mrazene, drogeria, ostatne)\" }\n  ]\n}"
                     },
                     {
                         inlineData: {
@@ -2723,7 +2723,7 @@ function analyzeParentsListWithGemini(base64Data, mimeType) {
                 parentsShoppingList = [...parentsShoppingList, ...formattedItems];
                 saveParentsShoppingToStorage();
                 renderParentsShoppingList();
-                alert("Nákupný zoznam od rodičov bol úspešne načítaný a pridaný! Spolu sa pridalo " + formattedItems.length + " položiek.");
+                alert("Nákupný zoznam od starých rodičov bol úspešne načítaný a pridaný! Spolu sa pridalo " + formattedItems.length + " položiek.");
             } else {
                 alert("AI na fotke nenašla žiadne položky nákupného zoznamu.");
             }
@@ -2746,7 +2746,7 @@ function renderParentsShoppingList() {
     container.innerHTML = "";
 
     if (parentsShoppingList.length === 0) {
-        container.innerHTML = "<p style='color: var(--text-muted); font-size: 12px; text-align: center; padding: 20px 0; font-style: italic;'>Zoznam je prázdny. Odfoťte papierový zoznam vyššie.</p>";
+        container.innerHTML = "<p style='color: var(--text-muted); font-size: 12px; text-align: center; padding: 20px 0; font-style: italic;'>Zoznam je prázdny. Odfoťte papierový zoznam starých rodičov alebo pridajte položky ručne.</p>";
         return;
     }
 
@@ -2796,9 +2796,33 @@ function deleteParentsShoppingItem(idx) {
 
 function clearParentsShoppingList() {
     if (parentsShoppingList.length === 0) return;
-    if (confirm("Naozaj chcete vymazať celý nákupný zoznam pre rodičov?")) {
+    if (confirm("Naozaj chcete vymazať celý nákupný zoznam pre starých rodičov?")) {
         parentsShoppingList = [];
         saveParentsShoppingToStorage();
         renderParentsShoppingList();
     }
+}
+
+function addManualGrandparentsItem(event) {
+    event.preventDefault();
+    const nameInput = document.getElementById("grandparents-item-name");
+    const qtyInput = document.getElementById("grandparents-item-qty");
+    if (!nameInput) return;
+
+    const name = nameInput.value.trim();
+    const qty = qtyInput ? qtyInput.value.trim() : "";
+
+    if (!name) return;
+
+    parentsShoppingList.push({
+        name: name,
+        quantity: qty,
+        category: "ostatne",
+        checked: false
+    });
+
+    saveParentsShoppingToStorage();
+    nameInput.value = "";
+    if (qtyInput) qtyInput.value = "";
+    renderParentsShoppingList();
 }
