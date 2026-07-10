@@ -867,6 +867,9 @@ function renderPlanScreen() {
     if (!timeline) return;
 
     timeline.innerHTML = "";
+    
+    // Update active suggestions banner
+    updatePlanSuggestionsBanner();
 
     // Toggle class active on correct button
     document.getElementById("btn-days-7").classList.toggle("active", currentPlan.duration === 7);
@@ -1020,6 +1023,70 @@ function renderSwapList() {
 
     // Filter meals
     const filtered = meals.filter(m => m.name.toLowerCase().includes(searchVal));
+
+    // ----------------------------------------------------
+    // ADD SUGGESTIONS FROM IVO & MAJO TO SWAP LIST
+    // ----------------------------------------------------
+    const ivoSug = (familyState.suggestions && familyState.suggestions.ivo) ? familyState.suggestions.ivo.filter(Boolean) : [];
+    const majoSug = (familyState.suggestions && familyState.suggestions.majo) ? familyState.suggestions.majo.filter(Boolean) : [];
+
+    const allSuggestions = [];
+    ivoSug.forEach((sug, idx) => {
+        if (sug.toLowerCase().includes(searchVal)) {
+            allSuggestions.push({ name: sug, son: "Ivo", originalIndex: idx, role: "ivo" });
+        }
+    });
+    majoSug.forEach((sug, idx) => {
+        if (sug.toLowerCase().includes(searchVal)) {
+            allSuggestions.push({ name: sug, son: "Majo", originalIndex: idx, role: "majo" });
+        }
+    });
+
+    if (allSuggestions.length > 0) {
+        const headerDiv = document.createElement("div");
+        headerDiv.style.padding = "8px 12px";
+        headerDiv.style.fontWeight = "bold";
+        headerDiv.style.fontSize = "12px";
+        headerDiv.style.color = "#b7950b";
+        headerDiv.style.borderLeft = "4px solid var(--accent)";
+        headerDiv.style.backgroundColor = "var(--accent-light)";
+        headerDiv.style.marginBottom = "5px";
+        headerDiv.style.borderRadius = "var(--border-radius-xs)";
+        headerDiv.innerHTML = "💡 ŽELANIA OD CHALANOV (KLIKNITE PRE NAPLÁNOVANIE):";
+        container.appendChild(headerDiv);
+
+        allSuggestions.forEach(sug => {
+            const matchedMeal = meals.find(m => m.name.toLowerCase().trim() === sug.name.toLowerCase().trim());
+            const sugDiv = document.createElement("div");
+            sugDiv.className = "swap-meal-item";
+            sugDiv.style.borderLeft = "4px solid var(--accent)";
+            sugDiv.style.backgroundColor = "rgba(241, 196, 15, 0.08)";
+
+            if (matchedMeal) {
+                sugDiv.onclick = () => selectSwapMeal(matchedMeal.id);
+                sugDiv.innerHTML = `
+                    <span class="swap-meal-item-name">🥞 ${sug.name} (chce ${sug.son})</span>
+                    <span class="swap-meal-item-cat">${matchedMeal.category.toUpperCase()} | ⏱️ ${matchedMeal.prepTime} min</span>
+                `;
+            } else {
+                sugDiv.onclick = () => {
+                    closeSwapMealModal();
+                    addSuggestedMealToDatabase(sug.name, sug.role, sug.originalIndex);
+                };
+                sugDiv.innerHTML = `
+                    <span class="swap-meal-item-name">➕ Pridať & Naplánovať: ${sug.name} (chce ${sug.son})</span>
+                    <span class="swap-meal-item-cat">Kliknutím vytvoríte recept a hneď ho naplánujete</span>
+                `;
+            }
+            container.appendChild(sugDiv);
+        });
+
+        // Add a spacing or small border
+        const dividerDiv = document.createElement("div");
+        dividerDiv.style.margin = "10px 0";
+        dividerDiv.style.borderBottom = "1.5px dashed var(--border-color)";
+        container.appendChild(dividerDiv);
+    }
 
     // Special items for swap
     if (swapTargetType === 'lunch') {
@@ -2825,4 +2892,23 @@ function addManualGrandparentsItem(event) {
     nameInput.value = "";
     if (qtyInput) qtyInput.value = "";
     renderParentsShoppingList();
+}
+
+function updatePlanSuggestionsBanner() {
+    const banner = document.getElementById("plan-suggestions-banner");
+    const textSpan = document.getElementById("plan-suggestions-text");
+    if (!banner || !textSpan) return;
+
+    const ivoSug = (familyState.suggestions && familyState.suggestions.ivo) ? familyState.suggestions.ivo.filter(Boolean) : [];
+    const majoSug = (familyState.suggestions && familyState.suggestions.majo) ? familyState.suggestions.majo.filter(Boolean) : [];
+
+    if (ivoSug.length === 0 && majoSug.length === 0) {
+        banner.classList.add("hidden");
+    } else {
+        banner.classList.remove("hidden");
+        const parts = [];
+        if (ivoSug.length > 0) parts.push("👦 Ivo: " + ivoSug.join(", "));
+        if (majoSug.length > 0) parts.push("👦 Majo: " + majoSug.join(", "));
+        textSpan.textContent = parts.join(" | ");
+    }
 }
