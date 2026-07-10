@@ -1,262 +1,4 @@
-// Default database of 15 Slovak recipes
-const DEFAULT_MEALS = [
-    {
-        id: "m1",
-        name: "Kurací vývar",
-        category: "polievka",
-        servings: 6,
-        prepTime: 120,
-        difficulty: "lahke",
-        cookForTwoDays: true,
-        canFreeze: true,
-        popularity: "velmi-oblubene",
-        likedBy: ["role1", "role2", "role3", "role4"],
-        ingredientsText: "Kuracie trupy a stehná, 500g, maso\nMrkva, 3ks, zelenina\nPetržlen, 2ks, zelenina\nKaleráb, 1ks, zelenina\nCibuľa, 1ks, zelenina\nPolievkové rezance, 100g, trvanlive\nSoľ, 1ČL, trvanlive",
-        instructions: "Kuracie mäso zalejeme studenou vodou, posolíme a privedieme k varu. Naberieme penu, pridáme očistenú zeleninu a na miernom ohni varíme pomaly aspoň 2 hodiny. Podávame s uvarenými rezancami.",
-        rating: "bolo-v-poriadku",
-        note: "Tradičná nedeľná polievka."
-    },
-    {
-        id: "m2",
-        name: "Segedínsky guláš",
-        category: "hlavne",
-        servings: 6,
-        prepTime: 90,
-        difficulty: "stredne",
-        cookForTwoDays: true,
-        canFreeze: true,
-        popularity: "velmi-oblubene",
-        likedBy: ["role1", "role2", "role3", "role4"],
-        ingredientsText: "Bravčové pliecko, 600g, maso\nKyslá kapusta, 500g, trvanlive\nCibuľa, 2ks, zelenina\nKyslá smotana, 250ml, mliecne\nHladká múka, 2PL, trvanlive\nOlej, 3PL, trvanlive\nMletá sladká paprika, 2PL, trvanlive\nKnedľa (na podávanie), 1ks, pecivo",
-        instructions: "Na oleji opražíme nakrájanú cibuľu, pridáme mletú papriku a nakrájané mäso. Opečieme, podlejeme vodou a dusíme. Po 30 minútach pridáme kyslú kapustu a dusíme do zmäknutia. Na záver zahustíme smotanou rozmiešanou s múkou. Necháme prevrieť.",
-        rating: "bolo-v-poriadku",
-        note: "Najlepší je na druhý deň, podávať s knedľou."
-    },
-    {
-        id: "m3",
-        name: "Kurací perkelt",
-        category: "hlavne",
-        servings: 4,
-        prepTime: 60,
-        difficulty: "stredne",
-        cookForTwoDays: true,
-        canFreeze: true,
-        popularity: "velmi-oblubene",
-        likedBy: ["role1", "role2", "role3", "role4"],
-        ingredientsText: "Kuracie stehná horné, 4ks, maso\nCibuľa, 2ks, zelenina\nSmotana na šľahanie, 250ml, mliecne\nHladká múka, 1PL, trvanlive\nCestoviny (kolienka), 400g, trvanlive\nOlej, 2PL, trvanlive\nMletá červená paprika, 1PL, trvanlive",
-        instructions: "Na oleji speníme nadrobno nakrájanú cibuľu. Pridáme červenú papriku, orestujeme a pridáme kuracie stehná. Osolíme, podlejeme vodou a dusíme pod pokrievkou do zmäknutia. Vyberieme mäso, do šťavy vlejeme smotanu rozmiešanú s hladkou múkou, prevaríme a vrátime mäso späť. Podávame s cestovinou.",
-        rating: "bolo-v-poriadku",
-        note: "Syn ho miluje s kolienkami."
-    },
-    {
-        id: "m4",
-        name: "Rizoto s kuracím mäsom",
-        category: "rychle",
-        servings: 4,
-        prepTime: 40,
-        difficulty: "lahke",
-        cookForTwoDays: false,
-        canFreeze: false,
-        popularity: "bezne",
-        likedBy: ["role1", "role3", "role4"],
-        ingredientsText: "Ryža, 300g, trvanlive\nKuracie prsia, 400g, maso\nMrazený hrášok a kukurica, 200g, mrazene\nCibuľa, 1ks, zelenina\nTvrdý syr (Eidam), 150g, mliecne\nOlej, 2PL, trvanlive",
-        instructions: "Uvaríme ryžu. Na druhej panvici orestujeme cibuľu, pridáme na kocky nakrájané kuracie prsia, osolíme, okoreníme a opekáme. Keď je mäso hotové, pridáme zeleninu a chvíľu podusíme. Nakoniec zmiešame s uvarenou ryžou a na tanieri posypeme nastrúhaným syrom.",
-        rating: "bolo-v-poriadku",
-        note: "Rýchly obed cez týždeň."
-    },
-    {
-        id: "m5",
-        name: "Špagety s mäsovou omáčkou",
-        category: "rychle",
-        servings: 4,
-        prepTime: 40,
-        difficulty: "lahke",
-        cookForTwoDays: false,
-        canFreeze: true,
-        popularity: "velmi-oblubene",
-        likedBy: ["role1", "role2", "role3", "role4"],
-        ingredientsText: "Mleté mäso mix, 500g, maso\nŠpagety, 400g, trvanlive\nParadajkový pretlak, 500g, trvanlive\nCibuľa, 1ks, zelenina\nCesnak, 2strúčiky, zelenina\nTvrdý syr, 100g, mliecne\nOlej, 2PL, trvanlive",
-        instructions: "Na oleji orestujeme cibuľu a cesnak, pridáme mleté mäso a opekáme ho. Osolíme, okoreníme, zalejeme paradajkovým pretlakom a dusíme cca 25 minút. Špagety uvaríme v osolenej vode. Podávame omáčku na špagetách posypanú syrom.",
-        rating: "bolo-v-poriadku",
-        note: "Klasické talianske jedlo po slovensky."
-    },
-    {
-        id: "m6",
-        name: "Francúzske zemiaky",
-        category: "hlavne",
-        servings: 4,
-        prepTime: 65,
-        difficulty: "stredne",
-        cookForTwoDays: true,
-        canFreeze: false,
-        popularity: "bezne",
-        likedBy: ["mama", "otec"],
-        ingredientsText: "Zemiaky, 1kg, zelenina\nKlobása na varenie, 2ks, maso\nVajíčka, 4ks, mliecne\nKyslá smotana, 250ml, mliecne\nOlej na vymazanie, 1PL, trvanlive",
-        instructions: "Uvaríme zemiaky v šupke a vajíčka natvrdo. Zemiaky ošúpeme a nakrájame na kolieska. Do vymazaného pekáča vrstvíme zemiaky, nakrájanú klobásu a vajíčka. Každú vrstvu jemne osolíme. Kyslú smotanu osolíme, rozšľaháme a zalejeme ňou zemiaky. Pečieme na 180°C asi 30-40 minút do zlatista.",
-        rating: "bolo-v-poriadku",
-        note: "Podávame s kyslou uhorkou."
-    },
-    {
-        id: "m7",
-        name: "Zapekané cestoviny",
-        category: "rychle",
-        servings: 4,
-        prepTime: 45,
-        difficulty: "lahke",
-        cookForTwoDays: true,
-        canFreeze: false,
-        popularity: "bezne",
-        likedBy: ["role1", "role3", "role4"],
-        ingredientsText: "Cestoviny (Penne), 400g, trvanlive\nŠunka, 200g, maso\nTvrdý syr Eidam, 150g, mliecne\nVajíčka, 3ks, mliecne\nSmotana na varenie, 250ml, mliecne\nSterilizovaná kukurica, 1ks, trvanlive",
-        instructions: "Cestoviny uvaríme. Zmiešame ich s nakrájanou šunkou, kukuricou a polovicou nastrúhaného syra. Vložíme do pekáča. Vajíčka rozšľaháme v smotane, osolíme, okoreníme a zalejeme cestoviny. Posypeme zvyšným syrom a zapekáme na 180°C cca 25 minút.",
-        rating: "bolo-v-poriadku",
-        note: "Skvelé na spotrebovanie zvyškov syra a šunky."
-    },
-    {
-        id: "m8",
-        name: "Zeleninová polievka",
-        category: "lahke",
-        servings: 4,
-        prepTime: 30,
-        difficulty: "lahke",
-        cookForTwoDays: false,
-        canFreeze: false,
-        popularity: "obcas",
-        likedBy: ["role1", "role2", "role3", "role4"],
-        ingredientsText: "Mrkva, 2ks, zelenina\nPetržlen, 1ks, zelenina\nMrazený hrášok, 100g, zelenina\nZemiaky, 2ks, zelenina\nMaslo, 50g, mliecne\nKrupicové halušky (vajce + detská krupica), 1ks, trvanlive",
-        instructions: "Očistenú zeleninu nakrájame. Na roztopenom masle orestujeme mrkvu a petržlen. Zalejeme vodou, pridáme zemiaky a varíme. Pred koncom pridáme hrášok a zavaríme malé krupicové halušky z jedného vajíčka a krupice. Osolíme a ozdobíme petržlenovou vňaťou.",
-        rating: "bolo-v-poriadku",
-        note: "Rýchla a zdravá polievka."
-    },
-    {
-        id: "m9",
-        name: "Šošovicová polievka na kyslo",
-        category: "polievka",
-        servings: 6,
-        prepTime: 50,
-        difficulty: "lahke",
-        cookForTwoDays: true,
-        canFreeze: false,
-        popularity: "bezne",
-        likedBy: ["role1", "role2", "role3", "role4"],
-        ingredientsText: "Šošovica, 200g, trvanlive\nZemiaky, 2ks, zelenina\nBobkový list, 2ks, trvanlive\nCesnak, 2strúčiky, zelenina\nKyslá smotana, 200ml, mliecne\nHladká múka, 1PL, trvanlive\nOcot, 1PL, trvanlive",
-        instructions: "Šošovicu vopred namočíme. Uvaríme ju vo vode s bobkovým listom. Keď je polomäkká, pridáme nakrájané zemiaky a prelisovaný cesnak. Keď zemiaky zmäknú, pridáme zátrepku z kyslej smotany a hladkej múky. Prevaríme. Dochutíme octom a cukrom podľa potreby.",
-        rating: "bolo-v-poriadku",
-        note: "Kyslá a sýta polievka."
-    },
-    {
-        id: "m10",
-        name: "Granadír",
-        category: "bezmasite",
-        servings: 4,
-        prepTime: 35,
-        difficulty: "lahke",
-        cookForTwoDays: true,
-        canFreeze: false,
-        popularity: "bezne",
-        likedBy: ["role1", "role2", "role3", "role4"],
-        ingredientsText: "Cestoviny fliačky, 400g, trvanlive\nZemiaky, 600g, zelenina\nCibuľa, 1ks, zelenina\nMletá sladká paprika, 2ČL, trvanlive\nOlej, 3PL, trvanlive",
-        instructions: "Uvaríme zemiaky aj cestoviny zvlášť. Na oleji speníme nadrobno nakrájanú cibuľu, pridáme mletú sladkú papriku, rýchlo premiešame a pridáme uvarené zemiaky. Zemiaky v hrnci popučíme a zmiešame s uvarenými cestovinami. Osolíme a podávame.",
-        rating: "bolo-v-poriadku",
-        note: "Lacné a veľmi obľúbené slovenské jedlo. Podávať s kyslou uhorkou."
-    },
-    {
-        id: "m11",
-        name: "Ryba na masle so zemiakmi",
-        category: "lahke",
-        servings: 4,
-        prepTime: 40,
-        difficulty: "lahke",
-        cookForTwoDays: false,
-        canFreeze: false,
-        popularity: "bezne",
-        likedBy: ["mama", "otec"],
-        ingredientsText: "Rybie filé / Treska, 600g, maso\nZemiaky, 1kg, zelenina\nMaslo, 100g, mliecne\nCitrón, 1ks, zelenina\nRasca mletá, 1ČL, trvanlive",
-        instructions: "Zemiaky ošúpeme, nakrájame a uvaríme v osolenej vode. Rybie filé osolíme, okoreníme rascom. Na panvici rozpustíme maslo a filé opečieme z oboch strán (cca 5 minút z každej strany). Podávame s maslovými zemiakmi pokvapkané citrónom.",
-        rating: "bolo-v-poriadku",
-        note: "Ľahký piatkový obed."
-    },
-    {
-        id: "m12",
-        name: "Kuracie prsia s ryžou",
-        category: "rychle",
-        servings: 4,
-        prepTime: 30,
-        difficulty: "lahke",
-        cookForTwoDays: false,
-        canFreeze: false,
-        popularity: "velmi-oblubene",
-        likedBy: ["role1", "role3", "role4", "role2"],
-        ingredientsText: "Kuracie prsia, 500g, maso\nRyža, 300g, trvanlive\nOlej, 2PL, trvanlive\nKompót broskyňový, 1ks, trvanlive\nMaslo, 20g, mliecne",
-        instructions: "Ryžu prepláchneme a uvaríme. Kuracie prsia nakrájame na rezne, jemne naklepeme, osolíme a okoreníme. Na rozpálenom oleji s kúskom masla orestujeme kuracie plátky z oboch strán do mäkka. Podávame s ryžou a broskyňovým kompótom.",
-        rating: "bolo-v-poriadku",
-        note: "Absolútna klasika, ktorú zje každý."
-    },
-    {
-        id: "m13",
-        name: "Palacinky s džemom",
-        category: "bezmasite",
-        servings: 4,
-        prepTime: 40,
-        difficulty: "lahke",
-        cookForTwoDays: false,
-        canFreeze: true,
-        popularity: "velmi-oblubene",
-        likedBy: ["role3", "role4", "role1", "role2"],
-        ingredientsText: "Hladká múka, 250g, trvanlive\nMlieko, 500ml, mliecne\nVajíčka, 2ks, mliecne\nDžem (jahodový/marhuľový), 1ks, trvanlive\nOlej na vyprážanie, 3PL, trvanlive\nCukor vanilkový, 1ks, trvanlive",
-        instructions: "Z múky, mlieka, vajíčok, štipky soli a vanilkového cukru vyšľaháme hladké cesto. Necháme 10 minút odstáť. Na panvici potretej olejom pečieme tenké palacinky z oboch strán. Natrieme džemom, zrolujeme a pocukrujeme.",
-        rating: "bolo-v-poriadku",
-        note: "Najobľúbenejšie sladké jedlo nášho syna."
-    },
-    {
-        id: "m14",
-        name: "Zeleninové lečo s klobásou",
-        category: "rychle",
-        servings: 3,
-        prepTime: 30,
-        difficulty: "lahke",
-        cookForTwoDays: false,
-        canFreeze: false,
-        popularity: "obcas",
-        likedBy: ["mama", "otec"],
-        ingredientsText: "Biela paprika, 5ks, zelenina\nParadajky zrelé, 4ks, zelenina\nCibuľa, 1ks, zelenina\nVajíčka, 4ks, mliecne\nKlobása pikantná, 2ks, maso\nOlej, 2PL, trvanlive",
-        instructions: "Cibuľu a klobásu nakrájame. Na oleji orestujeme cibuľu, pridáme klobásu a opečieme. Pridáme nakrájanú papriku a podusíme 10 minút pod pokrievkou. Následne pridáme nakrájané paradajky a dusíme, kým zelenina nezmäkne a neodparí sa voda. Na záver vlejeme rozšľahané vajíčka, osolíme a miešame do stuhnutia.",
-        rating: "bolo-v-poriadku",
-        note: "Ideálne letné jedlo z čerstvej zeleniny zo záhrady."
-    },
-    {
-        id: "m15",
-        name: "Fazuľový prívarok",
-        category: "bezmasite",
-        servings: 4,
-        prepTime: 60,
-        difficulty: "stredne",
-        cookForTwoDays: true,
-        canFreeze: false,
-        popularity: "obcas",
-        likedBy: ["mama", "otec"],
-        ingredientsText: "Biela fazuľa suchá, 250g, trvanlive\nSmotana na varenie, 250ml, mliecne\nHladká múka, 2PL, trvanlive\nCesnak, 2strúčiky, zelenina\nBobkový list, 2ks, trvanlive\nOcot, 1PL, trvanlive",
-        instructions: "Fazuľu namočíme deň vopred. Uvaríme ju s bobkovým listom do mäkka. Smotanu rozmiešame s múkou a vlejeme k fazuli. Za stáleho miešania povaríme. Pridáme prelisovaný cesnak, soľ a na záver dochutíme octom a cukrom. Podávame s vajíčkom natvrdo alebo fašírkou.",
-        rating: "bolo-v-poriadku",
-        note: "Podávame s čerstvým chlebom."
-    }
-];
-
-const DEFAULT_PANTRY = [
-    { name: "ryža", status: "mame" },
-    { name: "cestoviny", status: "mame" },
-    { name: "múka", status: "dochadza" },
-    { name: "olej", status: "mame" },
-    { name: "cukor", status: "mame" },
-    { name: "soľ", status: "mame" },
-    { name: "zemiaky", status: "treba-kupit" },
-    { name: "cibuľa", status: "dochadza" },
-    { name: "cesnak", status: "mame" },
-    { name: "konzervy", status: "mame" },
-    { name: "strukoviny", status: "mame" },
-    { name: "mrazené potraviny", status: "mame" }
-];
-
+// Kategórie nákupného zoznamu (slovenské preklady).
 const CATEGORY_TRANSLATIONS = {
     zelenina: "Zelenina a ovocie",
     maso: "Mäso a ryby",
@@ -268,16 +10,16 @@ const CATEGORY_TRANSLATIONS = {
     ostatne: "Ostatné"
 };
 
+// PocketBase klient — adresa backendu je v config.js (PB_URL).
+const pb = new PocketBase(PB_URL);
+
 // State Variables
 let meals = [];
 let currentPlan = null;
+let currentPlanRecordId = null;
 let pantry = [];
 let shoppingList = [];
 let activeTab = 'today';
-let firebaseConfig = null;
-let isFirebaseConnected = false;
-let geminiApiKey = null;
-let firebaseFamilyPassword = '';
 let tempFridgeSuggestions = [];
 let memberNames = {
     role1: "Mama",
@@ -285,7 +27,16 @@ let memberNames = {
     role3: "Člen 1",
     role4: "Člen 2"
 };
-let parentsShoppingList = [];
+let memberRecordIds = {
+    role1: null,
+    role2: null,
+    role3: null,
+    role4: null
+};
+let suggestionRecordIds = {
+    role3: null,
+    role4: null
+};
 let familyState = {
     activeRole: "role2",
     suggestions: {
@@ -298,139 +49,439 @@ let familyState = {
     }
 };
 
-// Initialize Application
+function roleIcon(roleKey) {
+    if (roleKey === 'role1') return '👩';
+    if (roleKey === 'role2') return '👨';
+    if (roleKey === 'role3' || roleKey === 'role4') return '👦';
+    return '';
+}
+
+// ----------------------------------------------------
+// REPOSITORY HELPERS
+// Jediná vrstva, ktorá komunikuje s PocketBase. Mapuje medzi camelCase
+// tvarom používaným v zvyšku appky a snake_case poľami v PB kolekciách,
+// aby zvyšný kód (render funkcie, generatePlan, parseIngredients...)
+// nemusel vedieť nič o tvare backendu.
+// ----------------------------------------------------
+function mealFromRecord(r) {
+    return {
+        id: r.id,
+        name: r.name,
+        category: r.category,
+        servings: r.servings,
+        prepTime: r.prep_time,
+        difficulty: r.difficulty,
+        cookForTwoDays: r.cook_for_two_days,
+        canFreeze: r.can_freeze,
+        popularity: r.popularity,
+        likedBy: r.liked_by || [],
+        ingredientsText: r.ingredients_text,
+        instructions: r.instructions,
+        note: r.note,
+        rating: r.rating
+    };
+}
+
+function mealPatchToPayload(m) {
+    const payload = {};
+    if ('name' in m) payload.name = m.name;
+    if ('category' in m) payload.category = m.category;
+    if ('servings' in m) payload.servings = m.servings;
+    if ('prepTime' in m) payload.prep_time = m.prepTime;
+    if ('difficulty' in m) payload.difficulty = m.difficulty;
+    if ('cookForTwoDays' in m) payload.cook_for_two_days = m.cookForTwoDays;
+    if ('canFreeze' in m) payload.can_freeze = m.canFreeze;
+    if ('popularity' in m) payload.popularity = m.popularity;
+    if ('likedBy' in m) payload.liked_by = m.likedBy;
+    if ('ingredientsText' in m) payload.ingredients_text = m.ingredientsText;
+    if ('instructions' in m) payload.instructions = m.instructions;
+    if ('note' in m) payload.note = m.note;
+    if ('rating' in m) payload.rating = m.rating;
+    return payload;
+}
+
+const mealsRepo = {
+    async list() {
+        const records = await pb.collection('meals').getFullList({ sort: '-created' });
+        return records.map(mealFromRecord);
+    },
+    async create(meal) {
+        const payload = mealPatchToPayload(meal);
+        payload.household = pb.authStore.record.id;
+        const record = await pb.collection('meals').create(payload);
+        return mealFromRecord(record);
+    },
+    async update(id, patch) {
+        return pb.collection('meals').update(id, mealPatchToPayload(patch));
+    },
+    async remove(id) {
+        return pb.collection('meals').delete(id);
+    }
+};
+
+function pantryFromRecord(r) {
+    return { id: r.id, name: r.name, status: r.status };
+}
+const pantryRepo = {
+    async list() {
+        const records = await pb.collection('pantry_items').getFullList({ sort: 'name' });
+        return records.map(pantryFromRecord);
+    },
+    async create(item) {
+        const record = await pb.collection('pantry_items').create({
+            household: pb.authStore.record.id,
+            name: item.name,
+            status: item.status
+        });
+        return pantryFromRecord(record);
+    },
+    async update(id, patch) {
+        return pb.collection('pantry_items').update(id, patch);
+    },
+    async remove(id) {
+        return pb.collection('pantry_items').delete(id);
+    }
+};
+
+const planRepo = {
+    async loadOrCreate() {
+        try {
+            const record = await pb.collection('weekly_plans').getFirstListItem(
+                pb.filter('household = {:household}', { household: pb.authStore.record.id })
+            );
+            currentPlanRecordId = record.id;
+            return {
+                duration: record.duration || 7,
+                startDate: record.start_date ? record.start_date.slice(0, 10) : new Date().toISOString().split('T')[0],
+                days: record.days || []
+            };
+        } catch (err) {
+            return null;
+        }
+    },
+    async upsert(plan) {
+        const payload = { duration: plan.duration, start_date: plan.startDate, days: plan.days };
+        if (currentPlanRecordId) {
+            await pb.collection('weekly_plans').update(currentPlanRecordId, payload);
+        } else {
+            payload.household = pb.authStore.record.id;
+            const record = await pb.collection('weekly_plans').create(payload);
+            currentPlanRecordId = record.id;
+        }
+    }
+};
+
+function shoppingFromRecord(r) {
+    return {
+        id: r.id,
+        name: r.name,
+        quantity: r.quantity ? r.quantity : null,
+        unit: r.unit,
+        category: r.category,
+        checked: r.checked,
+        manual: r.manual
+    };
+}
+const shoppingRepo = {
+    async list() {
+        const records = await pb.collection('shopping_items').getFullList({ sort: 'created' });
+        return records.map(shoppingFromRecord);
+    },
+    async create(item) {
+        const record = await pb.collection('shopping_items').create({
+            household: pb.authStore.record.id,
+            name: item.name,
+            quantity: item.quantity || 0,
+            unit: item.unit,
+            category: item.category,
+            checked: !!item.checked,
+            manual: !!item.manual
+        });
+        return shoppingFromRecord(record);
+    },
+    async update(id, patch) {
+        const payload = {};
+        if ('checked' in patch) payload.checked = patch.checked;
+        if ('quantity' in patch) payload.quantity = patch.quantity || 0;
+        if ('category' in patch) payload.category = patch.category;
+        return pb.collection('shopping_items').update(id, payload);
+    },
+    async remove(id) {
+        return pb.collection('shopping_items').delete(id);
+    },
+    async removeMany(ids) {
+        await Promise.all(ids.map(id => this.remove(id)));
+    },
+    // Zosynchronizuje automaticky generované položky (manual=false) s novým
+    // vypočítaným zoznamom z plánu: zmaže nepotrebné, dotvorí chýbajúce,
+    // aktualizuje množstvo/kategóriu pri zhode. Ručne pridané položky sa
+    // vôbec nedotýka (tie rieši volajúci samostatne).
+    async syncAutoItems(desiredAutoItems, existingAutoItems) {
+        const key = (i) => i.name.toLowerCase() + '__' + i.unit;
+
+        const toDelete = existingAutoItems.filter(ex => !desiredAutoItems.some(d => key(d) === key(ex)));
+        const toCreate = desiredAutoItems.filter(d => !existingAutoItems.some(ex => key(ex) === key(d)));
+        const matchedPairs = desiredAutoItems
+            .map(d => ({ desired: d, existing: existingAutoItems.find(ex => key(ex) === key(d)) }))
+            .filter(pair => pair.existing);
+        const toUpdate = matchedPairs.filter(pair =>
+            pair.existing.quantity !== pair.desired.quantity || pair.existing.category !== pair.desired.category
+        );
+
+        await Promise.all(toDelete.map(i => this.remove(i.id)));
+        await Promise.all(toUpdate.map(pair => this.update(pair.existing.id, {
+            quantity: pair.desired.quantity,
+            category: pair.desired.category
+        })));
+        const created = await Promise.all(toCreate.map(i => this.create(i)));
+
+        const untouched = matchedPairs
+            .filter(pair => !toUpdate.includes(pair))
+            .map(pair => pair.existing);
+        const updated = toUpdate.map(pair => ({ ...pair.existing, quantity: pair.desired.quantity, category: pair.desired.category }));
+
+        return [...untouched, ...updated, ...created];
+    }
+};
+
+const membersRepo = {
+    async list() {
+        return pb.collection('members').getFullList();
+    },
+    async update(id, patch) {
+        return pb.collection('members').update(id, patch);
+    }
+};
+
+function suggestionFromRecord(r) {
+    return {
+        id: r.id,
+        memberRole: r.member_role,
+        suggestions: r.meal_suggestions || [],
+        ratedMealIds: r.rated_meal_ids || []
+    };
+}
+const suggestionsRepo = {
+    async list() {
+        const records = await pb.collection('suggestions').getFullList();
+        return records.map(suggestionFromRecord);
+    },
+    async upsert(memberRole, patch) {
+        const payload = {};
+        if ('suggestions' in patch) payload.meal_suggestions = patch.suggestions;
+        if ('ratedMealIds' in patch) payload.rated_meal_ids = patch.ratedMealIds;
+
+        const existingId = suggestionRecordIds[memberRole];
+        if (existingId) {
+            await pb.collection('suggestions').update(existingId, payload);
+        } else {
+            payload.household = pb.authStore.record.id;
+            payload.member_role = memberRole;
+            const record = await pb.collection('suggestions').create(payload);
+            suggestionRecordIds[memberRole] = record.id;
+        }
+    }
+};
+
+// ----------------------------------------------------
+// AUTH & BOOTSTRAP
+// ----------------------------------------------------
 document.addEventListener("DOMContentLoaded", () => {
-    initData();
+    if (pb.authStore.isValid) {
+        hideAuthGate();
+        boot();
+    } else {
+        showAuthGate();
+    }
+});
+
+function showAuthGate() {
+    document.getElementById("auth-gate").classList.remove("hidden");
+    document.querySelector(".app-container").classList.add("hidden");
+}
+
+function hideAuthGate() {
+    document.getElementById("auth-gate").classList.add("hidden");
+    document.querySelector(".app-container").classList.remove("hidden");
+}
+
+function toggleAuthMode() {
+    document.getElementById("login-form").classList.toggle("hidden");
+    document.getElementById("register-form").classList.toggle("hidden");
+    document.getElementById("auth-error").classList.add("hidden");
+}
+
+function showAuthError(message) {
+    const box = document.getElementById("auth-error");
+    if (!box) return;
+    box.textContent = message;
+    box.classList.remove("hidden");
+}
+
+async function submitLogin(event) {
+    event.preventDefault();
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value;
+    try {
+        await pb.collection('households').authWithPassword(email, password);
+        hideAuthGate();
+        boot();
+    } catch (err) {
+        showAuthError("Prihlásenie zlyhalo. Skontrolujte e-mail a heslo.");
+    }
+}
+
+async function submitRegister(event) {
+    event.preventDefault();
+    const name = document.getElementById("register-name").value.trim();
+    const email = document.getElementById("register-email").value.trim();
+    const password = document.getElementById("register-password").value;
+    try {
+        await pb.collection('households').create({
+            name: name,
+            email: email,
+            password: password,
+            passwordConfirm: password
+        });
+        await pb.collection('households').authWithPassword(email, password);
+        hideAuthGate();
+        boot();
+    } catch (err) {
+        showAuthError("Registrácia zlyhala. Skúste iný e-mail alebo silnejšie heslo (min. 8 znakov).");
+    }
+}
+
+function logoutHousehold() {
+    pb.authStore.clear();
+    window.location.reload();
+}
+
+// Hlavné načítanie dát z PocketBase a vykreslenie appky po prihlásení.
+async function boot() {
+    updateConnectionStatusUI(true);
+
+    const [mealRecords, pantryRecords, planData, shoppingRecords, memberRecords, suggestionRecords] = await Promise.all([
+        mealsRepo.list(),
+        pantryRepo.list(),
+        planRepo.loadOrCreate(),
+        shoppingRepo.list(),
+        membersRepo.list(),
+        suggestionsRepo.list()
+    ]);
+
+    meals = mealRecords;
+    pantry = pantryRecords;
+    currentPlan = planData || { duration: 7, startDate: new Date().toISOString().split('T')[0], days: [] };
+    shoppingList = shoppingRecords;
+
+    memberRecords.forEach(r => {
+        memberNames[r.role_key] = r.name;
+        memberRecordIds[r.role_key] = r.id;
+    });
+
+    suggestionRecords.forEach(s => {
+        suggestionRecordIds[s.memberRole] = s.id;
+        familyState.suggestions[s.memberRole] = s.suggestions;
+        familyState.ratedMealsThisWeek[s.memberRole] = s.ratedMealIds;
+    });
+
+    // activeRole ostáva nastavenie per zariadenie (nesynchronizuje sa cez PocketBase).
+    const savedRole = localStorage.getItem("family_active_role");
+    if (savedRole) familyState.activeRole = savedRole;
+
+    if (!currentPlan.days || currentPlan.days.length === 0) {
+        generatePlan(7, true);
+    }
+
     renderTodayScreen();
     renderPlanScreen();
     renderShoppingList();
     renderMealsScreen();
     renderPantryScreen();
     renderSuggestionsScreen();
+    updateRoleSelectOptions();
     updateRoleUI();
     updateDateDisplay();
-});
-
-// Load data from LocalStorage or Fallback to default
-function initData() {
-    // 1. Meals
-    const savedMeals = localStorage.getItem("family_meals");
-    if (savedMeals) {
-        meals = JSON.parse(savedMeals);
-    } else {
-        meals = [...DEFAULT_MEALS];
-        saveMealsToStorage();
-    }
-
-    // 2. Pantry
-    const savedPantry = localStorage.getItem("family_pantry");
-    if (savedPantry) {
-        pantry = JSON.parse(savedPantry);
-    } else {
-        pantry = [...DEFAULT_PANTRY];
-        savePantryToStorage();
-    }
-
-    // 2.5 Gemini key load
-    const savedGeminiKey = localStorage.getItem("gemini_api_key");
-    if (savedGeminiKey) {
-        geminiApiKey = savedGeminiKey;
-    }
-    
-    // 2.6 Family password load
-    firebaseFamilyPassword = localStorage.getItem("firebase_family_password") || '';
-    
-    // 2.65 Member names load
-    const savedNames = localStorage.getItem("family_member_names");
-    if (savedNames) {
-        try {
-            memberNames = JSON.parse(savedNames);
-        } catch(e) {
-            console.error("Failed to parse memberNames", e);
-        }
-    }
-
-    // 2.7 Parents shopping list load
-    const savedParents = localStorage.getItem("family_parents_shopping");
-    if (savedParents) {
-        try {
-            parentsShoppingList = JSON.parse(savedParents);
-        } catch(e) {
-            console.error("Failed to parse parents shopping list", e);
-        }
-    }
-
-    // 3. Plan
-    const savedPlan = localStorage.getItem("family_plan");
-    if (savedPlan) {
-        currentPlan = JSON.parse(savedPlan);
-    } else {
-        // Generate a simple initial plan if none exists
-        generatePlan(7, false);
-    }
-
-    // 4. Shopping List
-    const savedShopping = localStorage.getItem("family_shopping");
-    if (savedShopping) {
-        shoppingList = JSON.parse(savedShopping);
-    } else {
-        regenerateShoppingListFromPlan();
-    }
-
-    // 5. Family State
-    const savedFamily = localStorage.getItem("family_state");
-    if (savedFamily) {
-        try {
-            const parsed = JSON.parse(savedFamily);
-            // Migration logic
-            if (parsed.sonSuggestions) {
-                parsed.suggestions = {
-                    role3: parsed.sonSuggestions || [],
-                    majo: []
-                };
-                delete parsed.sonSuggestions;
-            }
-            if (!parsed.suggestions) {
-                parsed.suggestions = { role3: [], role4: [] };
-            }
-            if (Array.isArray(parsed.ratedMealsThisWeek)) {
-                parsed.ratedMealsThisWeek = {
-                    role3: parsed.ratedMealsThisWeek || [],
-                    majo: []
-                };
-            }
-            if (!parsed.ratedMealsThisWeek) {
-                parsed.ratedMealsThisWeek = { role3: [], role4: [] };
-            }
-            familyState = parsed;
-        } catch(e) {
-            console.error("Migration failed, resetting familyState", e);
-        }
-        // Sync select dropdown in UI
-        const select = document.getElementById("role-select");
-        if (select) select.value = familyState.activeRole;
-    } else {
-        saveFamilyStateToStorage();
-    }
-    initFirebase();
-}
-
-// Storage helpers
-function saveMealsToStorage() {
-    localStorage.setItem("family_meals", JSON.stringify(meals));
-}
-function savePantryToStorage() {
-    localStorage.setItem("family_pantry", JSON.stringify(pantry));
-}
-function savePlanToStorage() {
-    localStorage.setItem("family_plan", JSON.stringify(currentPlan));
-}
-function saveShoppingToStorage() {
-    localStorage.setItem("family_shopping", JSON.stringify(shoppingList));
     updateShoppingBadge();
+
+    subscribeRealtime();
 }
-function saveFamilyStateToStorage() {
-    localStorage.setItem("family_state", JSON.stringify(familyState));
+
+// ----------------------------------------------------
+// REALTIME — naživo prejaví zmeny ostatných členov domácnosti.
+// ----------------------------------------------------
+function subscribeRealtime() {
+    pb.collection('meals').subscribe('*', (e) => {
+        if (e.action === 'create') {
+            if (!meals.some(m => m.id === e.record.id)) meals.push(mealFromRecord(e.record));
+        } else if (e.action === 'update') {
+            const idx = meals.findIndex(m => m.id === e.record.id);
+            if (idx >= 0) meals[idx] = mealFromRecord(e.record); else meals.push(mealFromRecord(e.record));
+        } else if (e.action === 'delete') {
+            meals = meals.filter(m => m.id !== e.record.id);
+        }
+        if (activeTab === 'meals') renderMealsScreen();
+        if (activeTab === 'today') renderTodayScreen();
+        if (activeTab === 'plan') renderPlanScreen();
+    });
+
+    pb.collection('pantry_items').subscribe('*', (e) => {
+        if (e.action === 'create') {
+            if (!pantry.some(p => p.id === e.record.id)) pantry.push(pantryFromRecord(e.record));
+        } else if (e.action === 'update') {
+            const idx = pantry.findIndex(p => p.id === e.record.id);
+            if (idx >= 0) pantry[idx] = pantryFromRecord(e.record);
+        } else if (e.action === 'delete') {
+            pantry = pantry.filter(p => p.id !== e.record.id);
+        }
+        if (activeTab === 'pantry') renderPantryScreen();
+        if (activeTab === 'shopping') renderShoppingList();
+        if (activeTab === 'suggestions') updateSynPantryProgress();
+    });
+
+    pb.collection('weekly_plans').subscribe('*', (e) => {
+        currentPlanRecordId = e.record.id;
+        currentPlan = {
+            duration: e.record.duration || 7,
+            startDate: (e.record.start_date || "").slice(0, 10) || new Date().toISOString().split('T')[0],
+            days: e.record.days || []
+        };
+        if (activeTab === 'plan') renderPlanScreen();
+        if (activeTab === 'today') renderTodayScreen();
+    });
+
+    pb.collection('shopping_items').subscribe('*', (e) => {
+        if (e.action === 'create') {
+            if (!shoppingList.some(i => i.id === e.record.id)) shoppingList.push(shoppingFromRecord(e.record));
+        } else if (e.action === 'update') {
+            const idx = shoppingList.findIndex(i => i.id === e.record.id);
+            if (idx >= 0) shoppingList[idx] = shoppingFromRecord(e.record);
+        } else if (e.action === 'delete') {
+            shoppingList = shoppingList.filter(i => i.id !== e.record.id);
+        }
+        updateShoppingBadge();
+        if (activeTab === 'shopping') renderShoppingList();
+    });
+
+    pb.collection('members').subscribe('*', (e) => {
+        memberNames[e.record.role_key] = e.record.name;
+        memberRecordIds[e.record.role_key] = e.record.id;
+        updateRoleSelectOptions();
+        updateRoleUI();
+        if (activeTab === 'suggestions') renderSuggestionsScreen();
+        if (activeTab === 'meals') renderMealsScreen();
+        if (activeTab === 'plan') renderPlanScreen();
+        if (activeTab === 'today') renderTodayScreen();
+    });
+
+    pb.collection('suggestions').subscribe('*', (e) => {
+        const s = suggestionFromRecord(e.record);
+        suggestionRecordIds[s.memberRole] = s.id;
+        familyState.suggestions[s.memberRole] = s.suggestions;
+        familyState.ratedMealsThisWeek[s.memberRole] = s.ratedMealIds;
+        if (activeTab === 'suggestions') renderSuggestionsScreen();
+        if (activeTab === 'plan') renderPlanScreen();
+    });
 }
 
 // Update date display on Today screen
@@ -474,13 +525,13 @@ function showTab(tabId) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Role Switching Handler
+// Role Switching Handler (activeRole je nastavenie per zariadenie, nesynchronizuje sa)
 function changeRole(role) {
     familyState.activeRole = role;
-    saveFamilyStateToStorage();
+    localStorage.setItem("family_active_role", role);
     updateRoleUI();
 
-    // If role is Syn, automatically jump to suggestions
+    // If role is helper (role3/role4), automatically jump to suggestions
     if (role === "role3" || role === "role4") {
         showTab("suggestions");
     } else {
@@ -494,24 +545,21 @@ function updateRoleUI() {
     if (!banner) return;
 
     let tipText = "";
+    const name = memberNames[familyState.activeRole] || "";
     switch (familyState.activeRole) {
-        case "mama":
-            tipText = "👩 <strong>Ahoj mami!</strong> Máš právo spravovať jedálniček, generovať nový plán, vymieňať jedlá a hodnotiť ich po dovarení.";
+        case "role1":
+            tipText = "👩 <strong>Ahoj, " + name + "!</strong> Máš právo spravovať jedálniček, generovať nový plán, vymieňať jedlá a hodnotiť ich po dovarení.";
             document.body.classList.remove("role-dad-view", "role-son-view");
             document.body.classList.add("role-mom-view");
             break;
-        case "otec":
-            tipText = "👨 <strong>Ahoj oci!</strong> Môžeš upravovať databázu jedál, spravovať nákupný zoznam a vymazávať zakúpené položky.";
+        case "role2":
+            tipText = "👨 <strong>Ahoj, " + name + "!</strong> Môžeš upravovať databázu jedál, spravovať nákupný zoznam a vymazávať zakúpené položky.";
             document.body.classList.remove("role-mom-view", "role-son-view");
             document.body.classList.add("role-dad-view");
             break;
-        case "ivo":
-            tipText = "👦 <strong>Ahoj Ivo!</strong> Môžeš navrhnúť 3 jedlá na tento týždeň, skontrolovať špajzu a ohodnotiť spoločné jedlá.";
-            document.body.classList.remove("role-mom-view", "role-dad-view");
-            document.body.classList.add("role-son-view");
-            break;
-        case "majo":
-            tipText = "👦 <strong>Ahoj Majo!</strong> Môžeš navrhnúť 3 jedlá na tento týždeň, skontrolovať špajzu a ohodnotiť spoločné jedlá.";
+        case "role3":
+        case "role4":
+            tipText = "👦 <strong>Ahoj, " + name + "!</strong> Môžeš navrhnúť 3 jedlá na tento týždeň, skontrolovať špajzu a ohodnotiť spoločné jedlá.";
             document.body.classList.remove("role-mom-view", "role-dad-view");
             document.body.classList.add("role-son-view");
             break;
@@ -523,6 +571,40 @@ function updateRoleUI() {
     if (addMealBtn) {
         addMealBtn.classList.remove("hidden");
     }
+}
+
+// Naplní dropdown rolí v hlavičke, filter "Kto má rád" a labely pri
+// checkboxoch v editore jedla — všetko podľa aktuálnych mien členov.
+function updateRoleSelectOptions() {
+    const select = document.getElementById("role-select");
+    if (select) {
+        select.innerHTML = "";
+        ["role1", "role2", "role3", "role4"].forEach(roleKey => {
+            const opt = document.createElement("option");
+            opt.value = roleKey;
+            opt.textContent = roleIcon(roleKey) + " " + memberNames[roleKey];
+            select.appendChild(opt);
+        });
+        select.value = familyState.activeRole;
+    }
+
+    const filterSelect = document.getElementById("meal-filter-liked");
+    if (filterSelect) {
+        const current = filterSelect.value;
+        filterSelect.innerHTML = '<option value="all">Kto má rád: Všetci</option>';
+        ["role1", "role2", "role3", "role4"].forEach(roleKey => {
+            const opt = document.createElement("option");
+            opt.value = roleKey;
+            opt.textContent = roleIcon(roleKey) + " " + memberNames[roleKey];
+            filterSelect.appendChild(opt);
+        });
+        if ([...filterSelect.options].some(o => o.value === current)) filterSelect.value = current;
+    }
+
+    ["role1", "role2", "role3", "role4"].forEach(roleKey => {
+        const label = document.getElementById("label-like-" + roleKey);
+        if (label) label.textContent = roleIcon(roleKey) + " " + memberNames[roleKey];
+    });
 }
 
 // Parser for ingredients
@@ -577,7 +659,7 @@ function renderTodayScreen() {
     // For simplicity, let's show "1. deň (Dnes)" and let them switch, or show Day 1.
     // Let's figure out what day we are in the plan. We can default to the first incomplete day, or day 1.
     let activeDay = currentPlan.days.find(d => !d.isCooked) || currentPlan.days[0];
-    
+
     if (!activeDay) {
         grid.innerHTML = `<div class="card"><p>Plán na tento týždeň je dokončený! Vygenerujte si nový na záložke <strong>Jedálniček</strong>.</p></div>`;
         return;
@@ -666,19 +748,14 @@ function renderTodayScreen() {
 function createTodayMealCardMarkup(day, meal, typeLabel) {
     const isDinner = typeLabel === "Večera";
     const cssClass = isDinner ? "dinner" : "";
-    const likesMarkup = meal.likedBy.map(role => {
-        if (role === 'mama') return '👩';
-        if (role === 'otec') return '👨';
-        if (role === 'role3' || role === 'role4') return '👦';
-        return '';
-    }).join(' ');
+    const likesMarkup = meal.likedBy.map(roleIcon).join(' ');
 
     let ratingSection = "";
     if (day.isCooked) {
         const ratingVal = meal.rating || "bolo-v-poriadku";
         let SlovakRating = "Bolo to v poriadku";
         let ratingClass = "poriadok";
-        
+
         if (ratingVal === 'chutilo') { SlovakRating = "😋 Chutilo nám!"; ratingClass = "chutilo"; }
         if (ratingVal === 'menej-casto') { SlovakRating = "😐 Radšej menej často"; ratingClass = "menej-casto"; }
         if (ratingVal === 'nechceme') { SlovakRating = "🤢 Nechceme opakovať"; ratingClass = "nechceme"; }
@@ -702,19 +779,19 @@ function createTodayMealCardMarkup(day, meal, typeLabel) {
         <div class="today-meal-card card ${cssClass}">
             <div class="meal-label">${typeLabel}</div>
             <h3 class="meal-title">${meal.name}</h3>
-            
+
             <div class="meal-meta">
                 <span class="meta-badge">⏱️ ${meal.prepTime} min</span>
                 <span class="meta-badge">📊 ${meal.difficulty === 'lahke' ? 'Ľahké' : meal.difficulty === 'stredne' ? 'Stredné' : 'Náročné'}</span>
                 <span class="meta-badge">👥 ${meal.servings} porcií</span>
                 <span class="meta-badge" title="Kto má rád">❤️ ${likesMarkup}</span>
             </div>
-            
+
             <div class="meal-card-actions">
                 <button class="btn btn-secondary btn-sm" onclick="openRecipeModal('${meal.id}')">📖 Recept & Postup</button>
                 ${!day.isCooked ? `<button class="btn btn-primary btn-sm" onclick="markDayAsCooked(${day.dayNumber})">✓ Uvarené!</button>` : ''}
             </div>
-            
+
             ${ratingSection}
         </div>
     `;
@@ -733,9 +810,9 @@ function rateMealFromToday(mealId, ratingValue, dayNumber) {
     const meal = meals.find(m => m.id === mealId);
     if (meal) {
         meal.rating = ratingValue;
-        saveMealsToStorage();
+        mealsRepo.update(mealId, { rating: ratingValue });
     }
-    
+
     // Auto-mark day as cooked as well
     const day = currentPlan.days.find(d => d.dayNumber === dayNumber);
     if (day) {
@@ -754,7 +831,7 @@ function rateMealFromToday(mealId, ratingValue, dayNumber) {
 function setPlanDuration(days) {
     document.getElementById("btn-days-7").classList.toggle("active", days === 7);
     document.getElementById("btn-days-14").classList.toggle("active", days === 14);
-    
+
     // Switch duration & regenerate list
     generatePlan(days, true);
 }
@@ -805,7 +882,7 @@ function generatePlan(duration, forceRegenerate) {
         // Pick lunch
         // Filter pool to avoid repeating the last meal and manage meat streaking
         let dailyPool = pool.filter(m => m.id !== lastSelectedId);
-        
+
         // Strict meat checking: if we've had meat for 2 days in a row, prefer a vegetarian dish
         if (meatStreak >= 2) {
             const vegPool = dailyPool.filter(m => m.category === 'bezmasite' || m.category === 'lahke');
@@ -878,12 +955,34 @@ function generatePlan(duration, forceRegenerate) {
     renderPlanScreen();
 }
 
+// Banner s prianiami pomocníkov (role3/role4) nad týždenným plánom.
+function updatePlanSuggestionsBanner() {
+    const banner = document.getElementById("plan-suggestions-banner");
+    const textEl = document.getElementById("plan-suggestions-text");
+    if (!banner || !textEl) return;
+
+    const parts = [];
+    if (familyState.suggestions.role3 && familyState.suggestions.role3.filter(Boolean).length > 0) {
+        parts.push(memberNames.role3 + ": " + familyState.suggestions.role3.filter(Boolean).join(", "));
+    }
+    if (familyState.suggestions.role4 && familyState.suggestions.role4.filter(Boolean).length > 0) {
+        parts.push(memberNames.role4 + ": " + familyState.suggestions.role4.filter(Boolean).join(", "));
+    }
+
+    if (parts.length > 0) {
+        textEl.textContent = parts.join(" | ");
+        banner.classList.remove("hidden");
+    } else {
+        banner.classList.add("hidden");
+    }
+}
+
 function renderPlanScreen() {
     const timeline = document.getElementById("plan-timeline");
     if (!timeline) return;
 
     timeline.innerHTML = "";
-    
+
     // Update active suggestions banner
     updatePlanSuggestionsBanner();
 
@@ -894,7 +993,7 @@ function renderPlanScreen() {
     currentPlan.days.forEach(day => {
         const div = document.createElement("div");
         div.className = `plan-day-card card ${day.isCooked ? 'cooked-opacity' : ''}`;
-        
+
         let lunchHtml = "";
         let dinnerHtml = "";
 
@@ -1015,13 +1114,13 @@ function promptSwapMeal(dayNumber, type) {
 
     const day = currentPlan.days.find(d => d.dayNumber === dayNumber);
     label.innerText = `Zvoľte jedlo pre: ${day.date} - ${type === 'lunch' ? 'Obed' : 'Večera'}`;
-    
+
     // Clear search
     document.getElementById("swap-search").value = "";
-    
+
     // Render list
     renderSwapList();
-    
+
     modal.classList.add("active");
 }
 
@@ -1041,18 +1140,18 @@ function renderSwapList() {
     const filtered = meals.filter(m => m.name.toLowerCase().includes(searchVal));
 
     // ----------------------------------------------------
-    // ADD SUGGESTIONS FROM IVO & MAJO TO SWAP LIST
+    // ADD SUGGESTIONS FROM HELPERS (role3/role4) TO SWAP LIST
     // ----------------------------------------------------
-    const ivoSug = (familyState.suggestions && familyState.suggestions.role3) ? familyState.suggestions.role3.filter(Boolean) : [];
-    const majoSug = (familyState.suggestions && familyState.suggestions.role4) ? familyState.suggestions.role4.filter(Boolean) : [];
+    const role3Sug = (familyState.suggestions && familyState.suggestions.role3) ? familyState.suggestions.role3.filter(Boolean) : [];
+    const role4Sug = (familyState.suggestions && familyState.suggestions.role4) ? familyState.suggestions.role4.filter(Boolean) : [];
 
     const allSuggestions = [];
-    ivoSug.forEach((sug, idx) => {
+    role3Sug.forEach((sug, idx) => {
         if (sug.toLowerCase().includes(searchVal)) {
             allSuggestions.push({ name: sug, son: memberNames.role3, originalIndex: idx, role: "role3" });
         }
     });
-    majoSug.forEach((sug, idx) => {
+    role4Sug.forEach((sug, idx) => {
         if (sug.toLowerCase().includes(searchVal)) {
             allSuggestions.push({ name: sug, son: memberNames.role4, originalIndex: idx, role: "role4" });
         }
@@ -1151,7 +1250,7 @@ function selectSwapMeal(mealId) {
         } else {
             day.dinner = mealId;
         }
-        
+
         savePlanToStorage();
         regenerateShoppingListFromPlan();
         closeSwapMealModal();
@@ -1162,7 +1261,7 @@ function selectSwapMeal(mealId) {
 // ----------------------------------------------------
 // SCREEN 3: NÁKUPNÝ ZOZNAM (SHOPPING LIST)
 // ----------------------------------------------------
-function regenerateShoppingListFromPlan() {
+async function regenerateShoppingListFromPlan() {
     if (!currentPlan) return;
 
     const list = [];
@@ -1176,7 +1275,7 @@ function regenerateShoppingListFromPlan() {
     // 1. Add ingredients from planned recipes
     currentPlan.days.forEach(day => {
         let lunchMeal = null;
-        
+
         if (day.lunch === "leftover") {
             // Leftovers don't add new ingredients
         } else {
@@ -1247,7 +1346,7 @@ function regenerateShoppingListFromPlan() {
         }
     });
 
-    // 4. Add manual entries
+    // 4. Add manual entries (zachovávajú si svoje PocketBase id)
     manualEntries.forEach(item => {
         const existing = list.find(l => l.name.toLowerCase() === item.name.toLowerCase() && l.unit === item.unit);
         if (!existing) {
@@ -1255,8 +1354,16 @@ function regenerateShoppingListFromPlan() {
         }
     });
 
-    shoppingList = list;
-    saveShoppingToStorage();
+    // 5. Zosynchronizuj automaticky generované položky s PocketBase (manuálne sa nedotýka)
+    const autoList = list.filter(i => !i.manual);
+    const manualList = list.filter(i => i.manual);
+    const existingAuto = shoppingList.filter(i => !i.manual);
+    const newAutoItems = await shoppingRepo.syncAutoItems(autoList, existingAuto);
+
+    shoppingList = [...newAutoItems, ...manualList];
+
+    updateShoppingBadge();
+    if (activeTab === 'shopping') renderShoppingList();
 }
 
 function renderShoppingList() {
@@ -1282,12 +1389,7 @@ function renderShoppingList() {
         }
     });
 
-    // Append Parents' Shopping List if present
-    const uncheckedParentsItems = parentsShoppingList.filter(item => !item.checked);
     let totalItems = 0;
-    if (uncheckedParentsItems.length > 0) {
-        totalItems += uncheckedParentsItems.length;
-    }
 
     Object.keys(categories).forEach(catKey => {
         const items = categories[catKey];
@@ -1297,7 +1399,7 @@ function renderShoppingList() {
 
         const groupDiv = document.createElement("div");
         groupDiv.className = "shopping-category-group";
-        
+
         let catEmoji = "📦";
         if (catKey === 'zelenina') catEmoji = "🥦";
         if (catKey === 'maso') catEmoji = "🥩";
@@ -1319,7 +1421,7 @@ function renderShoppingList() {
         items.forEach(item => {
             const li = document.createElement("li");
             li.className = `shopping-item ${item.checked ? 'checked' : ''}`;
-            
+
             const qtyText = item.quantity !== null ? `${item.quantity} ${item.unit}` : "";
             const qtyBadge = qtyText ? `<span class="shop-item-qty-badge">${qtyText}</span>` : "";
             const manualTag = item.manual ? `<span class="shopping-item-manual-indicator">Manuálne</span>` : "";
@@ -1372,18 +1474,21 @@ function toggleShoppingItem(name, unit) {
     const item = shoppingList.find(i => i.name === name && i.unit === unit);
     if (item) {
         item.checked = !item.checked;
-        saveShoppingToStorage();
+        shoppingRepo.update(item.id, { checked: item.checked });
+        updateShoppingBadge();
         renderShoppingList();
     }
 }
 
 function deleteShoppingItem(name, unit) {
+    const item = shoppingList.find(i => i.name === name && i.unit === unit);
     shoppingList = shoppingList.filter(i => !(i.name === name && i.unit === unit));
-    saveShoppingToStorage();
+    if (item) shoppingRepo.remove(item.id);
+    updateShoppingBadge();
     renderShoppingList();
 }
 
-function addManualShoppingItem(event) {
+async function addManualShoppingItem(event) {
     event.preventDefault();
     const nameInput = document.getElementById("shop-item-name");
     const qtyInput = document.getElementById("shop-item-qty");
@@ -1402,9 +1507,10 @@ function addManualShoppingItem(event) {
     if (existing) {
         if (qty !== null && existing.quantity !== null) {
             existing.quantity += qty;
+            shoppingRepo.update(existing.id, { quantity: existing.quantity });
         }
     } else {
-        shoppingList.unshift({
+        const created = await shoppingRepo.create({
             name: name.charAt(0).toUpperCase() + name.slice(1),
             quantity: qty,
             unit: unit,
@@ -1412,9 +1518,10 @@ function addManualShoppingItem(event) {
             checked: false,
             manual: true
         });
+        shoppingList.unshift(created);
     }
 
-    saveShoppingToStorage();
+    updateShoppingBadge();
     renderShoppingList();
 
     // Reset inputs
@@ -1424,8 +1531,10 @@ function addManualShoppingItem(event) {
 }
 
 function clearCheckedShoppingItems() {
+    const checkedIds = shoppingList.filter(item => item.checked).map(item => item.id);
     shoppingList = shoppingList.filter(item => !item.checked);
-    saveShoppingToStorage();
+    shoppingRepo.removeMany(checkedIds);
+    updateShoppingBadge();
     renderShoppingList();
 }
 
@@ -1464,7 +1573,7 @@ function copyShoppingListToClipboard() {
 
         totalItems += items.length;
         text += `🟢 *${CATEGORY_TRANSLATIONS[catKey].toUpperCase()}*\n`;
-        
+
         items.forEach(item => {
             const qtyText = item.quantity !== null ? ` (${item.quantity} ${item.unit})` : "";
             text += `- [ ] ${item.name}${qtyText}\n`;
@@ -1523,12 +1632,7 @@ function renderMealsScreen() {
         const div = document.createElement("div");
         div.className = "meal-card card";
 
-        const likesIcons = meal.likedBy.map(role => {
-            if (role === 'mama') return '<span class="like-icon-badge" title="Mama">👩</span>';
-            if (role === 'otec') return '<span class="like-icon-badge" title="Otec">👨</span>';
-            if (role === 'role3' || role === 'role4') return '<span class="like-icon-badge" title="Člen">👦</span>';
-            return '';
-        }).join(' ');
+        const likesIcons = meal.likedBy.map(role => `<span class="like-icon-badge" title="${memberNames[role] || ''}">${roleIcon(role)}</span>`).join(' ');
 
         let catLabel = meal.category.toUpperCase();
         if (meal.category === 'polievka') catLabel = "🍜 Polievka";
@@ -1555,7 +1659,7 @@ function renderMealsScreen() {
             if (meal.rating === 'chutilo') { label = "😋 Chutilo"; cls = "chutilo"; }
             if (meal.rating === 'menej-casto') { label = "😐 Menej často"; cls = "menej-casto"; }
             if (meal.rating === 'nechceme') { label = "🤢 Neopakovať"; cls = "nechceme"; }
-            
+
             ratingBadge = `<span class="rating-badge-active ${cls}" style="margin: 0; padding: 2px 6px; font-size: 10px;">${label}</span>`;
         }
 
@@ -1593,12 +1697,12 @@ function filterMeals() {
     renderMealsScreen();
 }
 
-function deleteMealPrompt(mealId) {
+async function deleteMealPrompt(mealId) {
     const meal = meals.find(m => m.id === mealId);
     if (meal) {
         if (confirm(`Chcete naozaj vymazať recept "${meal.name}" zo svojej databázy?`)) {
             meals = meals.filter(m => m.id !== mealId);
-            saveMealsToStorage();
+            await mealsRepo.remove(mealId);
             renderMealsScreen();
         }
     }
@@ -1679,7 +1783,7 @@ window.onclick = function(event) {
     const recModal = document.getElementById("recipe-modal");
     const formModal = document.getElementById("meal-form-modal");
     const swapModal = document.getElementById("swap-meal-modal");
-    
+
     if (event.target === recModal) closeRecipeModal();
     if (event.target === formModal) closeMealFormModal();
     if (event.target === swapModal) closeSwapMealModal();
@@ -1722,8 +1826,6 @@ function openEditMealModal(mealId) {
     document.getElementById("edit-meal-popularity").value = meal.popularity;
 
     // Checked who likes it
-    document.getElementById("like-mama").checked = meal.likedBy.includes("mama");
-    document.getElementById("like-otec").checked = meal.likedBy.includes("otec");
     document.getElementById("like-role1").checked = meal.likedBy.includes("role1");
     document.getElementById("like-role2").checked = meal.likedBy.includes("role2");
     document.getElementById("like-role3").checked = meal.likedBy.includes("role3");
@@ -1741,7 +1843,7 @@ function closeMealFormModal() {
     if (modal) modal.classList.remove("active");
 }
 
-function saveMealForm(event) {
+async function saveMealForm(event) {
     event.preventDefault();
 
     const id = document.getElementById("edit-meal-id").value;
@@ -1755,8 +1857,6 @@ function saveMealForm(event) {
     const popularity = document.getElementById("edit-meal-popularity").value;
 
     const likedBy = [];
-    if (document.getElementById("like-mama").checked) likedBy.push("mama");
-    if (document.getElementById("like-otec").checked) likedBy.push("otec");
     if (document.getElementById("like-role1").checked) likedBy.push("role1");
     if (document.getElementById("like-role2").checked) likedBy.push("role2");
     if (document.getElementById("like-role3").checked) likedBy.push("role3");
@@ -1766,45 +1866,22 @@ function saveMealForm(event) {
     const instructions = document.getElementById("edit-meal-instructions").value.trim();
     const note = document.getElementById("edit-meal-note").value.trim();
 
+    const mealData = { name, category, servings, prepTime, difficulty, cookForTwoDays, canFreeze, popularity, likedBy, ingredientsText, instructions, note };
+
     if (id) {
         // Edit existing
         const meal = meals.find(m => m.id === id);
         if (meal) {
-            meal.name = name;
-            meal.category = category;
-            meal.servings = servings;
-            meal.prepTime = prepTime;
-            meal.difficulty = difficulty;
-            meal.cookForTwoDays = cookForTwoDays;
-            meal.canFreeze = canFreeze;
-            meal.popularity = popularity;
-            meal.likedBy = likedBy;
-            meal.ingredientsText = ingredientsText;
-            meal.instructions = instructions;
-            meal.note = note;
+            Object.assign(meal, mealData);
+            await mealsRepo.update(id, mealData);
         }
     } else {
         // Create new
-        const newId = "m_" + Date.now();
-        meals.push({
-            id: newId,
-            name,
-            category,
-            servings,
-            prepTime,
-            difficulty,
-            cookForTwoDays,
-            canFreeze,
-            popularity,
-            likedBy,
-            ingredientsText,
-            instructions,
-            note,
-            rating: "bolo-v-poriadku"
-        });
+        mealData.rating = "bolo-v-poriadku";
+        const created = await mealsRepo.create(mealData);
+        meals.push(created);
     }
 
-    saveMealsToStorage();
     renderMealsScreen();
     closeMealFormModal();
 }
@@ -1837,7 +1914,7 @@ function renderPantryScreen() {
         if (item.status === 'dochadza') badgeText = "Dochádza";
         if (item.status === 'treba-kupit') badgeText = "Treba kúpiť";
 
-        const deleteBtnMarkup = isAdmin 
+        const deleteBtnMarkup = isAdmin
             ? `<button onclick="deletePantryItem('${item.name}')" title="Vymazať surovinu" style="background: none; border: none; color: var(--danger); cursor: pointer; font-size: 14px; padding: 0; margin-right: 8px; transition: var(--transition-fast);">🗑️</button>`
             : '';
 
@@ -1861,14 +1938,15 @@ function renderPantryScreen() {
 
 function deletePantryItem(name) {
     if (confirm('Naozaj chcete surovinu "' + name + '" vymazať zo zoznamu zásob?')) {
+        const item = pantry.find(p => p.name.toLowerCase() === name.toLowerCase());
         pantry = pantry.filter(p => p.name.toLowerCase() !== name.toLowerCase());
-        savePantryToStorage();
+        if (item) pantryRepo.remove(item.id);
         renderPantryScreen();
         updateSynPantryProgress();
     }
 }
 
-function addNewPantryItem() {
+async function addNewPantryItem() {
     const input = document.getElementById("new-pantry-item-name");
     if (!input) return;
     const name = input.value.trim();
@@ -1881,13 +1959,9 @@ function addNewPantryItem() {
         return;
     }
 
-    pantry.push({
-        name: name,
-        status: "mame",
-        checkedAt: null
-    });
+    const created = await pantryRepo.create({ name: name, status: "mame" });
+    pantry.push(created);
 
-    savePantryToStorage();
     input.value = "";
     renderPantryScreen();
     updateSynPantryProgress();
@@ -1897,9 +1971,9 @@ function togglePantryItemStatus(name, newStatus) {
     const item = pantry.find(p => p.name.toLowerCase() === name.toLowerCase());
     if (item) {
         item.status = newStatus;
-        savePantryToStorage();
+        pantryRepo.update(item.id, { status: newStatus });
         renderPantryScreen();
-        
+
         // Auto update shopping list on pantry changes
         regenerateShoppingListFromPlan();
 
@@ -1922,25 +1996,25 @@ function renderSuggestionsScreen() {
     // Load suggestions from state
     const activeSon = (familyState.activeRole === "role3" || familyState.activeRole === "role4") ? familyState.activeRole : null;
 
-    // Load suggestions of BOTH Ivo and Majo for parents
-    if (familyState.suggestions.ivo && familyState.suggestions.ivo.length > 0) {
-        familyState.suggestions.ivo.forEach((sug, index) => {
+    // Load suggestions of BOTH helpers (role3/role4) for parents
+    if (familyState.suggestions.role3 && familyState.suggestions.role3.length > 0) {
+        familyState.suggestions.role3.forEach((sug, index) => {
             if (!sug) return;
             const li = document.createElement("li");
             li.innerHTML = `
-                <span>👦 Ivo: ${sug}</span>
-                <button class="btn-add-to-plan" onclick="addSuggestedMealToDatabase('${sug}', 'ivo', ${index})">➕ Pridať do databázy</button>
+                <span>👦 ${memberNames.role3}: ${sug}</span>
+                <button class="btn-add-to-plan" onclick="addSuggestedMealToDatabase('${sug}', 'role3', ${index})">➕ Pridať do databázy</button>
             `;
             pSuggestions.appendChild(li);
         });
     }
-    if (familyState.suggestions.majo && familyState.suggestions.majo.length > 0) {
-        familyState.suggestions.majo.forEach((sug, index) => {
+    if (familyState.suggestions.role4 && familyState.suggestions.role4.length > 0) {
+        familyState.suggestions.role4.forEach((sug, index) => {
             if (!sug) return;
             const li = document.createElement("li");
             li.innerHTML = `
-                <span>👦 Majo: ${sug}</span>
-                <button class="btn-add-to-plan" onclick="addSuggestedMealToDatabase('${sug}', 'majo', ${index})">➕ Pridať do databázy</button>
+                <span>👦 ${memberNames.role4}: ${sug}</span>
+                <button class="btn-add-to-plan" onclick="addSuggestedMealToDatabase('${sug}', 'role4', ${index})">➕ Pridať do databázy</button>
             `;
             pSuggestions.appendChild(li);
         });
@@ -1950,13 +2024,13 @@ function renderSuggestionsScreen() {
         pSuggestions.innerHTML = `<li style="background: none; padding: 0; color: var(--text-muted);">Žiadne aktívne návrhy jedál od rodiny.</li>`;
     }
 
-    // Set UI elements based on active role (Ivo or Majo vs Parents)
+    // Set UI elements based on active role (helper vs parents)
     const badgeLabel = document.getElementById("son-badge-label");
     const titleLabel = document.getElementById("son-title-label");
     const suggestTitle = document.getElementById("son-suggest-title");
 
     if (activeSon) {
-        const nameCap = familyState.activeRole.charAt(0).toUpperCase() + familyState.activeRole.slice(1);
+        const nameCap = memberNames[activeSon];
         if (badgeLabel) badgeLabel.innerText = "👦 Úlohy pre " + nameCap;
         if (titleLabel) titleLabel.innerText = "🎯 Tvoje návrhy a pomoc špajzi";
         if (suggestTitle) suggestTitle.innerText = "Navrhni 3 jedlá na tento týždeň, na ktoré máš chuť";
@@ -1990,7 +2064,7 @@ function renderSuggestionsScreen() {
     if (activeSon && familyState.suggestions[familyState.activeRole] && familyState.suggestions[familyState.activeRole].filter(Boolean).length === 3) {
         inputsBox.classList.add("hidden");
         displayBox.classList.remove("hidden");
-        
+
         let listHtml = "<h5>Tvoje návrhy na tento týždeň:</h5><ul>";
         familyState.suggestions[familyState.activeRole].forEach(s => {
             listHtml += `<li>⭐ ${s}</li>`;
@@ -2014,7 +2088,7 @@ function renderSuggestionsScreen() {
 }
 
 function saveSonSuggestions() {
-    const activeSon = (familyState.activeRole === "ivo" || familyState.activeRole === "majo") ? familyState.activeRole : null;
+    const activeSon = (familyState.activeRole === "role3" || familyState.activeRole === "role4") ? familyState.activeRole : null;
     if (!activeSon) return;
 
     const sug1 = document.getElementById("son-suggest-1").value.trim();
@@ -2027,17 +2101,17 @@ function saveSonSuggestions() {
     }
 
     familyState.suggestions[activeSon] = [sug1, sug2, sug3];
-    saveFamilyStateToStorage();
+    suggestionsRepo.upsert(activeSon, { suggestions: familyState.suggestions[activeSon] });
     renderSuggestionsScreen();
     alert("Super! Tvoje návrhy boli uložené a rodičia ich uvidia.");
 }
 
 function editSonSuggestions() {
-    const activeSon = (familyState.activeRole === "ivo" || familyState.activeRole === "majo") ? familyState.activeRole : null;
+    const activeSon = (familyState.activeRole === "role3" || familyState.activeRole === "role4") ? familyState.activeRole : null;
     if (!activeSon) return;
 
     familyState.suggestions[activeSon] = [];
-    saveFamilyStateToStorage();
+    suggestionsRepo.upsert(activeSon, { suggestions: [] });
     renderSuggestionsScreen();
 }
 
@@ -2045,7 +2119,7 @@ function addSuggestedMealToDatabase(mealName, sourceSon, suggestionIndex) {
     // Open Add Meal Modal with prefilled name
     openAddMealModal();
     document.getElementById("edit-meal-name").value = mealName;
-    
+
     // Check correct checkbox
     if (sourceSon === 'role3') {
         document.getElementById("like-role3").checked = true;
@@ -2060,9 +2134,8 @@ function updateSynPantryProgress() {
     if (!progressText || !progressFill) return;
 
     // For simplicity, let's track how many items are updated in pantry
-    // In actual usage, we can set checkedCount to 12 if he clicks check off
-    // Let's assume he has checked 8 items
-    let count = pantry.length; // 12
+    // In actual usage, we can set checkedCount to the total if he clicks check off
+    let count = pantry.length;
     progressText.innerText = count;
     progressFill.style.width = "100%";
 
@@ -2103,12 +2176,12 @@ function renderSonRatingTarget() {
         }
     });
 
-    const activeSon = (familyState.activeRole === "ivo" || familyState.activeRole === "majo") ? familyState.activeRole : null;
+    const activeSon = (familyState.activeRole === "role3" || familyState.activeRole === "role4") ? familyState.activeRole : null;
 
     targetMeals.forEach(meal => {
         const row = document.createElement("div");
         row.className = "son-rating-row";
-        
+
         const isRated = activeSon ? familyState.ratedMealsThisWeek[activeSon].includes(meal.id) : false;
 
         row.innerHTML = `
@@ -2124,22 +2197,22 @@ function renderSonRatingTarget() {
 }
 
 function rateAsSon(mealId, ratingVal) {
-    const activeSon = (familyState.activeRole === "ivo" || familyState.activeRole === "majo") ? familyState.activeRole : null;
+    const activeSon = (familyState.activeRole === "role3" || familyState.activeRole === "role4") ? familyState.activeRole : null;
     if (!activeSon) return;
 
     const meal = meals.find(m => m.id === mealId);
     if (meal) {
         meal.rating = ratingVal;
-        saveMealsToStorage();
+        mealsRepo.update(mealId, { rating: ratingVal });
     }
 
     if (!familyState.ratedMealsThisWeek[activeSon].includes(mealId)) {
         familyState.ratedMealsThisWeek[activeSon].push(mealId);
-        saveFamilyStateToStorage();
+        suggestionsRepo.upsert(activeSon, { ratedMealIds: familyState.ratedMealsThisWeek[activeSon] });
     }
 
     renderSuggestionsScreen();
-    
+
     // Also update checkbox badge
     const checkbox = document.querySelector("#mission-3-status .mission-checkbox");
     if (checkbox) {
@@ -2152,41 +2225,8 @@ function rateAsSon(mealId, ratingVal) {
 }
 
 // ----------------------------------------------------
-// FIREBASE SYNCHRONIZATION LOGIC
+// NASTAVENIE DOMÁCNOSTI (mená členov, odhlásenie, stav pripojenia)
 // ----------------------------------------------------
-
-
-function firebaseRef(path) {
-    const pwd = localStorage.getItem("firebase_family_password") || "default";
-    return firebase.database().ref("rodina/" + pwd + "/" + path);
-}
-
-function initFirebase() {
-    const savedConfig = localStorage.getItem("firebase_config");
-    if (savedConfig) {
-        try {
-            firebaseConfig = JSON.parse(savedConfig);
-            if (firebaseConfig && firebaseConfig.databaseURL) {
-                // Initialize Firebase app if not already done
-                if (firebase.apps.length === 0) {
-                    firebase.initializeApp(firebaseConfig);
-                }
-                isFirebaseConnected = true;
-                updateConnectionStatusUI(true);
-                setupFirebaseListeners();
-                console.log("Firebase initialized successfully in online mode.");
-            } else {
-                updateConnectionStatusUI(false);
-            }
-        } catch (e) {
-            console.error("Failed to parse or initialize Firebase:", e);
-            updateConnectionStatusUI(false);
-        }
-    } else {
-        updateConnectionStatusUI(false);
-    }
-}
-
 function updateConnectionStatusUI(online) {
     const indicator = document.getElementById("connection-status");
     if (!indicator) return;
@@ -2194,235 +2234,71 @@ function updateConnectionStatusUI(online) {
     if (online) {
         indicator.className = "connection-status-indicator online";
         indicator.querySelector(".status-text").innerText = "Online";
-        indicator.setAttribute("title", "Online synchronizácia je aktívna. Kliknite pre nastavenia.");
+        indicator.setAttribute("title", "Prihlásené. Kliknutím upravíte nastavenia domácnosti.");
     } else {
         indicator.className = "connection-status-indicator offline";
-        indicator.querySelector(".status-text").innerText = "Lokálne";
-        indicator.setAttribute("title", "Kliknutím sem prepojíte celú rodinu.");
+        indicator.querySelector(".status-text").innerText = "Odhlásené";
+        indicator.setAttribute("title", "Nie ste prihlásený.");
     }
 }
 
-function setupFirebaseListeners() {
-    if (!isFirebaseConnected) return;
-
-    // 1. Listen for Meals changes
-    firebaseRef('meals').on('value', (snapshot) => {
-        const val = snapshot.val();
-        if (val) {
-            meals = val;
-            localStorage.setItem("family_meals", JSON.stringify(meals));
-            if (activeTab === 'meals') renderMealsScreen();
-            if (activeTab === 'today') renderTodayScreen();
-        } else {
-            // Populate database with default values if empty
-            firebaseRef('meals').set(meals);
-        }
-    });
-
-    // 2. Listen for Pantry changes
-    firebaseRef('pantry').on('value', (snapshot) => {
-        const val = snapshot.val();
-        if (val) {
-            pantry = val;
-            localStorage.setItem("family_pantry", JSON.stringify(pantry));
-            if (activeTab === 'pantry') renderPantryScreen();
-            if (activeTab === 'shopping') renderShoppingList();
-            if (activeTab === 'suggestions') updateSynPantryProgress();
-        } else {
-            firebaseRef('pantry').set(pantry);
-        }
-    });
-
-    // 3. Listen for Plan changes
-    firebaseRef('plan').on('value', (snapshot) => {
-        const val = snapshot.val();
-        if (val) {
-            currentPlan = val;
-            localStorage.setItem("family_plan", JSON.stringify(currentPlan));
-            if (activeTab === 'plan') renderPlanScreen();
-            if (activeTab === 'today') renderTodayScreen();
-        } else {
-            firebaseRef('plan').set(currentPlan);
-        }
-    });
-
-    // 4. Listen for Shopping List changes
-    firebaseRef('shoppingList').on('value', (snapshot) => {
-        const val = snapshot.val();
-        if (val) {
-            shoppingList = val;
-            localStorage.setItem("family_shopping", JSON.stringify(shoppingList));
-            updateShoppingBadge();
-            if (activeTab === 'shopping') renderShoppingList();
-        } else {
-            firebaseRef('shoppingList').set(shoppingList);
-        }
-    });
-
-
-
-    // 4.8 Listen for member custom names changes
-    firebaseRef('memberNames').on('value', (snapshot) => {
-        const val = snapshot.val();
-        if (val) {
-            memberNames = val;
-            localStorage.setItem("family_member_names", JSON.stringify(memberNames));
-            updateRoleSelectOptions();
-            updateRoleUI();
-            if (activeTab === 'suggestions') renderSuggestionsScreen();
-            if (activeTab === 'meals') renderMealsScreen();
-            if (activeTab === 'plan') renderPlanScreen();
-        } else {
-            firebaseRef('memberNames').set(memberNames);
-        }
-    });
-
-    // 5. Listen for Family State changes (suggestions, etc.)
-    firebaseRef('familyState').on('value', (snapshot) => {
-        const val = snapshot.val();
-        if (val) {
-            const localRole = familyState.activeRole;
-            familyState = val;
-            familyState.activeRole = localRole; // Keep device-specific active role
-            localStorage.setItem("family_state", JSON.stringify(familyState));
-            if (activeTab === 'suggestions') renderSuggestionsScreen();
-        } else {
-            firebaseRef('familyState').set(familyState);
-        }
-    });
-}
-
-// Modal handling
-function openFirebaseSettingsModal() {
-    const modal = document.getElementById("firebase-modal");
-    const details = document.getElementById("firebase-status-details");
-    const textarea = document.getElementById("fb-config-json");
-    const geminiInput = document.getElementById("gemini-api-key");
+function openSettingsModal() {
+    const modal = document.getElementById("settings-modal");
+    const details = document.getElementById("settings-status-details");
     if (!modal || !details) return;
 
-    if (isFirebaseConnected) {
-        details.style.backgroundColor = "#d4efdf";
-        details.style.color = "#196f3d";
-        details.innerHTML = "<strong>Stav: PRIPOJENÉ ONLINE 🟢</strong><br>Aplikácia sa úspešne synchronizuje s vašou online databázou. Všetci členovia rodiny, ktorí použijú túto konfiguráciu, vidia rovnaké dáta.";
-        const savedConfig = localStorage.getItem("firebase_config");
-        if (textarea && savedConfig) {
-            textarea.value = savedConfig;
-        }
-    } else {
-        details.style.backgroundColor = "#f2f3f4";
-        details.style.color = "#566573";
-        details.innerHTML = "<strong>Stav: LOKÁLNY REŽIM ⚪</strong><br>Aplikácia ukladá dáta len vo vašom mobile/počítači. Ak chcete prepojiť celú rodinu, prepojte ju s Firebase.";
-        if (textarea) textarea.value = "";
-    }
+    const household = pb.authStore.record;
+    details.style.backgroundColor = "#d4efdf";
+    details.style.color = "#196f3d";
+    details.innerHTML = "<strong>Prihlásená domácnosť: " + (household ? household.name : "") + "</strong><br>E-mail: " + (household ? household.email : "");
 
-    // Set Gemini key input
-    const savedGeminiKey = localStorage.getItem("gemini_api_key");
-    if (geminiInput) {
-        geminiInput.value = savedGeminiKey || "";
-    }
-
-    // Set Family password input
-    const savedFamilyPwd = localStorage.getItem("firebase_family_password");
-    const pwdInput = document.getElementById("fb-family-password");
-    if (pwdInput) {
-        pwdInput.value = savedFamilyPwd || "";
-    }
-    
-    // Set custom role name inputs
-    if (document.getElementById("member-name-1")) document.getElementById("member-name-1").value = memberNames.role1 || "";
-    if (document.getElementById("member-name-2")) document.getElementById("member-name-2").value = memberNames.role2 || "";
-    if (document.getElementById("member-name-3")) document.getElementById("member-name-3").value = memberNames.role3 || "";
-    if (document.getElementById("member-name-4")) document.getElementById("member-name-4").value = memberNames.role4 || "";
+    document.getElementById("member-name-1").value = memberNames.role1 || "";
+    document.getElementById("member-name-2").value = memberNames.role2 || "";
+    document.getElementById("member-name-3").value = memberNames.role3 || "";
+    document.getElementById("member-name-4").value = memberNames.role4 || "";
 
     modal.classList.add("active");
 }
 
-function closeFirebaseSettingsModal() {
-    const modal = document.getElementById("firebase-modal");
+function closeSettingsModal() {
+    const modal = document.getElementById("settings-modal");
     if (modal) modal.classList.remove("active");
 }
 
-function saveFirebaseConfig(event) {
+async function saveMemberNames(event) {
     event.preventDefault();
-    const jsonInput = document.getElementById("fb-config-json").value.trim();
-    const geminiInput = document.getElementById("gemini-api-key").value.trim();
-    const pwdInput = document.getElementById("fb-family-password").value.trim();
-    
-    // Custom member names
-    const mName1 = document.getElementById("member-name-1").value.trim() || "Mama";
-    const mName2 = document.getElementById("member-name-2").value.trim() || "Otec";
-    const mName3 = document.getElementById("member-name-3").value.trim() || "Člen 1";
-    const mName4 = document.getElementById("member-name-4").value.trim() || "Člen 2";
-    
-    memberNames = {
-        role1: mName1,
-        role2: mName2,
-        role3: mName3,
-        role4: mName4
+
+    const updates = {
+        role1: document.getElementById("member-name-1").value.trim() || "Mama",
+        role2: document.getElementById("member-name-2").value.trim() || "Otec",
+        role3: document.getElementById("member-name-3").value.trim() || "Člen 1",
+        role4: document.getElementById("member-name-4").value.trim() || "Člen 2"
     };
-    localStorage.setItem("family_member_names", JSON.stringify(memberNames));
-    if (isFirebaseConnected) {
-        firebaseRef('memberNames').set(memberNames);
-    }
+
+    memberNames = updates;
+
+    await Promise.all(Object.keys(updates).map(roleKey => {
+        const id = memberRecordIds[roleKey];
+        if (!id) return Promise.resolve();
+        return membersRepo.update(id, { name: updates[roleKey] });
+    }));
+
     updateRoleSelectOptions();
-
-    // Save Gemini key
-    if (geminiInput) {
-        localStorage.setItem("gemini_api_key", geminiInput);
-        geminiApiKey = geminiInput;
-    } else {
-        localStorage.removeItem("gemini_api_key");
-        geminiApiKey = null;
-    }
-
-    // Save Family Password
-    if (pwdInput) {
-        localStorage.setItem("firebase_family_password", pwdInput);
-        firebaseFamilyPassword = pwdInput;
-    } else {
-        localStorage.removeItem("firebase_family_password");
-        firebaseFamilyPassword = '';
-    }
-
-    // Save Firebase config
-    if (jsonInput) {
-        try {
-            const config = JSON.parse(jsonInput);
-            if (!config.apiKey || !config.databaseURL || !config.projectId) {
-                alert("Neplatná Firebase konfigurácia! Chýbajú povinné položky (apiKey, databaseURL, projectId).");
-                return;
-            }
-            localStorage.setItem("firebase_config", JSON.stringify(config));
-        } catch (e) {
-            alert("Chyba: Zadaný text pre Firebase nie je platný JSON kód.");
-            return;
-        }
-    }
-
-    alert("Nastavenia úspešne uložené! Stránka sa reštartuje.");
-    window.location.reload();
-}
-
-function clearFirebaseConfig() {
-    if (confirm("Chcete naozaj vymazať online a AI nastavenia? Aplikácia prejde do lokálneho režimu a AI funkcie sa vypnú.")) {
-        localStorage.removeItem("firebase_config");
-        localStorage.removeItem("gemini_api_key");
-        localStorage.removeItem("firebase_family_password");
-        localStorage.removeItem("family_member_names");
-        alert("Nastavenia boli vymazané. Stránka sa reštartuje.");
-        window.location.reload();
-    }
+    updateRoleUI();
+    renderMealsScreen();
+    renderPlanScreen();
+    renderSuggestionsScreen();
+    closeSettingsModal();
+    alert("Mená členov boli uložené.");
 }
 
 // ----------------------------------------------------
-// GEMINI AI CAMERA RECIPE SCANNER LOGIC
+// GEMINI AI CAMERA RECIPE SCANNER (cez PocketBase AI proxy)
 // ----------------------------------------------------
 
 function triggerAICamera() {
-    const key = localStorage.getItem("gemini_api_key");
-    if (!key) {
-        alert("Nemáte nastavený Gemini API Kľúč! Otvorte nastavenia (indikátor stavu pripojenia v hlavičke) a zadajte kľúč, ktorý získate zadarmo na Google AI Studio.");
-        openFirebaseSettingsModal();
+    if (!pb.authStore.isValid) {
+        alert("Musíte byť prihlásený, aby ste mohli použiť AI skener.");
         return;
     }
     document.getElementById("ai-camera-input").click();
@@ -2445,74 +2321,33 @@ function processAICameraInput(event) {
     reader.readAsDataURL(file);
 }
 
-function analyzeImageWithGemini(base64Data, mimeType) {
-    const key = localStorage.getItem("gemini_api_key");
-    if (!key) return;
+async function analyzeImageWithGemini(base64Data, mimeType) {
+    try {
+        const res = await fetch(AI_SCAN_RECIPE_ENDPOINT, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + pb.authStore.token
+            },
+            body: JSON.stringify({ imageBase64: base64Data, mimeType: mimeType })
+        });
 
-    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + key;
-    const bTick3 = "`" + "`" + "`";
-
-    const requestBody = {
-        contents: [
-            {
-                parts: [
-                    {
-                        text: "Si slovenský kulinársky asistent pre rodinu. Analyzuj tento obrázok (ktorý môže byť odfotenou stranou z kuchárskej knihy, rukou písaným receptom alebo priamo fotkou hotového uvareného jedla). Zisti názov a navrhni kompletné vyplnenie receptu v slovenskom jazyku. Výstup vráť STRIKTNE ako jeden platný JSON objekt (žiadny iný text okolo, žiadne markdown značky ako " + bTick3 + "json). JSON musí presne zodpovedať tejto schéme:\n{\n  \"name\": \"Názov jedla (napr. Kurací perkelt)\",\n  \"category\": \"kategória (jedna z hodnôt: polievka, hlavne, rychle, bezmasite, dvojdnove, lahke, vikendove)\",\n  \"servings\": 4,\n  \"prepTime\": 45,\n  \"difficulty\": \"náročnosť (jedna z hodnôt: lahke, stredne, narocne)\",\n  \"cookForTwoDays\": true,\n  \"canFreeze\": false,\n  \"ingredientsText\": \"Zoznam surovín. Každá surovina musí byť na samostatnom riadku v presnom tvare: Názov, MnožstvoJednotka, kategória (napr: Zemiaky, 1kg, zelenina alebo Bravčové pliecko, 600g, maso). Kategórie surovín vyber len z: zelenina, maso, mliecne, pecivo, trvanlive, mrazene, drogeria, ostatne. Uisti sa, že za čiarkou je presné množstvo a kategória, napríklad: Cibuľa, 2ks, zelenina\",\n  \"instructions\": \"Stručný a jasný postup prípravy krok po kroku.\",\n  \"note\": \"Krátka poznámka alebo tip (napr. podávať s ryžou).\"\n}"
-                    },
-                    {
-                        inlineData: {
-                            mimeType: mimeType,
-                            data: base64Data
-                        }
-                    }
-                ]
-            }
-        ]
-    };
-
-    fetch(url, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(requestBody)
-    })
-    .then(res => {
-        if (!res.ok) {
-            throw new Error("Chyba Gemini API. Skontrolujte platnosť vášho kľúča.");
-        }
-        return res.json();
-    })
-    .then(data => {
         const loader = document.getElementById("ai-loading");
         if (loader) loader.classList.add("hidden");
 
-        if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
-            let textResponse = data.candidates[0].content.parts[0].text.trim();
-            
-            // Clean markdown blocks
-            const matchStart = new RegExp("^" + bTick3 + "json\\s*");
-            const matchEnd = new RegExp("\\s*" + bTick3 + "$");
-            const matchSimple = new RegExp("^" + bTick3 + "\\s*");
-            
-            if (matchStart.test(textResponse)) {
-                textResponse = textResponse.replace(matchStart, "").replace(matchEnd, "");
-            } else if (matchSimple.test(textResponse)) {
-                textResponse = textResponse.replace(matchSimple, "").replace(matchEnd, "");
-            }
-
-            const recipe = JSON.parse(textResponse);
-            fillRecipeFormWithAIResult(recipe);
-        } else {
-            throw new Error("Gemini neodpovedal v očakávanom formáte.");
+        if (!res.ok) {
+            const errBody = await res.json().catch(() => ({}));
+            throw new Error(errBody.message || "Chyba AI skenera.");
         }
-    })
-    .catch(err => {
+
+        const recipe = await res.json();
+        fillRecipeFormWithAIResult(recipe);
+    } catch (err) {
         const loader = document.getElementById("ai-loading");
         if (loader) loader.classList.add("hidden");
         console.error("AI Error:", err);
-        alert("Chyba AI analýzy: " + err.message + "\nUistite sa, že máte správny Gemini API kľúč a stabilné internetové pripojenie.");
-    });
+        alert("Chyba AI analýzy: " + err.message);
+    }
 }
 
 function fillRecipeFormWithAIResult(recipe) {
@@ -2523,10 +2358,10 @@ function fillRecipeFormWithAIResult(recipe) {
     if (recipe.servings) document.getElementById("edit-meal-servings").value = recipe.servings;
     if (recipe.prepTime) document.getElementById("edit-meal-preptime").value = recipe.prepTime;
     if (recipe.difficulty) document.getElementById("edit-meal-difficulty").value = recipe.difficulty;
-    
+
     document.getElementById("edit-meal-cook2days").checked = recipe.cookForTwoDays || false;
     document.getElementById("edit-meal-freeze").checked = recipe.canFreeze || false;
-    
+
     if (recipe.ingredientsText) document.getElementById("edit-meal-ingredients").value = recipe.ingredientsText;
     if (recipe.instructions) document.getElementById("edit-meal-instructions").value = recipe.instructions;
     if (recipe.note) document.getElementById("edit-meal-note").value = recipe.note;
@@ -2535,14 +2370,12 @@ function fillRecipeFormWithAIResult(recipe) {
 }
 
 // ----------------------------------------------------
-// GEMINI AI FRIDGE SCANNER LOGIC
+// GEMINI AI FRIDGE SCANNER (cez PocketBase AI proxy)
 // ----------------------------------------------------
 
 function triggerFridgeCamera() {
-    const key = localStorage.getItem("gemini_api_key");
-    if (!key) {
-        alert("Nemáte nastavený Gemini API Kľúč! Otvorte nastavenia (indikátor stavu pripojenia v hlavičke) a zadajte kľúč, ktorý získate zadarmo na Google AI Studio.");
-        openFirebaseSettingsModal();
+    if (!pb.authStore.isValid) {
+        alert("Musíte byť prihlásený, aby ste mohli použiť AI skener.");
         return;
     }
     document.getElementById("fridge-camera-input").click();
@@ -2567,74 +2400,33 @@ function processFridgeCameraInput(event) {
     reader.readAsDataURL(file);
 }
 
-function analyzeFridgeWithGemini(base64Data, mimeType) {
-    const key = localStorage.getItem("gemini_api_key");
-    if (!key) return;
+async function analyzeFridgeWithGemini(base64Data, mimeType) {
+    try {
+        const res = await fetch(AI_SCAN_FRIDGE_ENDPOINT, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + pb.authStore.token
+            },
+            body: JSON.stringify({ imageBase64: base64Data, mimeType: mimeType })
+        });
 
-    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + key;
-    const bTick3 = "`" + "`" + "`";
-
-    const requestBody = {
-        contents: [
-            {
-                parts: [
-                    {
-                        text: "Si slovenský kulinársky asistent pre rodinu. Analyzuj túto fotografiu (ktorá zobrazuje otvorenú chladničku, špajzu, potraviny na stole alebo nákup). Rozpoznaj potraviny a suroviny, ktoré sú k dispozícii. Na základe nich navrhni presne 3 slovenské recepty, ktoré je možné z nich pripraviť. Výstup vráť STRIKTNE ako jeden platný JSON objekt (žiadny iný text okolo, žiadne markdown značky ako " + bTick3 + "json). JSON musí presne zodpovedať tejto schéme:\n{\n  \"recognizedIngredients\": [\"zoznam rozpoznaných surovín (napr. vajcia, mrkva, syr)\"] ,\n  \"recipes\": [\n    {\n      \"name\": \"Názov jedla (napr. Miešané vajíčka so syrom)\",\n      \"category\": \"kategória (jedna z hodnôt: polievka, hlavne, rychle, bezmasite, dvojdnove, lahke, vikendove)\",\n      \"servings\": 4,\n      \"prepTime\": 20,\n      \"difficulty\": \"náročnosť (jedna z hodnôt: lahke, stredne, narocne)\",\n      \"cookForTwoDays\": false,\n      \"canFreeze\": false,\n      \"ingredientsWeHave\": [\n        \"zoznam surovín ktoré máme k dispozícii odfotené, každá v presnom tvare: Názov, MnožstvoJednotka, kategória (napr: Vajcia, 4ks, mliecne alebo Syr Eidam, 100g, mliecne). Kategórie surovín vyber len z: zelenina, maso, mliecne, pecivo, trvanlive, mrazene, drogeria, ostatne\"\n      ],\n      \"ingredientsMissing\": [\n        \"zoznam surovín ktoré nám na dokončenie receptu chýbajú a bude ich treba dokúpiť, v rovnakom tvare: Názov, MnožstvoJednotka, kategória (napr: Pažítka, 1ks, zelenina). Ak nič nechýba, nechaj prázdne.\"\n      ],\n      \"instructions\": \"Stručný a jasný postup prípravy krok po kroku.\",\n      \"note\": \"Krátka poznámka alebo tip na servírovanie.\"\n    }\n  ]\n}"
-                    },
-                    {
-                        inlineData: {
-                            mimeType: mimeType,
-                            data: base64Data
-                        }
-                    }
-                ]
-            }
-        ]
-    };
-
-    fetch(url, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(requestBody)
-    })
-    .then(res => {
-        if (!res.ok) {
-            throw new Error("Chyba Gemini API. Skontrolujte platnosť vášho kľúča.");
-        }
-        return res.json();
-    })
-    .then(data => {
         const loader = document.getElementById("fridge-loading");
         if (loader) loader.classList.add("hidden");
 
-        if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
-            let textResponse = data.candidates[0].content.parts[0].text.trim();
-            
-            // Clean markdown blocks
-            const matchStart = new RegExp("^" + bTick3 + "json\\s*");
-            const matchEnd = new RegExp("\\s*" + bTick3 + "$");
-            const matchSimple = new RegExp("^" + bTick3 + "\\s*");
-            
-            if (matchStart.test(textResponse)) {
-                textResponse = textResponse.replace(matchStart, "").replace(matchEnd, "");
-            } else if (matchSimple.test(textResponse)) {
-                textResponse = textResponse.replace(matchSimple, "").replace(matchEnd, "");
-            }
-
-            const result = JSON.parse(textResponse);
-            renderFridgeAIResults(result);
-        } else {
-            throw new Error("Gemini neodpovedal v očakávanom formáte.");
+        if (!res.ok) {
+            const errBody = await res.json().catch(() => ({}));
+            throw new Error(errBody.message || "Chyba AI skenera.");
         }
-    })
-    .catch(err => {
+
+        const result = await res.json();
+        renderFridgeAIResults(result);
+    } catch (err) {
         const loader = document.getElementById("fridge-loading");
         if (loader) loader.classList.add("hidden");
         console.error("Fridge Scanner AI Error:", err);
-        alert("Chyba AI analýzy: " + err.message + "\nUistite sa, že máte správny Gemini API kľúč a odfotili ste prehľadný záber.");
-    });
+        alert("Chyba AI analýzy: " + err.message);
+    }
 }
 
 function renderFridgeAIResults(result) {
@@ -2670,23 +2462,23 @@ function renderFridgeAIResults(result) {
                         <div class="meal-meta" style="font-size: 11px; margin-bottom: 10px; color: var(--text-muted); font-weight: 600;">
                             ⏱️ ${recipe.prepTime} min | ⚡ ${recipe.difficulty === 'lahke' ? 'Ľahká' : recipe.difficulty === 'stredne' ? 'Stredná' : 'Náročná'}
                         </div>
-                        
+
                         <div style="font-size: 12px; margin-bottom: 8px; line-height: 1.4;">
                             <strong style="color: #27ae60;">✅ Máme doma:</strong>
                             <div style="color: #196f3d; font-style: italic;">${weHaveText}</div>
                         </div>
-                        
+
                         <div style="font-size: 12px; margin-bottom: 12px; line-height: 1.4;">
                             <strong style="color: var(--danger);">❌ Treba dokúpiť:</strong>
                             <div style="color: #c0392b; font-style: italic;">${missingText}</div>
                         </div>
-                        
+
                         <div style="font-size: 12px; margin-bottom: 10px;">
                             <strong>📝 Postup:</strong>
                             <p style="white-space: pre-wrap; font-size: 11px; line-height: 1.4; color: var(--text-color); max-height: 70px; overflow-y: auto; border: 1px solid var(--border-color); padding: 5px; border-radius: 4px; background-color: var(--primary-light); margin: 4px 0 0 0;">${recipe.instructions}</p>
                         </div>
                     </div>
-                    
+
                     <button class="btn btn-secondary btn-sm" onclick="saveAIDiscoveredRecipe(${idx})" style="width: 100%; margin-top: 10px; font-size: 11px; padding: 6px;">
                         ➕ Pridať do našich jedál
                     </button>
@@ -2697,7 +2489,7 @@ function renderFridgeAIResults(result) {
     }
 }
 
-function saveAIDiscoveredRecipe(idx) {
+async function saveAIDiscoveredRecipe(idx) {
     if (!tempFridgeSuggestions || !tempFridgeSuggestions[idx]) return;
     const recipe = tempFridgeSuggestions[idx];
 
@@ -2706,7 +2498,6 @@ function saveAIDiscoveredRecipe(idx) {
     const ingredientsText = allIngredientsList.join("\n");
 
     const newMeal = {
-        id: "m_" + Date.now(),
         name: recipe.name,
         category: recipe.category || "hlavne",
         servings: recipe.servings || 4,
@@ -2714,20 +2505,19 @@ function saveAIDiscoveredRecipe(idx) {
         difficulty: recipe.difficulty || "stredne",
         cookForTwoDays: recipe.cookForTwoDays || false,
         canFreeze: recipe.canFreeze || false,
-        popularity: "stredne",
+        popularity: "bezne",
         likedBy: ["role1", "role2", "role3", "role4"],
         ingredientsText: ingredientsText,
         instructions: recipe.instructions,
-        note: recipe.note || ""
+        note: recipe.note || "",
+        rating: "bolo-v-poriadku"
     };
 
-    meals.push(newMeal);
-    saveMealsToStorage();
+    const created = await mealsRepo.create(newMeal);
+    meals.push(created);
 
     // Trigger rendering of meals if screen is active
     if (activeTab === "meals") renderMealsScreen();
 
-    alert("Recept '" + newMeal.name + "' bol úspešne pridaný do Našich jedál!");
+    alert("Recept '" + created.name + "' bol úspešne pridaný do Našich jedál!");
 }
-
-// ----------------------------------------------------

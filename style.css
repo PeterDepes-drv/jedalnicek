@@ -1397,6 +1397,26 @@ h1, h2, h3, h4, h5, h6 {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* Auth gate: blokujúca prihlasovacia obrazovka, kým domácnosť nie je prihlásená */
+.auth-gate {
+    display: flex;
+    position: fixed;
+    z-index: 300;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: var(--bg-main);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.auth-gate .modal-content {
+    max-width: 420px;
+}
+
 .close {
     position: absolute;
     right: 20px;

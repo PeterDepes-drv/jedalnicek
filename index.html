@@ -22,10 +22,10 @@
                     <h1>Rodinný Jedálniček</h1>
                 </div>
                 
-                <!-- Role Switcher & Firebase Config -->
+                <!-- Role Switcher & Account Settings -->
                 <div class="role-switcher">
-                    <div class="connection-status-indicator offline" id="connection-status" onclick="openFirebaseSettingsModal()" title="Nastavenie online pripojenia">
-                        <span class="status-dot"></span> <span class="status-text">Lokálne</span>
+                    <div class="connection-status-indicator offline" id="connection-status" onclick="openSettingsModal()" title="Nastavenie domácnosti">
+                        <span class="status-dot"></span> <span class="status-text">Odhlásené</span>
                     </div>
                     <label for="role-select">Rola:</label>
                     <div class="select-wrapper">
@@ -191,10 +191,7 @@
                         </select>
                         <select id="meal-filter-liked" onchange="filterMeals()">
                             <option value="all">Kto má rád: Všetci</option>
-                            <option value="mama">👩 Mama</option>
-                            <option value="otec">👨 Otec</option>
-                            <option value="ivo">👦 Ivo</option>
-                            <option value="majo">👦 Majo</option>
+                            <!-- role1..role4 options sa dopĺňajú dynamicky podľa mien členov (populateMealFilterLikedOptions) -->
                         </select>
                     </div>
                 </div>
@@ -507,37 +504,19 @@
         </div>
     </div>
 
-    <!-- MODAL: ONLINE & AI SETTINGS -->
-    <div id="firebase-modal" class="modal">
+    <!-- MODAL: DOMÁCNOSŤ & ČLENOVIA -->
+    <div id="settings-modal" class="modal">
         <div class="modal-content card">
-            <span class="close" onclick="closeFirebaseSettingsModal()">&times;</span>
-            <h3>🌐 Nastavenie prepojenia & AI</h3>
-            <p class="section-subtitle">Prepojte celú rodinu cez Firebase a aktivujte AI fotoaparát cez Gemini</p>
-            
-            <div id="firebase-status-details" style="margin-bottom: 15px; padding: 12px; border-radius: var(--border-radius-sm); font-size: 13px; line-height: 1.5;">
+            <span class="close" onclick="closeSettingsModal()">&times;</span>
+            <h3>🏠 Nastavenie domácnosti</h3>
+            <p class="section-subtitle">Spravujte prihlásenie a mená členov rodiny</p>
+
+            <div id="settings-status-details" style="margin-bottom: 15px; padding: 12px; border-radius: var(--border-radius-sm); font-size: 13px; line-height: 1.5;">
                 <!-- Status details will be rendered dynamically -->
             </div>
 
-            <form id="firebase-config-form" onsubmit="saveFirebaseConfig(event)">
+            <form id="member-names-form" onsubmit="saveMemberNames(event)">
                 <div class="form-group">
-                    <label for="fb-config-json">Firebase Konfigurácia (vložte JSON kód)</label>
-                    <p class="form-help">Vložte kód, ktorý získate vo Firebase konzole (obsahuje apiKey, databaseURL, atď.)</p>
-                    <textarea id="fb-config-json" rows="6" placeholder='{&#10;  "apiKey": "AIzaSy...",&#10;  "databaseURL": "https://...",&#10;  "projectId": "...",&#10;  "appId": "..."&#10;}'></textarea>
-                </div>
-
-                <div class="form-group" style="margin-top: 15px;">
-                    <label for="fb-family-password">Rodinné heslo (Zabezpečenie)</label>
-                    <p class="form-help">Zadajte tajné rodinné heslo, pod ktorým sa budú ukladať vaše dáta vo Firebase.</p>
-                    <input type="text" id="fb-family-password" placeholder="napr. moje-tajne-heslo-123">
-                </div>
-
-                <div class="form-group" style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
-                    <label for="gemini-api-key">Google Gemini API Kľúč</label>
-                    <p class="form-help">Zadajte kľúč pre bezplatné Gemini API na skenovanie fotiek receptov a jedál. Získate ho zadarmo na <a href="https://aistudio.google.com/" target="_blank" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Google AI Studio</a>.</p>
-                    <input type="text" id="gemini-api-key" placeholder="AIzaSy...">
-                </div>
-
-                <div class="form-group" style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
                     <label>Prispôsobenie mien členov domácnosti</label>
                     <p class="form-help">Zadajte mená pre jednotlivé roly v domácnosti. Ak necháte pole prázdne, použije sa predvolený názov.</p>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px;">
@@ -561,17 +540,67 @@
                 </div>
 
                 <div class="form-actions" style="margin-top: 20px;">
-                    <button type="button" class="btn btn-danger-outline" onclick="clearFirebaseConfig()" style="margin-right: auto;">Odpojiť online režim</button>
-                    <button type="button" class="btn btn-secondary" onclick="closeFirebaseSettingsModal()">Zrušiť</button>
-                    <button type="submit" class="btn btn-primary">Uložiť nastavenia</button>
+                    <button type="button" class="btn btn-danger-outline" onclick="logoutHousehold()" style="margin-right: auto;">Odhlásiť sa</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeSettingsModal()">Zrušiť</button>
+                    <button type="submit" class="btn btn-primary">Uložiť mená</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Firebase SDK (Compat version) -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <!-- AUTH GATE: Prihlásenie / registrácia domácnosti (blokuje appku, kým nie ste prihlásení) -->
+    <div id="auth-gate" class="auth-gate">
+        <div class="modal-content card">
+            <div class="logo-area" style="justify-content: center; margin-bottom: 10px;">
+                <span class="logo-icon">🍳</span>
+                <h1 style="margin: 0;">Rodinný Jedálniček</h1>
+            </div>
+            <p class="section-subtitle" style="text-align: center; margin-bottom: 20px;">Prihláste sa do svojej domácnosti, alebo si založte novú.</p>
+
+            <div id="auth-error" class="hidden" style="margin-bottom: 15px; padding: 10px 12px; border-radius: var(--border-radius-sm); font-size: 13px; background-color: #fdecea; color: #c0392b;"></div>
+
+            <!-- Prihlásenie -->
+            <form id="login-form" onsubmit="submitLogin(event)">
+                <div class="form-group">
+                    <label for="login-email">E-mail domácnosti</label>
+                    <input type="email" id="login-email" required placeholder="rodina@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Heslo</label>
+                    <input type="password" id="login-password" required placeholder="••••••••">
+                </div>
+                <div class="form-actions" style="justify-content: space-between;">
+                    <button type="button" class="btn btn-secondary" onclick="toggleAuthMode()">Založiť novú domácnosť</button>
+                    <button type="submit" class="btn btn-primary">Prihlásiť sa</button>
+                </div>
+            </form>
+
+            <!-- Registrácia (skrytá defaultne) -->
+            <form id="register-form" class="hidden" onsubmit="submitRegister(event)">
+                <div class="form-group">
+                    <label for="register-name">Názov domácnosti</label>
+                    <input type="text" id="register-name" required placeholder="napr. Rodina Nováková">
+                </div>
+                <div class="form-group">
+                    <label for="register-email">E-mail domácnosti</label>
+                    <input type="email" id="register-email" required placeholder="rodina@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Heslo</label>
+                    <input type="password" id="register-password" required minlength="8" placeholder="minimálne 8 znakov">
+                </div>
+                <div class="form-actions" style="justify-content: space-between;">
+                    <button type="button" class="btn btn-secondary" onclick="toggleAuthMode()">Mám už účet</button>
+                    <button type="submit" class="btn btn-primary">Vytvoriť domácnosť</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Konfigurácia backendu (adresa PocketBase servera) -->
+    <script src="config.js"></script>
+    <!-- PocketBase SDK -->
+    <script src="https://unpkg.com/pocketbase@0.25.1/dist/pocketbase.umd.js"></script>
 
     <!-- Script loading -->
     <script src="app.js"></script>
