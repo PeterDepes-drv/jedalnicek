@@ -30,10 +30,7 @@
                     <label for="role-select">Rola:</label>
                     <div class="select-wrapper">
                         <select id="role-select" onchange="changeRole(this.value)">
-                            <option value="mama">👩 Mama (Varenie & Plán)</option>
-                            <option value="otec" selected>👨 Otec (Nákupy & Nastavenia)</option>
-                            <option value="ivo">👦 Ivo (Návrhy & Zásoby)</option>
-                            <option value="majo">👦 Majo (Návrhy & Zásoby)</option>
+                            <!-- Dynamicky plnené cez JS -->
                         </select>
                     </div>
                 </div>
@@ -156,46 +153,9 @@
                         </div>
                     </div>
 
-                    <!-- Right Side: Grandparents' List & Pantry notices -->
-                    <div class="shopping-sidebar">
-                        <!-- Grandparents' Shopping List Card -->
-                        <div class="parents-shopping-card card" style="margin-bottom: 20px; padding: 20px; border: 1.5px dashed var(--accent); background-color: var(--accent-light);">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                                <h3 style="margin: 0; color: #b7950b; font-size: 16px;">👴 Nákup pre starých rodičov</h3>
-                                <button class="btn btn-danger-outline btn-sm" onclick="clearParentsShoppingList()" style="padding: 4px 8px; font-size: 11px;">Vymazať</button>
-                            </div>
-
-                            <!-- Add Manual Grandparents Item Form -->
-                            <form id="add-grandparents-item-form" class="add-item-form" onsubmit="addManualGrandparentsItem(event)" style="margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
-                                <div style="display: flex; gap: 6px;">
-                                    <input type="text" id="grandparents-item-name" placeholder="Položka (napr. Maslo)" required style="flex: 1; padding: 6px; font-size: 13px; border: 1px solid var(--border-color); border-radius: 4px; background-color: var(--bg-card);">
-                                    <input type="text" id="grandparents-item-qty" placeholder="Množstvo" style="max-width: 80px; padding: 6px; font-size: 13px; border: 1px solid var(--border-color); border-radius: 4px; background-color: var(--bg-card);">
-                                    <button type="submit" class="btn btn-primary btn-sm" style="padding: 6px 12px; background-color: var(--accent); border-color: var(--accent); font-size: 13px;">➕</button>
-                                </div>
-                            </form>
-                            
-                            <!-- AI Scanner for Grandparents' List -->
-                            <div style="text-align: center; margin-bottom: 15px; padding: 12px; background-color: var(--bg-card); border-radius: var(--border-radius-sm); border: 1px dashed var(--border-color);">
-                                <p style="font-size: 12px; font-weight: 600; margin-bottom: 8px;">📷 Máte papierový zoznam od starých rodičov?</p>
-                                <button type="button" class="btn btn-primary btn-sm" onclick="triggerParentsCamera()" style="background-color: var(--accent); color: white; border-color: var(--accent); box-shadow: none;">
-                                    📷 Odfotiť zoznam
-                                </button>
-                                <input type="file" accept="image/*" capture="environment" id="parents-camera-input" style="display: none;" onchange="processParentsCameraInput(event)">
-                                
-                                <!-- Loader -->
-                                <div id="parents-loading" class="hidden" style="margin-top: 8px; font-size: 12px; font-weight: bold; color: var(--text-color);">
-                                    🧠 AI číta rukou písaný zoznam od starých rodičov...
-                                </div>
-                            </div>
-                            
-                            <div id="parents-shopping-list-items" style="display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto;">
-                                <!-- Dynamically filled with parents' items -->
-                            </div>
-                        </div>
-
-                        <div class="shopping-pantry-notices" id="shopping-pantry-notices">
-                            <!-- Dynamically shows notes about what we already have at home -->
-                        </div>
+                    <!-- Right Side: Pantry notices -->
+                    <div class="shopping-pantry-notices" id="shopping-pantry-notices">
+                        <!-- Dynamically shows notes about what we already have at home -->
                     </div>
                 </div>
             </section>
@@ -291,17 +251,17 @@
                 </div>
             </section>
 
-            <!-- SCREEN 6: NÁVRHY OD RODINY -->
+            <!-- SCREEN 6: NÁVRHY A POMOCNÍCI -->
             <section id="screen-suggestions" class="app-screen">
                 <div class="screen-header">
-                    <h2>👦 Ivo & Majo - Návrhy a Zásoby</h2>
+                    <h2 id="screen-suggestions-header">👦 Pomocníci - Návrhy a Zásoby</h2>
                     <p>Spoločná správa jedálnička, návrhy na varenie a kontrola špajze.</p>
                 </div>
 
                 <div class="suggestions-layout">
-                    <!-- Left: Son's Checklist (only active in Ivo/Majo roles) -->
+                    <!-- Left: Son's Checklist (only active in Helper roles) -->
                     <div class="suggestions-card card">
-                        <div class="card-badge" id="son-badge-label">👦 Úlohy pre chalanov</div>
+                        <div class="card-badge" id="son-badge-label">👦 Úlohy pre pomocníkov</div>
                         <h3 id="son-title-label">🎯 Pomoc s jedálničkom a zásobami</h3>
                         
                         <div class="mission-item" id="mission-1-status">
@@ -382,7 +342,7 @@
             </button>
             <button class="nav-btn" id="nav-suggestions" onclick="showTab('suggestions')">
                 <span class="nav-icon">👦</span>
-                <span class="nav-label">Ivo & Majo</span>
+                <span class="nav-label" id="nav-suggestions-label">Pomocníci</span>
             </button>
         </nav>
     </div>
@@ -487,20 +447,20 @@
                     <label>Kto ho má rád (označte všetkých):</label>
                     <div class="who-likes-checkboxes">
                         <label class="checkbox-pill">
-                            <input type="checkbox" id="like-mama" value="mama">
-                            <span>👩 Mama</span>
+                            <input type="checkbox" id="like-role1" value="role1">
+                            <span id="label-like-role1">👩 Mama</span>
                         </label>
                         <label class="checkbox-pill">
-                            <input type="checkbox" id="like-otec" value="otec">
-                            <span>👨 Otec</span>
+                            <input type="checkbox" id="like-role2" value="role2">
+                            <span id="label-like-role2">👨 Otec</span>
                         </label>
                         <label class="checkbox-pill">
-                            <input type="checkbox" id="like-ivo" value="ivo">
-                            <span>👦 Ivo</span>
+                            <input type="checkbox" id="like-role3" value="role3">
+                            <span id="label-like-role3">👦 Člen 1</span>
                         </label>
                         <label class="checkbox-pill">
-                            <input type="checkbox" id="like-majo" value="majo">
-                            <span>👦 Majo</span>
+                            <input type="checkbox" id="like-role4" value="role4">
+                            <span id="label-like-role4">👦 Člen 2</span>
                         </label>
                     </div>
                 </div>
@@ -577,7 +537,30 @@
                     <input type="text" id="gemini-api-key" placeholder="AIzaSy...">
                 </div>
 
-                <div class="form-actions">
+                <div class="form-group" style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                    <label>Prispôsobenie mien členov domácnosti</label>
+                    <p class="form-help">Zadajte mená pre jednotlivé roly v domácnosti. Ak necháte pole prázdne, použije sa predvolený názov.</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px;">
+                        <div>
+                            <label for="member-name-1" style="font-size: 11px; font-weight: 600;">Rola 1 (predvolené: Mama)</label>
+                            <input type="text" id="member-name-1" placeholder="Mama" style="padding: 6px; font-size: 13px; background-color: var(--bg-card); width: 100%; border: 1px solid var(--border-color); border-radius: 4px;">
+                        </div>
+                        <div>
+                            <label for="member-name-2" style="font-size: 11px; font-weight: 600;">Rola 2 (predvolené: Otec)</label>
+                            <input type="text" id="member-name-2" placeholder="Otec" style="padding: 6px; font-size: 13px; background-color: var(--bg-card); width: 100%; border: 1px solid var(--border-color); border-radius: 4px;">
+                        </div>
+                        <div>
+                            <label for="member-name-3" style="font-size: 11px; font-weight: 600;">Rola 3 (predvolené: Člen 1)</label>
+                            <input type="text" id="member-name-3" placeholder="Člen 1" style="padding: 6px; font-size: 13px; background-color: var(--bg-card); width: 100%; border: 1px solid var(--border-color); border-radius: 4px;">
+                        </div>
+                        <div>
+                            <label for="member-name-4" style="font-size: 11px; font-weight: 600;">Rola 4 (predvolené: Člen 2)</label>
+                            <input type="text" id="member-name-4" placeholder="Člen 2" style="padding: 6px; font-size: 13px; background-color: var(--bg-card); width: 100%; border: 1px solid var(--border-color); border-radius: 4px;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions" style="margin-top: 20px;">
                     <button type="button" class="btn btn-danger-outline" onclick="clearFirebaseConfig()" style="margin-right: auto;">Odpojiť online režim</button>
                     <button type="button" class="btn btn-secondary" onclick="closeFirebaseSettingsModal()">Zrušiť</button>
                     <button type="submit" class="btn btn-primary">Uložiť nastavenia</button>

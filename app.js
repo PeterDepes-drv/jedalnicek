@@ -10,7 +10,7 @@ const DEFAULT_MEALS = [
         cookForTwoDays: true,
         canFreeze: true,
         popularity: "velmi-oblubene",
-        likedBy: ["mama", "otec", "ivo", "majo"],
+        likedBy: ["role1", "role2", "role3", "role4"],
         ingredientsText: "Kuracie trupy a stehná, 500g, maso\nMrkva, 3ks, zelenina\nPetržlen, 2ks, zelenina\nKaleráb, 1ks, zelenina\nCibuľa, 1ks, zelenina\nPolievkové rezance, 100g, trvanlive\nSoľ, 1ČL, trvanlive",
         instructions: "Kuracie mäso zalejeme studenou vodou, posolíme a privedieme k varu. Naberieme penu, pridáme očistenú zeleninu a na miernom ohni varíme pomaly aspoň 2 hodiny. Podávame s uvarenými rezancami.",
         rating: "bolo-v-poriadku",
@@ -26,7 +26,7 @@ const DEFAULT_MEALS = [
         cookForTwoDays: true,
         canFreeze: true,
         popularity: "velmi-oblubene",
-        likedBy: ["mama", "otec", "ivo", "majo"],
+        likedBy: ["role1", "role2", "role3", "role4"],
         ingredientsText: "Bravčové pliecko, 600g, maso\nKyslá kapusta, 500g, trvanlive\nCibuľa, 2ks, zelenina\nKyslá smotana, 250ml, mliecne\nHladká múka, 2PL, trvanlive\nOlej, 3PL, trvanlive\nMletá sladká paprika, 2PL, trvanlive\nKnedľa (na podávanie), 1ks, pecivo",
         instructions: "Na oleji opražíme nakrájanú cibuľu, pridáme mletú papriku a nakrájané mäso. Opečieme, podlejeme vodou a dusíme. Po 30 minútach pridáme kyslú kapustu a dusíme do zmäknutia. Na záver zahustíme smotanou rozmiešanou s múkou. Necháme prevrieť.",
         rating: "bolo-v-poriadku",
@@ -42,7 +42,7 @@ const DEFAULT_MEALS = [
         cookForTwoDays: true,
         canFreeze: true,
         popularity: "velmi-oblubene",
-        likedBy: ["mama", "otec", "ivo", "majo"],
+        likedBy: ["role1", "role2", "role3", "role4"],
         ingredientsText: "Kuracie stehná horné, 4ks, maso\nCibuľa, 2ks, zelenina\nSmotana na šľahanie, 250ml, mliecne\nHladká múka, 1PL, trvanlive\nCestoviny (kolienka), 400g, trvanlive\nOlej, 2PL, trvanlive\nMletá červená paprika, 1PL, trvanlive",
         instructions: "Na oleji speníme nadrobno nakrájanú cibuľu. Pridáme červenú papriku, orestujeme a pridáme kuracie stehná. Osolíme, podlejeme vodou a dusíme pod pokrievkou do zmäknutia. Vyberieme mäso, do šťavy vlejeme smotanu rozmiešanú s hladkou múkou, prevaríme a vrátime mäso späť. Podávame s cestovinou.",
         rating: "bolo-v-poriadku",
@@ -58,7 +58,7 @@ const DEFAULT_MEALS = [
         cookForTwoDays: false,
         canFreeze: false,
         popularity: "bezne",
-        likedBy: ["mama", "ivo", "majo"],
+        likedBy: ["role1", "role3", "role4"],
         ingredientsText: "Ryža, 300g, trvanlive\nKuracie prsia, 400g, maso\nMrazený hrášok a kukurica, 200g, mrazene\nCibuľa, 1ks, zelenina\nTvrdý syr (Eidam), 150g, mliecne\nOlej, 2PL, trvanlive",
         instructions: "Uvaríme ryžu. Na druhej panvici orestujeme cibuľu, pridáme na kocky nakrájané kuracie prsia, osolíme, okoreníme a opekáme. Keď je mäso hotové, pridáme zeleninu a chvíľu podusíme. Nakoniec zmiešame s uvarenou ryžou a na tanieri posypeme nastrúhaným syrom.",
         rating: "bolo-v-poriadku",
@@ -74,7 +74,7 @@ const DEFAULT_MEALS = [
         cookForTwoDays: false,
         canFreeze: true,
         popularity: "velmi-oblubene",
-        likedBy: ["mama", "otec", "ivo", "majo"],
+        likedBy: ["role1", "role2", "role3", "role4"],
         ingredientsText: "Mleté mäso mix, 500g, maso\nŠpagety, 400g, trvanlive\nParadajkový pretlak, 500g, trvanlive\nCibuľa, 1ks, zelenina\nCesnak, 2strúčiky, zelenina\nTvrdý syr, 100g, mliecne\nOlej, 2PL, trvanlive",
         instructions: "Na oleji orestujeme cibuľu a cesnak, pridáme mleté mäso a opekáme ho. Osolíme, okoreníme, zalejeme paradajkovým pretlakom a dusíme cca 25 minút. Špagety uvaríme v osolenej vode. Podávame omáčku na špagetách posypanú syrom.",
         rating: "bolo-v-poriadku",
@@ -106,7 +106,7 @@ const DEFAULT_MEALS = [
         cookForTwoDays: true,
         canFreeze: false,
         popularity: "bezne",
-        likedBy: ["mama", "ivo", "majo"],
+        likedBy: ["role1", "role3", "role4"],
         ingredientsText: "Cestoviny (Penne), 400g, trvanlive\nŠunka, 200g, maso\nTvrdý syr Eidam, 150g, mliecne\nVajíčka, 3ks, mliecne\nSmotana na varenie, 250ml, mliecne\nSterilizovaná kukurica, 1ks, trvanlive",
         instructions: "Cestoviny uvaríme. Zmiešame ich s nakrájanou šunkou, kukuricou a polovicou nastrúhaného syra. Vložíme do pekáča. Vajíčka rozšľaháme v smotane, osolíme, okoreníme a zalejeme cestoviny. Posypeme zvyšným syrom a zapekáme na 180°C cca 25 minút.",
         rating: "bolo-v-poriadku",
@@ -122,7 +122,7 @@ const DEFAULT_MEALS = [
         cookForTwoDays: false,
         canFreeze: false,
         popularity: "obcas",
-        likedBy: ["mama", "otec", "ivo", "majo"],
+        likedBy: ["role1", "role2", "role3", "role4"],
         ingredientsText: "Mrkva, 2ks, zelenina\nPetržlen, 1ks, zelenina\nMrazený hrášok, 100g, zelenina\nZemiaky, 2ks, zelenina\nMaslo, 50g, mliecne\nKrupicové halušky (vajce + detská krupica), 1ks, trvanlive",
         instructions: "Očistenú zeleninu nakrájame. Na roztopenom masle orestujeme mrkvu a petržlen. Zalejeme vodou, pridáme zemiaky a varíme. Pred koncom pridáme hrášok a zavaríme malé krupicové halušky z jedného vajíčka a krupice. Osolíme a ozdobíme petržlenovou vňaťou.",
         rating: "bolo-v-poriadku",
@@ -138,7 +138,7 @@ const DEFAULT_MEALS = [
         cookForTwoDays: true,
         canFreeze: false,
         popularity: "bezne",
-        likedBy: ["mama", "otec", "ivo", "majo"],
+        likedBy: ["role1", "role2", "role3", "role4"],
         ingredientsText: "Šošovica, 200g, trvanlive\nZemiaky, 2ks, zelenina\nBobkový list, 2ks, trvanlive\nCesnak, 2strúčiky, zelenina\nKyslá smotana, 200ml, mliecne\nHladká múka, 1PL, trvanlive\nOcot, 1PL, trvanlive",
         instructions: "Šošovicu vopred namočíme. Uvaríme ju vo vode s bobkovým listom. Keď je polomäkká, pridáme nakrájané zemiaky a prelisovaný cesnak. Keď zemiaky zmäknú, pridáme zátrepku z kyslej smotany a hladkej múky. Prevaríme. Dochutíme octom a cukrom podľa potreby.",
         rating: "bolo-v-poriadku",
@@ -154,7 +154,7 @@ const DEFAULT_MEALS = [
         cookForTwoDays: true,
         canFreeze: false,
         popularity: "bezne",
-        likedBy: ["mama", "otec", "ivo", "majo"],
+        likedBy: ["role1", "role2", "role3", "role4"],
         ingredientsText: "Cestoviny fliačky, 400g, trvanlive\nZemiaky, 600g, zelenina\nCibuľa, 1ks, zelenina\nMletá sladká paprika, 2ČL, trvanlive\nOlej, 3PL, trvanlive",
         instructions: "Uvaríme zemiaky aj cestoviny zvlášť. Na oleji speníme nadrobno nakrájanú cibuľu, pridáme mletú sladkú papriku, rýchlo premiešame a pridáme uvarené zemiaky. Zemiaky v hrnci popučíme a zmiešame s uvarenými cestovinami. Osolíme a podávame.",
         rating: "bolo-v-poriadku",
@@ -186,7 +186,7 @@ const DEFAULT_MEALS = [
         cookForTwoDays: false,
         canFreeze: false,
         popularity: "velmi-oblubene",
-        likedBy: ["mama", "ivo", "majo", "otec"],
+        likedBy: ["role1", "role3", "role4", "role2"],
         ingredientsText: "Kuracie prsia, 500g, maso\nRyža, 300g, trvanlive\nOlej, 2PL, trvanlive\nKompót broskyňový, 1ks, trvanlive\nMaslo, 20g, mliecne",
         instructions: "Ryžu prepláchneme a uvaríme. Kuracie prsia nakrájame na rezne, jemne naklepeme, osolíme a okoreníme. Na rozpálenom oleji s kúskom masla orestujeme kuracie plátky z oboch strán do mäkka. Podávame s ryžou a broskyňovým kompótom.",
         rating: "bolo-v-poriadku",
@@ -202,7 +202,7 @@ const DEFAULT_MEALS = [
         cookForTwoDays: false,
         canFreeze: true,
         popularity: "velmi-oblubene",
-        likedBy: ["ivo", "majo", "mama", "otec"],
+        likedBy: ["role3", "role4", "role1", "role2"],
         ingredientsText: "Hladká múka, 250g, trvanlive\nMlieko, 500ml, mliecne\nVajíčka, 2ks, mliecne\nDžem (jahodový/marhuľový), 1ks, trvanlive\nOlej na vyprážanie, 3PL, trvanlive\nCukor vanilkový, 1ks, trvanlive",
         instructions: "Z múky, mlieka, vajíčok, štipky soli a vanilkového cukru vyšľaháme hladké cesto. Necháme 10 minút odstáť. Na panvici potretej olejom pečieme tenké palacinky z oboch strán. Natrieme džemom, zrolujeme a pocukrujeme.",
         rating: "bolo-v-poriadku",
@@ -279,16 +279,22 @@ let isFirebaseConnected = false;
 let geminiApiKey = null;
 let firebaseFamilyPassword = '';
 let tempFridgeSuggestions = [];
+let memberNames = {
+    role1: "Mama",
+    role2: "Otec",
+    role3: "Člen 1",
+    role4: "Člen 2"
+};
 let parentsShoppingList = [];
 let familyState = {
-    activeRole: "otec",
+    activeRole: "role2",
     suggestions: {
-        ivo: [],
-        majo: []
+        role3: [],
+        role4: []
     },
     ratedMealsThisWeek: {
-        ivo: [],
-        majo: []
+        role3: [],
+        role4: []
     }
 };
 
@@ -333,6 +339,16 @@ function initData() {
     
     // 2.6 Family password load
     firebaseFamilyPassword = localStorage.getItem("firebase_family_password") || '';
+    
+    // 2.65 Member names load
+    const savedNames = localStorage.getItem("family_member_names");
+    if (savedNames) {
+        try {
+            memberNames = JSON.parse(savedNames);
+        } catch(e) {
+            console.error("Failed to parse memberNames", e);
+        }
+    }
 
     // 2.7 Parents shopping list load
     const savedParents = localStorage.getItem("family_parents_shopping");
@@ -369,22 +385,22 @@ function initData() {
             // Migration logic
             if (parsed.sonSuggestions) {
                 parsed.suggestions = {
-                    ivo: parsed.sonSuggestions,
+                    role3: parsed.sonSuggestions || [],
                     majo: []
                 };
                 delete parsed.sonSuggestions;
             }
             if (!parsed.suggestions) {
-                parsed.suggestions = { ivo: [], majo: [] };
+                parsed.suggestions = { role3: [], role4: [] };
             }
             if (Array.isArray(parsed.ratedMealsThisWeek)) {
                 parsed.ratedMealsThisWeek = {
-                    ivo: parsed.ratedMealsThisWeek,
+                    role3: parsed.ratedMealsThisWeek || [],
                     majo: []
                 };
             }
             if (!parsed.ratedMealsThisWeek) {
-                parsed.ratedMealsThisWeek = { ivo: [], majo: [] };
+                parsed.ratedMealsThisWeek = { role3: [], role4: [] };
             }
             familyState = parsed;
         } catch(e) {
@@ -465,7 +481,7 @@ function changeRole(role) {
     updateRoleUI();
 
     // If role is Syn, automatically jump to suggestions
-    if (role === "ivo" || role === "majo") {
+    if (role === "role3" || role === "role4") {
         showTab("suggestions");
     } else {
         // Go to today's screen
@@ -653,7 +669,7 @@ function createTodayMealCardMarkup(day, meal, typeLabel) {
     const likesMarkup = meal.likedBy.map(role => {
         if (role === 'mama') return '👩';
         if (role === 'otec') return '👨';
-        if (role === 'ivo', 'majo') return '👦';
+        if (role === 'role3' || role === 'role4') return '👦';
         return '';
     }).join(' ');
 
@@ -1027,18 +1043,18 @@ function renderSwapList() {
     // ----------------------------------------------------
     // ADD SUGGESTIONS FROM IVO & MAJO TO SWAP LIST
     // ----------------------------------------------------
-    const ivoSug = (familyState.suggestions && familyState.suggestions.ivo) ? familyState.suggestions.ivo.filter(Boolean) : [];
-    const majoSug = (familyState.suggestions && familyState.suggestions.majo) ? familyState.suggestions.majo.filter(Boolean) : [];
+    const ivoSug = (familyState.suggestions && familyState.suggestions.role3) ? familyState.suggestions.role3.filter(Boolean) : [];
+    const majoSug = (familyState.suggestions && familyState.suggestions.role4) ? familyState.suggestions.role4.filter(Boolean) : [];
 
     const allSuggestions = [];
     ivoSug.forEach((sug, idx) => {
         if (sug.toLowerCase().includes(searchVal)) {
-            allSuggestions.push({ name: sug, son: "Ivo", originalIndex: idx, role: "ivo" });
+            allSuggestions.push({ name: sug, son: memberNames.role3, originalIndex: idx, role: "role3" });
         }
     });
     majoSug.forEach((sug, idx) => {
         if (sug.toLowerCase().includes(searchVal)) {
-            allSuggestions.push({ name: sug, son: "Majo", originalIndex: idx, role: "majo" });
+            allSuggestions.push({ name: sug, son: memberNames.role4, originalIndex: idx, role: "role4" });
         }
     });
 
@@ -1456,14 +1472,7 @@ function copyShoppingListToClipboard() {
         text += "\n";
     });
 
-    if (uncheckedParentsItems.length > 0) {
-        text += "👴 *NÁKUP PRE STARÝCH RODIČOV* 👴\n";
-        uncheckedParentsItems.forEach(item => {
-            const qtyText = item.quantity ? " (" + item.quantity + ")" : "";
-            text += "- [ ] " + item.name + qtyText + "\n";
-        });
-        text += "\n";
-    }
+
 
     if (totalItems === 0) {
         alert("Nákupný zoznam je prázdny. Nie je čo kopírovať.");
@@ -1517,7 +1526,7 @@ function renderMealsScreen() {
         const likesIcons = meal.likedBy.map(role => {
             if (role === 'mama') return '<span class="like-icon-badge" title="Mama">👩</span>';
             if (role === 'otec') return '<span class="like-icon-badge" title="Otec">👨</span>';
-            if (role === 'ivo', 'majo') return '<span class="like-icon-badge" title="Syn">👦</span>';
+            if (role === 'role3' || role === 'role4') return '<span class="like-icon-badge" title="Člen">👦</span>';
             return '';
         }).join(' ');
 
@@ -1715,7 +1724,10 @@ function openEditMealModal(mealId) {
     // Checked who likes it
     document.getElementById("like-mama").checked = meal.likedBy.includes("mama");
     document.getElementById("like-otec").checked = meal.likedBy.includes("otec");
-    document.getElementById("like-syn").checked = meal.likedBy.includes("ivo", "majo");
+    document.getElementById("like-role1").checked = meal.likedBy.includes("role1");
+    document.getElementById("like-role2").checked = meal.likedBy.includes("role2");
+    document.getElementById("like-role3").checked = meal.likedBy.includes("role3");
+    document.getElementById("like-role4").checked = meal.likedBy.includes("role4");
 
     document.getElementById("edit-meal-ingredients").value = meal.ingredientsText || "";
     document.getElementById("edit-meal-instructions").value = meal.instructions || "";
@@ -1745,7 +1757,10 @@ function saveMealForm(event) {
     const likedBy = [];
     if (document.getElementById("like-mama").checked) likedBy.push("mama");
     if (document.getElementById("like-otec").checked) likedBy.push("otec");
-    if (document.getElementById("like-syn").checked) likedBy.push("ivo", "majo");
+    if (document.getElementById("like-role1").checked) likedBy.push("role1");
+    if (document.getElementById("like-role2").checked) likedBy.push("role2");
+    if (document.getElementById("like-role3").checked) likedBy.push("role3");
+    if (document.getElementById("like-role4").checked) likedBy.push("role4");
 
     const ingredientsText = document.getElementById("edit-meal-ingredients").value.trim();
     const instructions = document.getElementById("edit-meal-instructions").value.trim();
@@ -1889,7 +1904,7 @@ function togglePantryItemStatus(name, newStatus) {
         regenerateShoppingListFromPlan();
 
         // Increment Syn progress checklist if he is doing the task
-        if (familyState.activeRole === "ivo" || familyState.activeRole === "majo") {
+        if (familyState.activeRole === "role3" || familyState.activeRole === "role4") {
             updateSynPantryProgress();
         }
     }
@@ -1905,7 +1920,7 @@ function renderSuggestionsScreen() {
     pSuggestions.innerHTML = "";
 
     // Load suggestions from state
-    const activeSon = (familyState.activeRole === "ivo" || familyState.activeRole === "majo") ? familyState.activeRole : null;
+    const activeSon = (familyState.activeRole === "role3" || familyState.activeRole === "role4") ? familyState.activeRole : null;
 
     // Load suggestions of BOTH Ivo and Majo for parents
     if (familyState.suggestions.ivo && familyState.suggestions.ivo.length > 0) {
@@ -1946,7 +1961,7 @@ function renderSuggestionsScreen() {
         if (titleLabel) titleLabel.innerText = "🎯 Tvoje návrhy a pomoc špajzi";
         if (suggestTitle) suggestTitle.innerText = "Navrhni 3 jedlá na tento týždeň, na ktoré máš chuť";
     } else {
-        if (badgeLabel) badgeLabel.innerText = "👦 Ivo & Majo";
+        if (badgeLabel) badgeLabel.innerText = "👦 " + memberNames.role3 + " & " + memberNames.role4;
         if (titleLabel) titleLabel.innerText = "🎯 Pomoc s jedálničkom a zásobami";
         if (suggestTitle) suggestTitle.innerText = "Návrhy jedál na tento týždeň";
     }
@@ -2032,10 +2047,10 @@ function addSuggestedMealToDatabase(mealName, sourceSon, suggestionIndex) {
     document.getElementById("edit-meal-name").value = mealName;
     
     // Check correct checkbox
-    if (sourceSon === 'ivo') {
-        document.getElementById("like-ivo").checked = true;
-    } else if (sourceSon === 'majo') {
-        document.getElementById("like-majo").checked = true;
+    if (sourceSon === 'role3') {
+        document.getElementById("like-role3").checked = true;
+    } else if (sourceSon === 'role4') {
+        document.getElementById("like-role4").checked = true;
     }
 }
 
@@ -2244,15 +2259,21 @@ function setupFirebaseListeners() {
         }
     });
 
-    // 4.5 Listen for Parents Shopping List changes
-    firebaseRef('parentsShoppingList').on('value', (snapshot) => {
+
+
+    // 4.8 Listen for member custom names changes
+    firebaseRef('memberNames').on('value', (snapshot) => {
         const val = snapshot.val();
         if (val) {
-            parentsShoppingList = val;
-            localStorage.setItem("family_parents_shopping", JSON.stringify(parentsShoppingList));
-            if (activeTab === 'shopping') renderParentsShoppingList();
+            memberNames = val;
+            localStorage.setItem("family_member_names", JSON.stringify(memberNames));
+            updateRoleSelectOptions();
+            updateRoleUI();
+            if (activeTab === 'suggestions') renderSuggestionsScreen();
+            if (activeTab === 'meals') renderMealsScreen();
+            if (activeTab === 'plan') renderPlanScreen();
         } else {
-            firebaseRef('parentsShoppingList').set(parentsShoppingList);
+            firebaseRef('memberNames').set(memberNames);
         }
     });
 
@@ -2306,6 +2327,12 @@ function openFirebaseSettingsModal() {
     if (pwdInput) {
         pwdInput.value = savedFamilyPwd || "";
     }
+    
+    // Set custom role name inputs
+    if (document.getElementById("member-name-1")) document.getElementById("member-name-1").value = memberNames.role1 || "";
+    if (document.getElementById("member-name-2")) document.getElementById("member-name-2").value = memberNames.role2 || "";
+    if (document.getElementById("member-name-3")) document.getElementById("member-name-3").value = memberNames.role3 || "";
+    if (document.getElementById("member-name-4")) document.getElementById("member-name-4").value = memberNames.role4 || "";
 
     modal.classList.add("active");
 }
@@ -2320,6 +2347,24 @@ function saveFirebaseConfig(event) {
     const jsonInput = document.getElementById("fb-config-json").value.trim();
     const geminiInput = document.getElementById("gemini-api-key").value.trim();
     const pwdInput = document.getElementById("fb-family-password").value.trim();
+    
+    // Custom member names
+    const mName1 = document.getElementById("member-name-1").value.trim() || "Mama";
+    const mName2 = document.getElementById("member-name-2").value.trim() || "Otec";
+    const mName3 = document.getElementById("member-name-3").value.trim() || "Člen 1";
+    const mName4 = document.getElementById("member-name-4").value.trim() || "Člen 2";
+    
+    memberNames = {
+        role1: mName1,
+        role2: mName2,
+        role3: mName3,
+        role4: mName4
+    };
+    localStorage.setItem("family_member_names", JSON.stringify(memberNames));
+    if (isFirebaseConnected) {
+        firebaseRef('memberNames').set(memberNames);
+    }
+    updateRoleSelectOptions();
 
     // Save Gemini key
     if (geminiInput) {
@@ -2363,6 +2408,7 @@ function clearFirebaseConfig() {
         localStorage.removeItem("firebase_config");
         localStorage.removeItem("gemini_api_key");
         localStorage.removeItem("firebase_family_password");
+        localStorage.removeItem("family_member_names");
         alert("Nastavenia boli vymazané. Stránka sa reštartuje.");
         window.location.reload();
     }
@@ -2669,7 +2715,7 @@ function saveAIDiscoveredRecipe(idx) {
         cookForTwoDays: recipe.cookForTwoDays || false,
         canFreeze: recipe.canFreeze || false,
         popularity: "stredne",
-        likedBy: ["mama", "otec", "ivo", "majo"],
+        likedBy: ["role1", "role2", "role3", "role4"],
         ingredientsText: ingredientsText,
         instructions: recipe.instructions,
         note: recipe.note || ""
@@ -2685,230 +2731,3 @@ function saveAIDiscoveredRecipe(idx) {
 }
 
 // ----------------------------------------------------
-// PARENTS SHOPPING LIST LOGIC
-// ----------------------------------------------------
-
-function saveParentsShoppingToStorage() {
-    localStorage.setItem("family_parents_shopping", JSON.stringify(parentsShoppingList));
-    if (isFirebaseConnected) {
-        firebaseRef('parentsShoppingList').set(parentsShoppingList);
-    }
-}
-
-function triggerParentsCamera() {
-    const key = localStorage.getItem("gemini_api_key");
-    if (!key) {
-        alert("Nemáte nastavený Gemini API Kľúč! Otvorte nastavenia (ikonu Lokálne/Online v hlavičke) a zadajte kľúč, ktorý získate zadarmo na Google AI Studio.");
-        openFirebaseSettingsModal();
-        return;
-    }
-    document.getElementById("parents-camera-input").click();
-}
-
-function processParentsCameraInput(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const loader = document.getElementById("parents-loading");
-    if (loader) loader.classList.remove("hidden");
-
-    const reader = new FileReader();
-    reader.onloadend = function() {
-        const base64Data = reader.result.split(',')[1];
-        const mimeType = file.type;
-        analyzeParentsListWithGemini(base64Data, mimeType);
-    };
-    reader.readAsDataURL(file);
-}
-
-function analyzeParentsListWithGemini(base64Data, mimeType) {
-    const key = localStorage.getItem("gemini_api_key");
-    if (!key) return;
-
-    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + key;
-    const bTick3 = "`" + "`" + "`";
-
-    const requestBody = {
-        contents: [
-            {
-                parts: [
-                    {
-                        text: "Si slovenský kulinársky asistent pre rodinu. Analyzuj túto fotografiu (ktorá zobrazuje rukou písaný alebo vytlačený papierový nákupný zoznam od starých rodičov). Prečítaj položky a vytvor z nich zoznam. Výstup vráť STRIKTNE ako jeden platný JSON objekt (žiadny iný text okolo, žiadne markdown značky ako " + bTick3 + "json). JSON musí presne zodpovedať tejto schéme:\n{\n  \"items\": [\n    { \"name\": \"Názov položky (napr. Polotučné mlieko)\", \"quantity\": \"množstvo s jednotkou (napr. 2ks alebo 1l alebo 500g, ak nie je zrejmé, ponechaj prázdne)\", \"category\": \"kategória (jedna z hodnôt: zelenina, maso, mliecne, pecivo, trvanlive, mrazene, drogeria, ostatne)\" }\n  ]\n}"
-                    },
-                    {
-                        inlineData: {
-                            mimeType: mimeType,
-                            data: base64Data
-                        }
-                    }
-                ]
-            }
-        ]
-    };
-
-    fetch(url, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(requestBody)
-    })
-    .then(res => {
-        if (!res.ok) {
-            throw new Error("Chyba Gemini API.");
-        }
-        return res.json();
-    })
-    .then(data => {
-        const loader = document.getElementById("parents-loading");
-        if (loader) loader.classList.add("hidden");
-
-        if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
-            let textResponse = data.candidates[0].content.parts[0].text.trim();
-            
-            // Clean markdown blocks
-            const matchStart = new RegExp("^" + bTick3 + "json\\s*");
-            const matchEnd = new RegExp("\\s*" + bTick3 + "$");
-            const matchSimple = new RegExp("^" + bTick3 + "\\s*");
-            
-            if (matchStart.test(textResponse)) {
-                textResponse = textResponse.replace(matchStart, "").replace(matchEnd, "");
-            } else if (matchSimple.test(textResponse)) {
-                textResponse = textResponse.replace(matchSimple, "").replace(matchEnd, "");
-            }
-
-            const parsed = JSON.parse(textResponse);
-            if (parsed.items && parsed.items.length > 0) {
-                // Map items to default unchecked state
-                const formattedItems = parsed.items.map(item => ({
-                    name: item.name,
-                    quantity: item.quantity || "",
-                    category: item.category || "ostatne",
-                    checked: false
-                }));
-
-                parentsShoppingList = [...parentsShoppingList, ...formattedItems];
-                saveParentsShoppingToStorage();
-                renderParentsShoppingList();
-                alert("Nákupný zoznam od starých rodičov bol úspešne načítaný a pridaný! Spolu sa pridalo " + formattedItems.length + " položiek.");
-            } else {
-                alert("AI na fotke nenašla žiadne položky nákupného zoznamu.");
-            }
-        } else {
-            throw new Error("Neočakávaná odpoveď z API.");
-        }
-    })
-    .catch(err => {
-        const loader = document.getElementById("parents-loading");
-        if (loader) loader.classList.add("hidden");
-        console.error("AI Parents List Error:", err);
-        alert("Chyba analýzy zoznamu: " + err.message + "\nUistite sa, že fotka je čitateľná a dobre osvetlená.");
-    });
-}
-
-function renderParentsShoppingList() {
-    const container = document.getElementById("parents-shopping-list-items");
-    if (!container) return;
-
-    container.innerHTML = "";
-
-    if (parentsShoppingList.length === 0) {
-        container.innerHTML = "<p style='color: var(--text-muted); font-size: 12px; text-align: center; padding: 20px 0; font-style: italic;'>Zoznam je prázdny. Odfoťte papierový zoznam starých rodičov alebo pridajte položky ručne.</p>";
-        return;
-    }
-
-    parentsShoppingList.forEach((item, idx) => {
-        const div = document.createElement("div");
-        div.style.display = "flex";
-        div.style.justifyContent = "space-between";
-        div.style.alignItems = "center";
-        div.style.padding = "6px 8px";
-        div.style.borderRadius = "var(--border-radius-xs)";
-        div.style.backgroundColor = "var(--bg-card)";
-        div.style.border = "1px solid var(--border-color)";
-        div.style.fontSize = "13px";
-        
-        if (item.checked) {
-            div.style.opacity = "0.6";
-        }
-
-        const qtyText = item.quantity ? " (" + item.quantity + ")" : "";
-
-        div.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 8px; cursor: pointer; flex: 1;" onclick="toggleParentsShoppingItem(${idx})">
-                <div style="width: 14px; height: 14px; border: 1px solid var(--border-color); border-radius: 3px; display: flex; align-items: center; justify-content: center; background-color: ${item.checked ? 'var(--primary)' : 'transparent'};">
-                    ${item.checked ? '<span style="color: white; font-size: 10px; font-weight: bold;">✓</span>' : ''}
-                </div>
-                <span style="text-decoration: ${item.checked ? 'line-through' : 'none'}; font-weight: 500;">${item.name}${qtyText}</span>
-            </div>
-            <button onclick="deleteParentsShoppingItem(${idx})" title="Vymazať" style="background: none; border: none; color: var(--danger); cursor: pointer; font-size: 12px; padding: 0;">🗑️</button>
-        `;
-        container.appendChild(div);
-    });
-}
-
-function toggleParentsShoppingItem(idx) {
-    if (parentsShoppingList[idx]) {
-        parentsShoppingList[idx].checked = !parentsShoppingList[idx].checked;
-        saveParentsShoppingToStorage();
-        renderParentsShoppingList();
-    }
-}
-
-function deleteParentsShoppingItem(idx) {
-    parentsShoppingList.splice(idx, 1);
-    saveParentsShoppingToStorage();
-    renderParentsShoppingList();
-}
-
-function clearParentsShoppingList() {
-    if (parentsShoppingList.length === 0) return;
-    if (confirm("Naozaj chcete vymazať celý nákupný zoznam pre starých rodičov?")) {
-        parentsShoppingList = [];
-        saveParentsShoppingToStorage();
-        renderParentsShoppingList();
-    }
-}
-
-function addManualGrandparentsItem(event) {
-    event.preventDefault();
-    const nameInput = document.getElementById("grandparents-item-name");
-    const qtyInput = document.getElementById("grandparents-item-qty");
-    if (!nameInput) return;
-
-    const name = nameInput.value.trim();
-    const qty = qtyInput ? qtyInput.value.trim() : "";
-
-    if (!name) return;
-
-    parentsShoppingList.push({
-        name: name,
-        quantity: qty,
-        category: "ostatne",
-        checked: false
-    });
-
-    saveParentsShoppingToStorage();
-    nameInput.value = "";
-    if (qtyInput) qtyInput.value = "";
-    renderParentsShoppingList();
-}
-
-function updatePlanSuggestionsBanner() {
-    const banner = document.getElementById("plan-suggestions-banner");
-    const textSpan = document.getElementById("plan-suggestions-text");
-    if (!banner || !textSpan) return;
-
-    const ivoSug = (familyState.suggestions && familyState.suggestions.ivo) ? familyState.suggestions.ivo.filter(Boolean) : [];
-    const majoSug = (familyState.suggestions && familyState.suggestions.majo) ? familyState.suggestions.majo.filter(Boolean) : [];
-
-    if (ivoSug.length === 0 && majoSug.length === 0) {
-        banner.classList.add("hidden");
-    } else {
-        banner.classList.remove("hidden");
-        const parts = [];
-        if (ivoSug.length > 0) parts.push("👦 Ivo: " + ivoSug.join(", "));
-        if (majoSug.length > 0) parts.push("👦 Majo: " + majoSug.join(", "));
-        textSpan.textContent = parts.join(" | ");
-    }
-}
