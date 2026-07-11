@@ -12,6 +12,10 @@ const CATEGORY_TRANSLATIONS = {
 
 // PocketBase klient — adresa backendu je v config.js (PB_URL).
 const pb = new PocketBase(PB_URL);
+// Appka bežne posiela viacero paralelných requestov na tú istú kolekciu
+// (napr. hromadné vytváranie položiek nákupného zoznamu cez Promise.all) —
+// SDK by ich defaultne navzájom rušilo ("auto-cancellation"), čo tu nechceme.
+pb.autoCancellation(false);
 
 // State Variables
 let meals = [];
@@ -102,7 +106,7 @@ function mealPatchToPayload(m) {
 
 const mealsRepo = {
     async list() {
-        const records = await pb.collection('meals').getFullList({ sort: '-created' });
+        const records = await pb.collection('meals').getFullList();
         return records.map(mealFromRecord);
     },
     async create(meal) {
@@ -171,6 +175,10 @@ const planRepo = {
     }
 };
 
+function savePlanToStorage() {
+    planRepo.upsert(currentPlan);
+}
+
 function shoppingFromRecord(r) {
     return {
         id: r.id,
@@ -184,7 +192,7 @@ function shoppingFromRecord(r) {
 }
 const shoppingRepo = {
     async list() {
-        const records = await pb.collection('shopping_items').getFullList({ sort: 'created' });
+        const records = await pb.collection('shopping_items').getFullList();
         return records.map(shoppingFromRecord);
     },
     async create(item) {
