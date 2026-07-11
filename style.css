@@ -943,6 +943,36 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: space-between;
 }
 
+.meal-card-photo {
+    display: block;
+    width: calc(100% + 40px);
+    height: 150px;
+    object-fit: cover;
+    margin: -20px -20px 12px -20px;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.recipe-modal-photo {
+    display: block;
+    width: calc(100% + 40px);
+    height: 220px;
+    object-fit: cover;
+    margin: -20px -20px 15px -20px;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.meal-card-photo-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(100% + 40px);
+    height: 150px;
+    margin: -20px -20px 12px -20px;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    background-color: var(--primary-light);
+    font-size: 42px;
+}
+
 .meal-card-header {
     display: flex;
     justify-content: space-between;

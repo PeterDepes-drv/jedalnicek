@@ -82,8 +82,18 @@ function mealFromRecord(r) {
         ingredientsText: r.ingredients_text,
         instructions: r.instructions,
         note: r.note,
-        rating: r.rating
+        rating: r.rating,
+        photo: r.photo || null
     };
+}
+
+// Fotky jedál sú PocketBase file polia — URL sa skladá podľa stabilnej REST
+// konvencie (/api/files/{collection}/{recordId}/{filename}), nie cez SDK helper.
+function mealPhotoUrl(meal, thumb) {
+    if (!meal || !meal.photo) return null;
+    let url = PB_URL + '/api/files/meals/' + meal.id + '/' + meal.photo;
+    if (thumb) url += '?thumb=' + thumb;
+    return url;
 }
 
 function mealPatchToPayload(m) {
@@ -101,6 +111,9 @@ function mealPatchToPayload(m) {
     if ('instructions' in m) payload.instructions = m.instructions;
     if ('note' in m) payload.note = m.note;
     if ('rating' in m) payload.rating = m.rating;
+    // photo: File objekt = nová fotka na nahratie, '' = odstrániť fotku,
+    // undefined (chýbajúci kľúč) = fotku nemeniť.
+    if ('photo' in m) payload.photo = m.photo instanceof File ? m.photo : (m.photo || '');
     return payload;
 }
 
@@ -116,7 +129,8 @@ const mealsRepo = {
         return mealFromRecord(record);
     },
     async update(id, patch) {
-        return pb.collection('meals').update(id, mealPatchToPayload(patch));
+        const record = await pb.collection('meals').update(id, mealPatchToPayload(patch));
+        return mealFromRecord(record);
     },
     async remove(id) {
         return pb.collection('meals').delete(id);
@@ -783,8 +797,13 @@ function createTodayMealCardMarkup(day, meal, typeLabel) {
         `;
     }
 
+    const photoMarkup = meal.photo
+        ? `<img class="meal-card-photo" src="${mealPhotoUrl(meal, '400x400')}" alt="${meal.name}">`
+        : "";
+
     return `
         <div class="today-meal-card card ${cssClass}">
+            ${photoMarkup}
             <div class="meal-label">${typeLabel}</div>
             <h3 class="meal-title">${meal.name}</h3>
 
@@ -1671,8 +1690,13 @@ function renderMealsScreen() {
             ratingBadge = `<span class="rating-badge-active ${cls}" style="margin: 0; padding: 2px 6px; font-size: 10px;">${label}</span>`;
         }
 
+        const photoMarkup = meal.photo
+            ? `<img class="meal-card-photo" src="${mealPhotoUrl(meal, '400x400')}" alt="${meal.name}">`
+            : `<div class="meal-card-photo-placeholder">🍽️</div>`;
+
         div.innerHTML = `
             <div>
+                ${photoMarkup}
                 <div class="meal-card-header">
                     <span class="meal-card-category">${catLabel}</span>
                     ${ratingBadge}
@@ -1754,8 +1778,13 @@ function openRecipeModal(mealId) {
     if (meal.rating === 'menej-casto') ratingText = "😒 Radšej menej často";
     if (meal.rating === 'nechceme') ratingText = "🤢 Nechceme opakovať";
 
+    const photoMarkup = meal.photo
+        ? `<img class="recipe-modal-photo" src="${mealPhotoUrl(meal, '600x400')}" alt="${meal.name}">`
+        : "";
+
     container.innerHTML = `
         <div class="recipe-modal-header">
+            ${photoMarkup}
             <span class="meal-card-category" style="margin-bottom: 8px; display: inline-block;">${catLabel}</span>
             <h2 class="recipe-modal-title">${meal.name}</h2>
             <div style="font-size: 13px; color: var(--text-muted);">
@@ -1800,6 +1829,49 @@ window.onclick = function(event) {
 // ----------------------------------------------------
 // RECIPE EDITOR FORM MODAL
 // ----------------------------------------------------
+// Stav rozpracovanej fotky v editore jedla (File objekt novej fotky,
+// alebo príznak, že sa má existujúca fotka odstrániť).
+let selectedMealPhotoFile = null;
+let removeMealPhotoFlag = false;
+
+function resetMealPhotoEditorState() {
+    selectedMealPhotoFile = null;
+    removeMealPhotoFlag = false;
+    const preview = document.getElementById("edit-meal-photo-preview");
+    const removeBtn = document.getElementById("edit-meal-photo-remove-btn");
+    const input = document.getElementById("edit-meal-photo-input");
+    if (preview) { preview.classList.add("hidden"); preview.src = ""; }
+    if (removeBtn) removeBtn.classList.add("hidden");
+    if (input) input.value = "";
+}
+
+function handleMealPhotoInputChange(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    selectedMealPhotoFile = file;
+    removeMealPhotoFlag = false;
+
+    const preview = document.getElementById("edit-meal-photo-preview");
+    const removeBtn = document.getElementById("edit-meal-photo-remove-btn");
+    if (preview) {
+        preview.src = URL.createObjectURL(file);
+        preview.classList.remove("hidden");
+    }
+    if (removeBtn) removeBtn.classList.remove("hidden");
+}
+
+function removeMealPhoto() {
+    selectedMealPhotoFile = null;
+    removeMealPhotoFlag = true;
+
+    const preview = document.getElementById("edit-meal-photo-preview");
+    const removeBtn = document.getElementById("edit-meal-photo-remove-btn");
+    const input = document.getElementById("edit-meal-photo-input");
+    if (preview) { preview.classList.add("hidden"); preview.src = ""; }
+    if (removeBtn) removeBtn.classList.add("hidden");
+    if (input) input.value = "";
+}
+
 function openAddMealModal() {
     const modal = document.getElementById("meal-form-modal");
     const title = document.getElementById("meal-form-title");
@@ -1809,6 +1881,7 @@ function openAddMealModal() {
     title.innerText = "Pridať nové jedlo";
     form.reset();
     document.getElementById("edit-meal-id").value = "";
+    resetMealPhotoEditorState();
 
     modal.classList.add("active");
 }
@@ -1843,6 +1916,15 @@ function openEditMealModal(mealId) {
     document.getElementById("edit-meal-instructions").value = meal.instructions || "";
     document.getElementById("edit-meal-note").value = meal.note || "";
 
+    resetMealPhotoEditorState();
+    const preview = document.getElementById("edit-meal-photo-preview");
+    const removeBtn = document.getElementById("edit-meal-photo-remove-btn");
+    if (meal.photo && preview && removeBtn) {
+        preview.src = mealPhotoUrl(meal, "100x100");
+        preview.classList.remove("hidden");
+        removeBtn.classList.remove("hidden");
+    }
+
     modal.classList.add("active");
 }
 
@@ -1875,13 +1957,18 @@ async function saveMealForm(event) {
     const note = document.getElementById("edit-meal-note").value.trim();
 
     const mealData = { name, category, servings, prepTime, difficulty, cookForTwoDays, canFreeze, popularity, likedBy, ingredientsText, instructions, note };
+    if (selectedMealPhotoFile) {
+        mealData.photo = selectedMealPhotoFile;
+    } else if (removeMealPhotoFlag) {
+        mealData.photo = '';
+    }
 
     if (id) {
         // Edit existing
         const meal = meals.find(m => m.id === id);
         if (meal) {
-            Object.assign(meal, mealData);
-            await mealsRepo.update(id, mealData);
+            const updated = await mealsRepo.update(id, mealData);
+            Object.assign(meal, updated);
         }
     } else {
         // Create new
@@ -2324,12 +2411,12 @@ function processAICameraInput(event) {
     reader.onloadend = function() {
         const base64Data = reader.result.split(',')[1];
         const mimeType = file.type;
-        analyzeImageWithGemini(base64Data, mimeType);
+        analyzeImageWithGemini(base64Data, mimeType, file);
     };
     reader.readAsDataURL(file);
 }
 
-async function analyzeImageWithGemini(base64Data, mimeType) {
+async function analyzeImageWithGemini(base64Data, mimeType, sourceFile) {
     try {
         const res = await fetch(AI_SCAN_RECIPE_ENDPOINT, {
             method: "POST",
@@ -2349,7 +2436,7 @@ async function analyzeImageWithGemini(base64Data, mimeType) {
         }
 
         const recipe = await res.json();
-        fillRecipeFormWithAIResult(recipe);
+        fillRecipeFormWithAIResult(recipe, sourceFile);
     } catch (err) {
         const loader = document.getElementById("ai-loading");
         if (loader) loader.classList.add("hidden");
@@ -2358,7 +2445,7 @@ async function analyzeImageWithGemini(base64Data, mimeType) {
     }
 }
 
-function fillRecipeFormWithAIResult(recipe) {
+function fillRecipeFormWithAIResult(recipe, sourceFile) {
     if (!recipe) return;
 
     if (recipe.name) document.getElementById("edit-meal-name").value = recipe.name;
@@ -2373,6 +2460,19 @@ function fillRecipeFormWithAIResult(recipe) {
     if (recipe.ingredientsText) document.getElementById("edit-meal-ingredients").value = recipe.ingredientsText;
     if (recipe.instructions) document.getElementById("edit-meal-instructions").value = recipe.instructions;
     if (recipe.note) document.getElementById("edit-meal-note").value = recipe.note;
+
+    // Odfotenú fotku rovno predvyplníme ako fotku jedla — dá sa neskôr odstrániť/vymeniť.
+    if (sourceFile) {
+        selectedMealPhotoFile = sourceFile;
+        removeMealPhotoFlag = false;
+        const preview = document.getElementById("edit-meal-photo-preview");
+        const removeBtn = document.getElementById("edit-meal-photo-remove-btn");
+        if (preview) {
+            preview.src = URL.createObjectURL(sourceFile);
+            preview.classList.remove("hidden");
+        }
+        if (removeBtn) removeBtn.classList.remove("hidden");
+    }
 
     alert("Výborne! AI úspešne analyzovala fotografiu a predvyplnila formulár receptu. Skontrolujte údaje a kliknite na 'Uložiť jedlo' pre uloženie.");
 }
