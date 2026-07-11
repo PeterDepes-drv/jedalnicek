@@ -156,59 +156,60 @@ const DEFAULT_MEALS = [
 ];
 
 onRecordAfterCreateSuccess((e) => {
-    const householdId = e.record.id;
+    try {
+        const householdId = e.record.id;
 
-    const membersCollection = e.app.findCollectionByNameOrId("members");
-    for (const m of DEFAULT_MEMBERS) {
-        const record = new Record(membersCollection, {
-            household: householdId,
-            name: m.name,
-            role_key: m.role_key,
-            permission: m.permission
-        });
-        e.app.save(record);
+        const membersCollection = e.app.findCollectionByNameOrId("members");
+        for (const m of DEFAULT_MEMBERS) {
+            const record = new Record(membersCollection);
+            record.set("household", householdId);
+            record.set("name", m.name);
+            record.set("role_key", m.role_key);
+            record.set("permission", m.permission);
+            e.app.save(record);
+        }
+
+        const pantryCollection = e.app.findCollectionByNameOrId("pantry_items");
+        for (const p of DEFAULT_PANTRY) {
+            const record = new Record(pantryCollection);
+            record.set("household", householdId);
+            record.set("name", p.name);
+            record.set("status", p.status);
+            e.app.save(record);
+        }
+
+        const mealsCollection = e.app.findCollectionByNameOrId("meals");
+        for (const m of DEFAULT_MEALS) {
+            const record = new Record(mealsCollection);
+            record.set("household", householdId);
+            record.set("name", m.name);
+            record.set("category", m.category);
+            record.set("servings", m.servings);
+            record.set("prep_time", m.prepTime);
+            record.set("difficulty", m.difficulty);
+            record.set("cook_for_two_days", m.cookForTwoDays);
+            record.set("can_freeze", m.canFreeze);
+            record.set("popularity", m.popularity);
+            record.set("liked_by", m.likedBy);
+            record.set("ingredients_text", m.ingredientsText);
+            record.set("instructions", m.instructions);
+            record.set("note", m.note);
+            record.set("rating", m.rating);
+            e.app.save(record);
+        }
+
+        // Prázdny počiatočný plán, aby "Dnes varíme" a "Jedálniček" mali čo zobraziť.
+        const planCollection = e.app.findCollectionByNameOrId("weekly_plans");
+        const planRecord = new Record(planCollection);
+        planRecord.set("household", householdId);
+        planRecord.set("duration", 7);
+        planRecord.set("start_date", new Date().toISOString().slice(0, 10));
+        planRecord.set("days", []);
+        e.app.save(planRecord);
+    } catch (err) {
+        // Loguj presnú príčinu do PocketBase logov namiesto tichého všeobecného 400.
+        console.log("seed_household hook failed: " + err);
     }
-
-    const pantryCollection = e.app.findCollectionByNameOrId("pantry_items");
-    for (const p of DEFAULT_PANTRY) {
-        const record = new Record(pantryCollection, {
-            household: householdId,
-            name: p.name,
-            status: p.status
-        });
-        e.app.save(record);
-    }
-
-    const mealsCollection = e.app.findCollectionByNameOrId("meals");
-    for (const m of DEFAULT_MEALS) {
-        const record = new Record(mealsCollection, {
-            household: householdId,
-            name: m.name,
-            category: m.category,
-            servings: m.servings,
-            prep_time: m.prepTime,
-            difficulty: m.difficulty,
-            cook_for_two_days: m.cookForTwoDays,
-            can_freeze: m.canFreeze,
-            popularity: m.popularity,
-            liked_by: m.likedBy,
-            ingredients_text: m.ingredientsText,
-            instructions: m.instructions,
-            note: m.note,
-            rating: m.rating
-        });
-        e.app.save(record);
-    }
-
-    // Prázdny počiatočný plán, aby "Dnes varíme" a "Jedálniček" mali čo zobraziť.
-    const planCollection = e.app.findCollectionByNameOrId("weekly_plans");
-    const planRecord = new Record(planCollection, {
-        household: householdId,
-        duration: 7,
-        start_date: new Date().toISOString().slice(0, 10),
-        days: []
-    });
-    e.app.save(planRecord);
 
     e.next();
 }, "households");
