@@ -21,9 +21,45 @@ function stripMarkdownFence(text) {
     return cleaned.trim();
 }
 
+// Globálny denný strop naprieč VŠETKÝMI domácnosťami — chráni pred
+// neplánovaným účtom pri raste počtu registrácií (napr. verejný launch).
+// Kontroluje sa PRED per-household limitom, aby sa šetrili aj Gemini
+// requesty pre domácnosti, ktoré by inak ešte mali vlastnú rezervu.
+function enforceGlobalAiScanRateLimit(app, today) {
+    const globalLimit = parseInt($os.getenv("AI_SCAN_GLOBAL_DAILY_LIMIT") || "200", 10);
+
+    let globalRecord = null;
+    try {
+        globalRecord = app.findFirstRecordByFilter(
+            "ai_usage_totals",
+            "date = {:date}",
+            { date: today }
+        );
+    } catch (err) {
+        globalRecord = null;
+    }
+
+    if (!globalRecord) {
+        const collection = app.findCollectionByNameOrId("ai_usage_totals");
+        globalRecord = new Record(collection);
+        globalRecord.set("date", today);
+        globalRecord.set("count", 0);
+    }
+
+    const current = globalRecord.getInt("count");
+    if (current >= globalLimit) {
+        throw new ApiError(429, "AI skener dnes dosiahol celkový denný limit pre všetkých používateľov. Skúste to prosím zajtra.", null);
+    }
+
+    globalRecord.set("count", current + 1);
+    app.save(globalRecord);
+}
+
 function enforceAiScanRateLimit(app, householdId) {
-    const limit = parseInt($os.getenv("AI_SCAN_DAILY_LIMIT") || "15", 10);
+    const limit = parseInt($os.getenv("AI_SCAN_DAILY_LIMIT") || "5", 10);
     const today = new Date().toISOString().slice(0, 10);
+
+    enforceGlobalAiScanRateLimit(app, today);
 
     let logRecord = null;
     try {
@@ -38,7 +74,10 @@ function enforceAiScanRateLimit(app, householdId) {
 
     if (!logRecord) {
         const collection = app.findCollectionByNameOrId("ai_scan_logs");
-        logRecord = new Record(collection, { household: householdId, date: today, count: 0 });
+        logRecord = new Record(collection);
+        logRecord.set("household", householdId);
+        logRecord.set("date", today);
+        logRecord.set("count", 0);
     }
 
     const current = logRecord.getInt("count");

@@ -17,7 +17,7 @@ realtime synchronizáciu a AI proxy pre skenovanie fotiek.
 Jedalnicek/
 ├── index.html, app.js, style.css, config.js   ← frontend (statické súbory)
 └── pocketbase/
-    ├── pb_migrations/   ← schéma (8 kolekcií), aplikuje sa automaticky pri štarte
+    ├── pb_migrations/   ← schéma (9 kolekcií), aplikuje sa automaticky pri štarte
     ├── pb_hooks/        ← seed dát pri registrácii + AI proxy endpointy
     ├── Dockerfile        ← buildí PocketBase image pre Coolify
     └── .env.example      ← zoznam potrebných premenných prostredia
@@ -44,7 +44,8 @@ Jedalnicek/
    Bez toho sa dáta pri redeployi stratia.
 3. V **Environment Variables** nastav (pozri `pocketbase/.env.example`):
    - `GEMINI_API_KEY` — tvoj Gemini kľúč (zadarmo na [Google AI Studio](https://aistudio.google.com/))
-   - `AI_SCAN_DAILY_LIMIT` — napr. `15`
+   - `AI_SCAN_DAILY_LIMIT` — koľko skenov smie jedna domácnosť za deň, napr. `5`
+   - `AI_SCAN_GLOBAL_DAILY_LIMIT` — celkový strop naprieč všetkými domácnosťami dokopy, napr. `200`
 4. Priraď doménu, napr. `api.jedalnicek.depes.online`, zapni SSL (Coolify to
    spraví automaticky cez Let's Encrypt, rovnako ako pri n8n).
 5. Deploy. Migrácie (`pb_migrations/`) a hooky (`pb_hooks/`) sa aplikujú
@@ -60,8 +61,8 @@ Jedalnicek/
 ### Overenie schémy
 
 Po prvom štarte skontroluj v Admin UI (**Collections**), že existuje
-8 kolekcií: `households`, `members`, `meals`, `weekly_plans`,
-`shopping_items`, `pantry_items`, `suggestions`, `ai_scan_logs`.
+9 kolekcií: `households`, `members`, `meals`, `weekly_plans`,
+`shopping_items`, `pantry_items`, `suggestions`, `ai_scan_logs`, `ai_usage_totals`.
 
 > **Poznámka k verziám:** JS API PocketBase (migrácie, hooky) sa medzi
 > minor verziami mierne mení. `Dockerfile` sťahuje verziu pripnutú v
