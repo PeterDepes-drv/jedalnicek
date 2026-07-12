@@ -139,25 +139,37 @@ function callGemini(promptText, imageBase64, mimeType) {
 }
 
 function handleAiScan(e, promptText) {
-    const authRecord = e.auth;
-    if (!authRecord || authRecord.collection().name !== "households") {
-        throw new UnauthorizedError("Musíte byť prihlásený ako domácnosť.", null);
+    try {
+        const authRecord = e.auth;
+        if (!authRecord || authRecord.collection().name !== "households") {
+            throw new UnauthorizedError("Musíte byť prihlásený ako domácnosť.", null);
+        }
+
+        const data = new DynamicModel({
+            imageBase64: "",
+            mimeType: ""
+        });
+        e.bindBody(data);
+
+        if (!data.imageBase64 || !data.mimeType) {
+            throw new BadRequestError("Chýba fotografia (imageBase64/mimeType).", null);
+        }
+
+        enforceAiScanRateLimit(e.app, authRecord.id);
+
+        const result = callGemini(promptText, data.imageBase64, data.mimeType);
+        return e.json(200, result);
+    } catch (err) {
+        // ApiError (a jej podtriedy ako UnauthorizedError/BadRequestError) sú
+        // zámerné, štruktúrované odpovede - tie len prehoď ďalej nezmenené.
+        // Čokoľvek iné je neočakávaná chyba v hooku - zaloguj presný text,
+        // nech sa dá diagnostikovať cez PocketBase logy namiesto tichého 400.
+        if (err && err.status) {
+            throw err;
+        }
+        console.log("handleAiScan failed: " + err);
+        throw new ApiError(500, "Neočakávaná chyba AI skenera: " + err, null);
     }
-
-    const data = new DynamicModel({
-        imageBase64: "",
-        mimeType: ""
-    });
-    e.bindBody(data);
-
-    if (!data.imageBase64 || !data.mimeType) {
-        throw new BadRequestError("Chýba fotografia (imageBase64/mimeType).", null);
-    }
-
-    enforceAiScanRateLimit(e.app, authRecord.id);
-
-    const result = callGemini(promptText, data.imageBase64, data.mimeType);
-    return e.json(200, result);
 }
 
 routerAdd("POST", "/api/ai/scan-recipe", (e) => {
