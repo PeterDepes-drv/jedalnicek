@@ -185,6 +185,24 @@ routerAdd("GET", "/api/ai/ping", (e) => {
     return e.json(200, { ping: "pong" });
 });
 
+// DOČASNÁ: over POST + telo requestu, bez auth/DynamicModel.
+routerAdd("POST", "/api/ai/ping-post", (e) => {
+    return e.json(200, { ping: "pong-post" });
+});
+
+// DOČASNÁ: over e.auth samostatne.
+routerAdd("GET", "/api/ai/ping-auth", (e) => {
+    const authRecord = e.auth;
+    return e.json(200, { hasAuth: !!authRecord, collectionName: authRecord ? authRecord.collection().name : null });
+});
+
+// DOČASNÁ: over DynamicModel + e.bindBody samostatne.
+routerAdd("POST", "/api/ai/ping-body", (e) => {
+    const data = new DynamicModel({ imageBase64: "", mimeType: "" });
+    e.bindBody(data);
+    return e.json(200, { hasImage: !!data.imageBase64, mimeType: data.mimeType });
+});
+
 routerAdd("POST", "/api/ai/scan-recipe", (e) => {
     return handleAiScan(e, RECIPE_PROMPT);
 });
