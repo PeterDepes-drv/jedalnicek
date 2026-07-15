@@ -203,6 +203,11 @@ routerAdd("POST", "/api/ai/ping-body", (e) => {
     return e.json(200, { hasImage: !!data.imageBase64, mimeType: data.mimeType });
 });
 
+// DOČASNÁ: over volanie samostatne definovanej top-level funkcie z callbacku.
+routerAdd("GET", "/api/ai/ping-func", (e) => {
+    return e.json(200, { cleaned: stripMarkdownFence("```json\nhello\n```") });
+});
+
 routerAdd("POST", "/api/ai/scan-recipe", (e) => {
     return handleAiScan(e, RECIPE_PROMPT);
 });
