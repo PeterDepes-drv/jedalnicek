@@ -333,6 +333,24 @@ function toggleAuthMode() {
     document.getElementById("auth-error").classList.add("hidden");
 }
 
+// Použité tlačidlami na landing page ("Vyskúšať zadarmo" / "Už mám účet"),
+// prepne správny formulár a odscrolluje naň.
+function scrollToAuthForm(mode) {
+    const loginForm = document.getElementById("login-form");
+    const registerForm = document.getElementById("register-form");
+    if (mode === "register") {
+        loginForm.classList.add("hidden");
+        registerForm.classList.remove("hidden");
+    } else {
+        loginForm.classList.remove("hidden");
+        registerForm.classList.add("hidden");
+    }
+    document.getElementById("auth-error").classList.add("hidden");
+
+    const section = document.getElementById("auth-forms-section");
+    if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 function showAuthError(message) {
     const box = document.getElementById("auth-error");
     if (!box) return;

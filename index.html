@@ -559,53 +559,125 @@
         </div>
     </div>
 
-    <!-- AUTH GATE: Prihlásenie / registrácia domácnosti (blokuje appku, kým nie ste prihlásení) -->
+    <!-- AUTH GATE / LANDING PAGE: zobrazené, kým nie ste prihlásení -->
     <div id="auth-gate" class="auth-gate">
-        <div class="modal-content card">
-            <div class="logo-area" style="justify-content: center; margin-bottom: 10px;">
+
+        <!-- HERO -->
+        <section class="landing-hero">
+            <div class="logo-area" style="justify-content: center; margin-bottom: 18px;">
                 <span class="logo-icon">🍳</span>
                 <h1 style="margin: 0;">Rodinný Jedálniček</h1>
             </div>
-            <p class="section-subtitle" style="text-align: center; margin-bottom: 20px;">Prihláste sa do svojej domácnosti, alebo si založte novú.</p>
+            <h2 class="landing-hero-title">Konečne viete, čo dnes varíte</h2>
+            <p class="landing-hero-subtitle">
+                Naplánujte si týždeň varenia spolu s rodinou, nechajte appku poskladať nákupný zoznam
+                a odfoťte otvorenú chladničku — umelá inteligencia hneď navrhne, čo z toho uvariť.
+            </p>
+            <div class="landing-hero-actions">
+                <button class="btn btn-primary landing-cta" onclick="scrollToAuthForm('register')">🚀 Vyskúšať zadarmo</button>
+                <button class="btn btn-secondary landing-cta" onclick="scrollToAuthForm('login')">Už mám účet</button>
+            </div>
+        </section>
 
-            <div id="auth-error" class="hidden" style="margin-bottom: 15px; padding: 10px 12px; border-radius: var(--border-radius-sm); font-size: 13px; background-color: #fdecea; color: #c0392b;"></div>
+        <!-- FUNKCIE -->
+        <section class="landing-features">
+            <div class="landing-feature-card card">
+                <div class="landing-feature-icon">📅</div>
+                <h3>Inteligentné plánovanie</h3>
+                <p>Vygenerujte si jedálny lístok na 7 alebo 14 dní jedným klikom. Appka strieda mäsité
+                    a bezmäsité jedlá a pamätá si, čo rodina naozaj rada je.</p>
+            </div>
+            <div class="landing-feature-card card">
+                <div class="landing-feature-icon">🛒</div>
+                <h3>Automatický nákupný zoznam</h3>
+                <p>Zoznam sa poskladá sám z vášho plánu, sčíta suroviny a vynechá, čo už máte doma.
+                    Odškrtávanie sa naživo synchronizuje medzi telefónmi celej rodiny.</p>
+            </div>
+            <div class="landing-feature-card card">
+                <div class="landing-feature-icon">📷</div>
+                <h3>AI skener chladničky</h3>
+                <p>Odfoťte otvorenú chladničku alebo špajzu a AI hneď navrhne 3 recepty presne z toho,
+                    čo doma máte — s tým, čo chýba na dokúpenie.</p>
+            </div>
+            <div class="landing-feature-card card">
+                <div class="landing-feature-icon">👨‍👩‍👧‍👦</div>
+                <h3>Pre celú rodinu</h3>
+                <p>Každý člen má svoju rolu. Deti môžu navrhovať jedlá a hodnotiť, čo sa uvarilo,
+                    rodičia spravujú plán, nákupy aj zásoby.</p>
+            </div>
+        </section>
 
-            <!-- Prihlásenie -->
-            <form id="login-form" onsubmit="submitLogin(event)">
-                <div class="form-group">
-                    <label for="login-email">E-mail domácnosti</label>
-                    <input type="email" id="login-email" required placeholder="rodina@example.com">
+        <!-- AKO TO FUNGUJE -->
+        <section class="landing-how">
+            <h2 class="landing-section-title">Ako to funguje</h2>
+            <div class="landing-steps">
+                <div class="landing-step">
+                    <div class="landing-step-number">1</div>
+                    <h4>Založte si domácnosť</h4>
+                    <p>30 sekúnd, len e-mail a heslo. Žiadna platobná karta.</p>
                 </div>
-                <div class="form-group">
-                    <label for="login-password">Heslo</label>
-                    <input type="password" id="login-password" required placeholder="••••••••">
+                <div class="landing-step">
+                    <div class="landing-step-number">2</div>
+                    <h4>Naplánujte týždeň</h4>
+                    <p>Ručne, alebo nechajte appku vygenerovať plán za vás.</p>
                 </div>
-                <div class="form-actions" style="justify-content: space-between;">
-                    <button type="button" class="btn btn-secondary" onclick="toggleAuthMode()">Založiť novú domácnosť</button>
-                    <button type="submit" class="btn btn-primary">Prihlásiť sa</button>
+                <div class="landing-step">
+                    <div class="landing-step-number">3</div>
+                    <h4>Choďte nakupovať</h4>
+                    <p>Nákupný zoznam už na vás čaká, hotový a zoradený.</p>
                 </div>
-            </form>
+            </div>
+        </section>
 
-            <!-- Registrácia (skrytá defaultne) -->
-            <form id="register-form" class="hidden" onsubmit="submitRegister(event)">
-                <div class="form-group">
-                    <label for="register-name">Názov domácnosti</label>
-                    <input type="text" id="register-name" required placeholder="napr. Rodina Nováková">
-                </div>
-                <div class="form-group">
-                    <label for="register-email">E-mail domácnosti</label>
-                    <input type="email" id="register-email" required placeholder="rodina@example.com">
-                </div>
-                <div class="form-group">
-                    <label for="register-password">Heslo</label>
-                    <input type="password" id="register-password" required minlength="8" placeholder="minimálne 8 znakov">
-                </div>
-                <div class="form-actions" style="justify-content: space-between;">
-                    <button type="button" class="btn btn-secondary" onclick="toggleAuthMode()">Mám už účet</button>
-                    <button type="submit" class="btn btn-primary">Vytvoriť domácnosť</button>
-                </div>
-            </form>
-        </div>
+        <!-- PRIHLÁSENIE / REGISTRÁCIA -->
+        <section id="auth-forms-section" class="landing-auth">
+            <div class="modal-content card">
+                <h2 class="landing-section-title" style="margin-bottom: 4px;">Začnite ešte dnes</h2>
+                <p class="section-subtitle" style="text-align: center; margin-bottom: 20px;">Prihláste sa do svojej domácnosti, alebo si založte novú.</p>
+
+                <div id="auth-error" class="hidden" style="margin-bottom: 15px; padding: 10px 12px; border-radius: var(--border-radius-sm); font-size: 13px; background-color: #fdecea; color: #c0392b;"></div>
+
+                <!-- Prihlásenie -->
+                <form id="login-form" onsubmit="submitLogin(event)">
+                    <div class="form-group">
+                        <label for="login-email">E-mail domácnosti</label>
+                        <input type="email" id="login-email" required placeholder="rodina@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Heslo</label>
+                        <input type="password" id="login-password" required placeholder="••••••••">
+                    </div>
+                    <div class="form-actions" style="justify-content: space-between;">
+                        <button type="button" class="btn btn-secondary" onclick="toggleAuthMode()">Založiť novú domácnosť</button>
+                        <button type="submit" class="btn btn-primary">Prihlásiť sa</button>
+                    </div>
+                </form>
+
+                <!-- Registrácia (skrytá defaultne) -->
+                <form id="register-form" class="hidden" onsubmit="submitRegister(event)">
+                    <div class="form-group">
+                        <label for="register-name">Názov domácnosti</label>
+                        <input type="text" id="register-name" required placeholder="napr. Rodina Nováková">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">E-mail domácnosti</label>
+                        <input type="email" id="register-email" required placeholder="rodina@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Heslo</label>
+                        <input type="password" id="register-password" required minlength="8" placeholder="minimálne 8 znakov">
+                    </div>
+                    <div class="form-actions" style="justify-content: space-between;">
+                        <button type="button" class="btn btn-secondary" onclick="toggleAuthMode()">Mám už účet</button>
+                        <button type="submit" class="btn btn-primary">Vytvoriť domácnosť</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <footer class="landing-footer">
+            <p>🍳 Rodinný Jedálniček — jedálniček, nákupy a AI kuchár na jednom mieste.</p>
+        </footer>
     </div>
 
     <!-- Konfigurácia backendu (adresa PocketBase servera) -->
