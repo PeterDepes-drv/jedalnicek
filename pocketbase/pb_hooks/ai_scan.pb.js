@@ -179,6 +179,12 @@ function handleAiScan(e, promptText) {
     }
 }
 
+// DOČASNÁ diagnostická cesta bez akejkoľvek logiky - overuje, či routerAdd
+// v tejto verzii PocketBase vôbec funguje.
+routerAdd("GET", "/api/ai/ping", (e) => {
+    return e.json(200, { ping: "pong" });
+});
+
 routerAdd("POST", "/api/ai/scan-recipe", (e) => {
     return handleAiScan(e, RECIPE_PROMPT);
 });
