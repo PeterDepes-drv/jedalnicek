@@ -139,25 +139,32 @@ function callGemini(promptText, imageBase64, mimeType) {
 }
 
 function handleAiScan(e, promptText) {
+    console.log("handleAiScan: entered");
     try {
+        console.log("handleAiScan: inside try, before e.auth");
         const authRecord = e.auth;
+        console.log("handleAiScan: after e.auth, authRecord=" + authRecord);
         if (!authRecord || authRecord.collection().name !== "households") {
             throw new UnauthorizedError("Musíte byť prihlásený ako domácnosť.", null);
         }
+        console.log("handleAiScan: auth check passed");
 
         const data = new DynamicModel({
             imageBase64: "",
             mimeType: ""
         });
         e.bindBody(data);
+        console.log("handleAiScan: bindBody done, hasImage=" + !!data.imageBase64 + " mimeType=" + data.mimeType);
 
         if (!data.imageBase64 || !data.mimeType) {
             throw new BadRequestError("Chýba fotografia (imageBase64/mimeType).", null);
         }
 
         enforceAiScanRateLimit(e.app, authRecord.id);
+        console.log("handleAiScan: rate limit passed, calling Gemini");
 
         const result = callGemini(promptText, data.imageBase64, data.mimeType);
+        console.log("handleAiScan: Gemini call succeeded");
         return e.json(200, result);
     } catch (err) {
         // ApiError (a jej podtriedy ako UnauthorizedError/BadRequestError) sú
